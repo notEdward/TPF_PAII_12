@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#FFFFFF">
+
+        <!-- Banner superior -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8A2BE2"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_menu_hamburger"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Capacitaciones"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
+
+        <!-- Título y botones -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Disponibles"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filtrar"
+                android:drawableEnd="@drawable/ic_filter_small"
+                android:backgroundTint="#3CB371"
+                android:layout_marginStart="8dp"
+                android:padding="8dp"
+                android:drawablePadding="8dp" />
+        </LinearLayout>
+
+        <!-- Campo de búsqueda -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:gravity="center_vertical">
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Buscar..."
+                android:background="@android:drawable/edit_text"
+                android:padding="8dp"/>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_search_icon"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
+        <!-- Lista de capacitaciones -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:padding="8dp"
+                android:layout_marginBottom="16dp">
+
+                <!-- Item 1 -->
+                <LinearLayout
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_margin="4dp"
+                    android:background="#E0E0E0"> <!-- Color de fondo para visibilidad -->
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:src="@drawable/img1_tpf"
+                        android:contentDescription="Imagen de capacitación 1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descripción 1"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ver capacitación"
+                        android:textColor="#0000EE"
+                        android:paddingTop="4dp"/>
+                </LinearLayout>
+
+                <!-- Item 2 -->
+                <LinearLayout
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_margin="4dp"
+                    android:background="#E0E0E0"> <!-- Color de fondo para visibilidad -->
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:src="@drawable/img2_tpf"
+                        android:contentDescription="Imagen de capacitación 2"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descripción 2"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ver capacitación"
+                        android:textColor="#0000EE"
+                        android:paddingTop="4dp"/>
+                </LinearLayout>
+
+                <!-- Item 3 -->
+                <LinearLayout
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_margin="4dp"
+                    android:background="#E0E0E0"> <!-- Color de fondo para visibilidad -->
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:src="@drawable/img3_tpf"
+                        android:contentDescription="Imagen de capacitación 3"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descripción 3"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ver capacitación"
+                        android:textColor="#0000EE"
+                        android:paddingTop="4dp"/>
+                </LinearLayout>
+
+                <!-- Item 4 -->
+                <LinearLayout
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_margin="4dp"
+                    android:background="#E0E0E0"> <!-- Color de fondo para visibilidad -->
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:src="@drawable/img4_tpf"
+                        android:contentDescription="Imagen de capacitación 4"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descripción 4"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ver capacitación"
+                        android:textColor="#0000EE"
+                        android:paddingTop="4dp"/>
+                </LinearLayout>
+
+                <!-- Item 5 (Imagen de capacitación 1) -->
+                <LinearLayout
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_margin="4dp"
+                    android:background="#E0E0E0"> <!-- Color de fondo para visibilidad -->
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:src="@drawable/img1_tpf"
+                        android:contentDescription="Imagen de capacitación 1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descripción 1"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ver capacitación"
+                        android:textColor="#0000EE"
+                        android:paddingTop="4dp"/>
+                </LinearLayout>
+
+                <!-- Item 6 (Imagen de capacitación 2) -->
+                <LinearLayout
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:layout_margin="4dp"
+                    android:background="#E0E0E0"> <!-- Color de fondo para visibilidad -->
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:src="@drawable/img2_tpf"
+                        android:contentDescription="Imagen de capacitación 2"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descripción 2"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ver capacitación"
+                        android:textColor="#0000EE"
+                        android:paddingTop="4dp"/>
+                </LinearLayout>
+
+            </GridLayout>
+        </ScrollView>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
