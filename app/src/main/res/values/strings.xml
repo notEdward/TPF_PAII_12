@@ -1,3 +1,39 @@
 <resources>
     <string name="app_name">TPF_PAII_Android</string>
+
+    <!-- LOGIN -->
+    <string name="txtLogin">Login</string>
+    <string name="txtUsuario"> Usuario</string>
+    <string name="txtContrasena">********</string>
+    <string name="btnIniciarSesion">Iniciar sesión</string>
+    <string name="txtNoTieneCuenta">No tienes una cuenta? </string>
+    <string name="txtRegistrarse">Regístrate</string>
+
+    <!-- INICIAR REGISTRO-->
+    <string name="txtIniciarRegistro">Iniciar Registro</string>
+    <string name="txtRegistrarmeComo">Registrarme como : </string>
+    <string name="rbEstudiante"> Estudiante</string>
+    <string name="rbEmpresa"> Empresa</string>
+    <string name="rbTutor"> Tutor</string>
+    <string name="btnIniciarRegistro">Iniciar Registro</string>
+
+    <!-- REGISTRAR EMPRESA-->
+    <string name="tvRegistrarEmpresa">Registrar Empresa</string>
+    <string name="tvDatosEmp">Datos</string>
+    <string name="txtNombreEmp">Nombre</string>
+    <string name="txtDescripcionEmp">Descripcion</string>
+    <string name="txtSectorEmp">Sector</string>
+    <string name="txtNIdentificacionEmp"> N° de identificación fiscal</string>
+    <string name="tvUsuarioEmp">Usuario</string>
+    <string name="txtNombreUsuarioEmp">Nombre de usuario</string>
+    <string name="txtPassEmp">Contraseña</string>
+    <string name="txtRepetirPassEmp">Repetir contraseña</string>
+    <string name="tvContactoEmp">Contacto</string>
+    <string name="txtEmailEmp">Email</string>
+    <string name="txtTelefonoEmp">N° de teléfono</string>
+    <string name="tvUbicacionEmp">Ubicacion</string>
+    <string name="txtDireccionEmp">Dirección</string>
+    <string name="tvProvinciaEmp">Provincia</string>
+    <string name="tvLocalidadEmp">Localidad</string>
+    <string name="btnRegistrarEmp">Registrarse</string>
 </resources>

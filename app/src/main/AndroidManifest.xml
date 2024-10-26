@@ -13,7 +13,22 @@
         android:theme="@style/Theme.TPF_PAII_Android"
         tools:targetApi="31">
         <activity
+            android:name=".RegistrarEmpresa"
+            android:exported="false" />
+        <activity
+            android:name=".RegistrarOfertaDeEmpleo"
+            android:exported="false" />
+        <activity
+            android:name=".RegistrarEstudiante"
+            android:exported="false" />
+        <activity
+            android:name=".IniciarRegistro"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
