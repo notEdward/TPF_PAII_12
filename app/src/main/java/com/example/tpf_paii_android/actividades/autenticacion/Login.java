@@ -1,6 +1,8 @@
 package com.example.tpf_paii_android.actividades.autenticacion;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,5 +24,11 @@ public class Login extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    // Método para el textView Registrarse
+    public void Registrarse(View view){
+        Intent registrarse = new Intent(this, IniciarRegistro.class);
+        startActivity(registrarse);
     }
 }

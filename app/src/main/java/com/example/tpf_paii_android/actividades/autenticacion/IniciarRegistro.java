@@ -23,4 +23,6 @@ public class IniciarRegistro extends AppCompatActivity {
             return insets;
         });
     }
+
+
 }

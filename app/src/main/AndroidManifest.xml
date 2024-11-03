@@ -12,12 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TPF_PAII_Android"
         tools:targetApi="31">
+
+        <!-- Actividades relacionadas con el chat -->
         <activity
             android:name=".actividades.chat.ChatDialog"
             android:exported="false" />
+
+        <!-- Actividades relacionadas con tutorías -->
         <activity
             android:name=".actividades.tutorias.Tutorias"
             android:exported="false" />
+
+        <!-- Actividades relacionadas con el registro -->
         <activity
             android:name=".actividades.registracion.RegistrarEmpresa"
             android:exported="false" />
@@ -27,12 +33,18 @@
         <activity
             android:name=".actividades.registracion.RegistrarEstudiante"
             android:exported="false" />
+
+        <!-- Actividad para iniciar registro -->
         <activity
             android:name=".actividades.autenticacion.IniciarRegistro"
             android:exported="false" />
+
+        <!-- Actividad principal -->
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <!-- Actividad de Login, inicio de la app -->
         <activity
             android:name=".actividades.autenticacion.Login"
             android:exported="true">
