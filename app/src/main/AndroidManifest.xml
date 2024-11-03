@@ -13,28 +13,28 @@
         android:theme="@style/Theme.TPF_PAII_Android"
         tools:targetApi="31">
         <activity
-            android:name=".ChatDialog"
+            android:name=".actividades.chat.ChatDialog"
             android:exported="false" />
         <activity
-            android:name=".Tutorias"
+            android:name=".actividades.tutorias.Tutorias"
             android:exported="false" />
         <activity
-            android:name=".RegistrarEmpresa"
+            android:name=".actividades.registracion.RegistrarEmpresa"
             android:exported="false" />
         <activity
-            android:name=".RegistrarOfertaDeEmpleo"
+            android:name=".actividades.empleo.RegistrarOfertaDeEmpleo"
             android:exported="false" />
         <activity
-            android:name=".RegistrarEstudiante"
+            android:name=".actividades.registracion.RegistrarEstudiante"
             android:exported="false" />
         <activity
-            android:name=".IniciarRegistro"
+            android:name=".actividades.autenticacion.IniciarRegistro"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".actividades.autenticacion.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
