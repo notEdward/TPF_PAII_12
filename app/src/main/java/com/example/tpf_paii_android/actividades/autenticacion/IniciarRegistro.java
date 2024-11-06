@@ -1,6 +1,10 @@
 package com.example.tpf_paii_android.actividades.autenticacion;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,8 +13,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tpf_paii_android.R;
+import com.example.tpf_paii_android.actividades.registracion.RegistrarEmpresa;
+import com.example.tpf_paii_android.actividades.registracion.RegistrarEstudiante;
 
 public class IniciarRegistro extends AppCompatActivity {
+
+    private RadioGroup radioGroup; // Declaracion del RadioGroup para opciones de registro
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +31,35 @@ public class IniciarRegistro extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Inicializa elementos de la interfaz
+        radioGroup = findViewById(R.id.radioGroup);
+
+        // Convierte el boton en una variable local
+        Button btnIniciarRegistro = findViewById(R.id.btnIniciarRegistro);
+
+        // Config evento OnClick del botón de registro
+        btnIniciarRegistro.setOnClickListener(v -> {
+            int seleccionId = radioGroup.getCheckedRadioButtonId();
+
+            if(seleccionId == R.id.rbEstudiante){
+                // Dirige a RegistrarEstudiante Activity
+                Intent intent = new Intent(IniciarRegistro.this, RegistrarEstudiante.class);
+                startActivity(intent);
+            } else if (seleccionId == R.id.rbEmpresa){
+                // Dirige a RegistrarEmpresa Activity
+                Intent intent = new Intent(IniciarRegistro.this, RegistrarEmpresa.class);
+                startActivity(intent);
+            //} else if (seleccionId == R.id.rbTutor){
+                // Agregar actividad de tutores
+                // Intent intent = new intent(IniciarRegistro.this, );
+                // startActivity(intent);
+            } else {
+                Toast.makeText(this, "Por favor, selecciona una opción.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
 
 }
