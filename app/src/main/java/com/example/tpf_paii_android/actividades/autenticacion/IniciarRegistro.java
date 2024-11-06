@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.actividades.registracion.RegistrarEmpresa;
 import com.example.tpf_paii_android.actividades.registracion.RegistrarEstudiante;
+import com.example.tpf_paii_android.actividades.registracion.RegistrarTutor;
 
 public class IniciarRegistro extends AppCompatActivity {
 
@@ -50,10 +51,10 @@ public class IniciarRegistro extends AppCompatActivity {
                 // Dirige a RegistrarEmpresa Activity
                 Intent intent = new Intent(IniciarRegistro.this, RegistrarEmpresa.class);
                 startActivity(intent);
-            //} else if (seleccionId == R.id.rbTutor){
-                // Agregar actividad de tutores
-                // Intent intent = new intent(IniciarRegistro.this, );
-                // startActivity(intent);
+            } else if (seleccionId == R.id.rbTutor){
+                // Dirige a RegistrarTutor Activity
+                 Intent intent = new Intent(IniciarRegistro.this, RegistrarTutor.class);
+                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Por favor, selecciona una opción.", Toast.LENGTH_SHORT).show();
             }
