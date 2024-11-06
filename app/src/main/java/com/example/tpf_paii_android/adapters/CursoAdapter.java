@@ -13,11 +13,15 @@ import com.example.tpf_paii_android.modelos.Curso;
 import java.util.List;
 
 public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHolder> {
-
     private List<Curso> cursos;
 
     public CursoAdapter(List<Curso> cursos) {
         this.cursos = cursos;
+    }
+
+    public void actualizarCursos(List<Curso> cursosFiltrados) {
+        this.cursos = cursosFiltrados;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -30,14 +34,11 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
     @Override
     public void onBindViewHolder(@NonNull CursoViewHolder holder, int position) {
         Curso curso = cursos.get(position);
-        Log.d("CursoAdapter", "Cargando curso: " + curso.getNombreCurso());  // Verifica qué curso se está cargando
-
         holder.tvNombreCurso.setText(curso.getNombreCurso());
         holder.tvDescripcionCurso.setText(curso.getDescripcion());
         holder.tvVerCapacitacion.setOnClickListener(v -> {
-            // dps ver capacitacion
+            //ver dps detalles
         });
-            //ver asignar img
     }
 
     @Override
