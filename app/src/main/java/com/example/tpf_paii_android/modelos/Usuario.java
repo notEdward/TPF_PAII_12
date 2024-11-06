@@ -1,4 +1,4 @@
-package com.example.tpf_paii_android.entidades;
+package com.example.tpf_paii_android.modelos;
 
 public class Usuario {
 
