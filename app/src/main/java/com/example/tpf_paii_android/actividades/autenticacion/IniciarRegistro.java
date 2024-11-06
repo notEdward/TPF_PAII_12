@@ -32,7 +32,7 @@ public class IniciarRegistro extends AppCompatActivity {
             return insets;
         });
 
-        // Inicializa elementos de la interfaz
+        // Inicializa las vistas
         radioGroup = findViewById(R.id.radioGroup);
 
         // Convierte el boton en una variable local
