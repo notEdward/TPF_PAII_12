@@ -3,10 +3,13 @@ package com.example.tpf_paii_android.actividades.cursos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.adapters.CursoAdapter;
 import com.example.tpf_paii_android.viewmodels.CursoViewModel;
+import com.google.android.material.navigation.NavigationView;
+
 import android.text.TextWatcher;
 import java.util.ArrayList;
 
@@ -25,6 +30,7 @@ public class CursoActivity extends AppCompatActivity {
     private Button btnFiltrar;
     private EditText editTextBuscar;
     private static final int REQUEST_FILTRO = 1;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,30 @@ public class CursoActivity extends AppCompatActivity {
         recyclerViewCursos.setHasFixedSize(true);
         cursoAdapter = new CursoAdapter(new ArrayList<>());
         recyclerViewCursos.setAdapter(cursoAdapter);
+
+        //menu hamburguesa
+        drawerLayout = findViewById(R.id.drawer_layout);
+        ImageView menuHamburguesa = findViewById(R.id.menu_hamburguesa);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        //listener
+        menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(Gravity.START));
+
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            int itemId = menuItem.getItemId();
+            if (itemId == R.id.nav_cursos) {
+                Toast.makeText(this, "Cursos seleccionados", Toast.LENGTH_SHORT).show();
+            } else if (itemId == R.id.nav_ofertas_empleo) {
+                Toast.makeText(this, "Ofertas de empleo seleccionadas", Toast.LENGTH_SHORT).show();
+            } else if (itemId == R.id.nav_tutorias) {
+                Toast.makeText(this, "Tutorías seleccionadas", Toast.LENGTH_SHORT).show();
+            } else if (itemId == R.id.nav_salir) {
+                Toast.makeText(this, "Salir", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            drawerLayout.closeDrawer(Gravity.START);
+            return true;
+        });
+        //fin menu//
 
         ////FILTROS POR LUPITA
         editTextBuscar = findViewById(R.id.editTextBuscar); // campo de busq

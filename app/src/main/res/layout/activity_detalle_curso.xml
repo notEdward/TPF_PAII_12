@@ -9,7 +9,6 @@
         android:orientation="vertical"
         android:background="#FFFFFF">
 
-        <!-- Banner superior -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +30,6 @@
                 android:layout_centerHorizontal="true" />
         </RelativeLayout>
 
-        <!-- Título centrado -->
         <TextView
             android:id="@+id/txtNombreCurso"
             android:layout_width="wrap_content"
@@ -43,7 +41,6 @@
             android:paddingTop="16dp"
             android:paddingBottom="8dp" />
 
-        <!-- Imagen -->
         <ImageView
             android:id="@+id/imgCurso"
             android:layout_width="200dp"
@@ -53,7 +50,6 @@
             android:contentDescription="Imagen de capacitación"
             android:paddingBottom="16dp" />
 
-        <!-- Descripción -->
         <TextView
             android:id="@+id/txtDescripcionCurso"
             android:layout_width="wrap_content"
@@ -64,7 +60,6 @@
             android:layout_gravity="center_horizontal"
             android:paddingBottom="8dp" />
 
-        <!-- Botón de postulación -->
         <Button
             android:id="@+id/btnIniciarCapacitacion"
             android:layout_width="wrap_content"

@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <!-- Contenedor del banner con color de fondo completo -->
     <FrameLayout
         android:id="@+id/filtro_banner"
         android:layout_width="0dp"
@@ -15,7 +14,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Título "FILTROS" centrado dentro del banner -->
         <TextView
             android:id="@+id/filtro_title"
             android:layout_width="match_parent"
@@ -27,7 +25,6 @@
             android:gravity="center" />
     </FrameLayout>
 
-    <!-- Subtítulo "CATEGORIAS" debajo del banner -->
     <TextView
         android:id="@+id/categorias_subtitle"
         android:layout_width="wrap_content"
@@ -41,7 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Contenedor dinámico para los CheckBox de categorías -->
+    <!-- Contenedor para los CheckBox de categorías -->
     <LinearLayout
         android:id="@+id/linearLayoutCategorias"
         android:layout_width="match_parent"
@@ -54,7 +51,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Botón de Aplicar al final, centrado y con color personalizado -->
     <Button
         android:id="@+id/btnAplicarFiltros"
         android:layout_width="wrap_content"
