@@ -1,25 +1,37 @@
 package com.example.tpf_paii_android.modelos;
 
 public class CategoriaCurso {
-
-    private int id_categoria;
+    private int idCategoria;
     private String descripcion;
 
-    public CategoriaCurso() {
+    // Constructor
+    public CategoriaCurso(int idCategoria, String descripcion) {
+        this.idCategoria = idCategoria;
+        this.descripcion = descripcion;
     }
 
-    public int getId_categoria() {
-        return id_categoria;
+    // Getters y Setters
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
     public String getDescripcion() {
         return descripcion;
     }
 
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    // Método opcional para obtener una representación en texto
     @Override
     public String toString() {
         return "CategoriaCurso{" +
-                "id_categoria=" + id_categoria +
+                "idCategoria=" + idCategoria +
                 ", descripcion='" + descripcion + '\'' +
                 '}';
     }
