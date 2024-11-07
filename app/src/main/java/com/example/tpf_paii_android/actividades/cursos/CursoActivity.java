@@ -6,14 +6,11 @@ import android.text.Editable;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.adapters.CursoAdapter;
 import com.example.tpf_paii_android.viewmodels.CursoViewModel;
@@ -68,7 +65,7 @@ public class CursoActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
         ////////
-        // ver filtros disp
+        // ver filtros disponibles
         btnFiltrar.setOnClickListener(v -> {
             Intent intent = new Intent(CursoActivity.this, FiltroCursoActivity.class);
             startActivityForResult(intent, REQUEST_FILTRO); // Código de solicitud para el filtro

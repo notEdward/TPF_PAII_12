@@ -60,7 +60,7 @@ public class CursoRepository {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<CategoriaCurso> categorias = new ArrayList<>();
-            String query = "SELECT * FROM categoria_curso";  // Consulta para obtener las categorías
+            String query = "SELECT * FROM categoria_curso";
 
             try {
                 Class.forName(DatabaseConnection.driver);
@@ -86,53 +86,4 @@ public class CursoRepository {
             new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(categorias));
         });
     }
-
-//    // Método para obtener cursos filtrados por categorías
-//    public void getCursosPorCategorias(List<Integer> categoriasSeleccionadas, DataCallback<ArrayList<Curso>> callback) {
-//        ExecutorService executor = Executors.newSingleThreadExecutor();
-//        executor.execute(() -> {
-//            List<Curso> cursos = new ArrayList<>();
-//
-//            // Construimos la consulta con los IDs de las categorías seleccionadas
-//            StringBuilder queryBuilder = new StringBuilder("SELECT * FROM curso WHERE id_categoria IN (");
-//            for (int i = 0; i < categoriasSeleccionadas.size(); i++) {
-//                queryBuilder.append("?");
-//                if (i < categoriasSeleccionadas.size() - 1) queryBuilder.append(", ");
-//            }
-//            queryBuilder.append(")");
-//
-//            try {
-//                Class.forName(DatabaseConnection.driver);
-//                Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
-//                PreparedStatement statement = con.prepareStatement(queryBuilder.toString());
-//
-//                // Setear parámetros en la consulta preparada
-//                for (int i = 0; i < categoriasSeleccionadas.size(); i++) {
-//                    statement.setInt(i + 1, categoriasSeleccionadas.get(i));
-//                }
-//
-//                ResultSet resultSet = statement.executeQuery();
-//                while (resultSet.next()) {
-//                    Curso curso = new Curso(
-//                            resultSet.getInt("id_curso"),
-//                            resultSet.getString("nombre_curso"),
-//                            resultSet.getString("descripcion"),
-//                            resultSet.getInt("id_categoria"),
-//                            resultSet.getString("respuestas_correctas"),
-//                            resultSet.getString("estado")
-//                    );
-//                    cursos.add(curso);
-//                }
-//
-//                resultSet.close();
-//                statement.close();
-//                con.close();
-//            } catch (Exception e) {
-//                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
-//                return;
-//            }
-//
-//            new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess((ArrayList<Curso>) cursos));
-//        });
-//    }
 }
