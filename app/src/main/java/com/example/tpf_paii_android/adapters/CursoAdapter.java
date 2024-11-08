@@ -37,7 +37,7 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
     @Override
     public void onBindViewHolder(@NonNull CursoViewHolder holder, int position) {
         Curso curso = cursos.get(position);
-        
+
         holder.tvNombreCurso.setText(curso.getNombreCurso());
         holder.tvDescripcionCurso.setText(curso.getDescripcion());
 
@@ -50,6 +50,7 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
             intent.putExtra("nombreCurso", curso.getNombreCurso());
             intent.putExtra("descripcionCurso", curso.getDescripcion());
             // Puedes añadir más datos si es necesario (ej. id del curso)
+            intent.putExtra("idCurso", curso.getIdCurso());
             context.startActivity(intent);
             //
         });

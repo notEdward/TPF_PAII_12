@@ -38,7 +38,17 @@
             android:exported="false" /> <!-- Actividad cursos -->
         <activity
             android:name=".actividades.cursos.CursoActivity"
-            android:exported="false" /> <!-- <activity -->
+            android:exported="false" />
+        <activity android:name=".actividades.cursos.FiltroCursoActivity"
+            android:label="Filtro de Cursos">
+        </activity>
+        <activity android:name=".actividades.cursos.PreguntasActivity"
+            android:label="Preguntas de Cursos">
+        </activity>
+        <activity android:name=".actividades.cursos.CursoDetalleActivity"
+            android:label="Cursos detalles">
+        </activity>
+        <!-- <activity -->
         <!-- android:name=".actividades.cursos.CursoActivity" -->
         <!-- android:exported="true"> -->
         <!-- <intent-filter> -->

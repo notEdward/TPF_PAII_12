@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -32,10 +33,20 @@ public class CursoActivity extends AppCompatActivity {
     private static final int REQUEST_FILTRO = 1;
     private DrawerLayout drawerLayout;
 
+    private int idUsuario;
+    private String nombreUsuario;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curso);
+        //simulo recibir los datos del login
+        // Recuperar los datos del usuario
+        //Intent intent = getIntent();
+        idUsuario = 1; // intent.getIntExtra("id_usuario", -1);
+        nombreUsuario = "prueba";//intent.getStringExtra("nombre_usuario");
+        ///
+
         //inicializaciones + configs
         cursoViewModel = new ViewModelProvider(this).get(CursoViewModel.class);
         recyclerViewCursos = findViewById(R.id.recyclerViewCursos);
@@ -51,23 +62,23 @@ public class CursoActivity extends AppCompatActivity {
         ImageView menuHamburguesa = findViewById(R.id.menu_hamburguesa);
         NavigationView navigationView = findViewById(R.id.navigation_view);
         //listener
-        menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(Gravity.START));
+        menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
-        navigationView.setNavigationItemSelectedListener(menuItem -> {
-            int itemId = menuItem.getItemId();
-            if (itemId == R.id.nav_cursos) {
-                Toast.makeText(this, "Cursos seleccionados", Toast.LENGTH_SHORT).show();
-            } else if (itemId == R.id.nav_ofertas_empleo) {
-                Toast.makeText(this, "Ofertas de empleo seleccionadas", Toast.LENGTH_SHORT).show();
-            } else if (itemId == R.id.nav_tutorias) {
-                Toast.makeText(this, "Tutorías seleccionadas", Toast.LENGTH_SHORT).show();
-            } else if (itemId == R.id.nav_salir) {
-                Toast.makeText(this, "Salir", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-            drawerLayout.closeDrawer(Gravity.START);
-            return true;
-        });
+//        navigationView.setNavigationItemSelectedListener(menuItem -> {
+//            int itemId = menuItem.getItemId();
+//            if (itemId == R.id.nav_cursos) {
+//                Toast.makeText(this, "Cursos seleccionados", Toast.LENGTH_SHORT).show();
+//            } else if (itemId == R.id.nav_ofertas_empleo) {
+//                Toast.makeText(this, "Ofertas de empleo seleccionadas", Toast.LENGTH_SHORT).show();
+//            } else if (itemId == R.id.nav_tutorias) {
+//                Toast.makeText(this, "Tutorías seleccionadas", Toast.LENGTH_SHORT).show();
+//            } else if (itemId == R.id.nav_salir) {
+//                Toast.makeText(this, "Salir", Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//            drawerLayout.closeDrawer(Gravity.START);
+//            return true;
+//        });
         //fin menu//
 
         ////FILTROS POR LUPITA

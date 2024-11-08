@@ -64,11 +64,28 @@
             android:id="@+id/btnIniciarCapacitacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Iniciar capacitación"
+            android:text=" Registrarme "
             android:backgroundTint="#3CB371"
             android:textColor="#FFFFFF"
             android:layout_gravity="center_horizontal"
             android:padding="12dp" />
+
+        <Button
+            android:id="@+id/btnIniciarCurso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey"
+            android:enabled="false"
+            android:text="Iniciar Curso"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewPreguntas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
