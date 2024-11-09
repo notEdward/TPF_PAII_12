@@ -11,15 +11,13 @@ public class Empresa {
     private String telefono;
     private String direccion;
     private Localidad id_localidad;
-    private Provincia id_provincia;
     private Usuario id_usuario;
-    private boolean estado;
 
 
     public Empresa() {
     }
 
-    public Empresa(int id_empresa, String nombre, String descripcion, String sector, String n_identificacionFiscal, String email, String telefono, String direccion, Localidad id_localidad, Provincia id_provincia, Usuario id_usuario, boolean estado) {
+    public Empresa(int id_empresa, String nombre, String descripcion, String sector, String n_identificacionFiscal, String email, String telefono, String direccion, Localidad id_localidad, Usuario id_usuario) {
         this.id_empresa = id_empresa;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -29,15 +27,12 @@ public class Empresa {
         this.telefono = telefono;
         this.direccion = direccion;
         this.id_localidad = id_localidad;
-        this.id_provincia = id_provincia;
         this.id_usuario = id_usuario;
-        this.estado = estado;
     }
 
     public int getId_empresa() {
         return id_empresa;
     }
-
 
     public String getNombre() {
         return nombre;
@@ -103,26 +98,10 @@ public class Empresa {
         this.id_localidad = id_localidad;
     }
 
-    public Provincia getId_provincia() {
-        return id_provincia;
-    }
-
-    public void setId_provincia(Provincia id_provincia) {
-        this.id_provincia = id_provincia;
-    }
-
-    public Usuario getId_usuario() {
+     public Usuario getId_usuario() {
         return id_usuario;
     }
 
-
-    public boolean isEstado() {
-        return estado;
-    }
-
-    public void setEstado(boolean estado) {
-        this.estado = estado;
-    }
 
     @Override
     public String toString() {
@@ -136,9 +115,7 @@ public class Empresa {
                 ", telefono='" + telefono + '\'' +
                 ", direccion='" + direccion + '\'' +
                 ", id_localidad=" + id_localidad +
-                ", id_provincia=" + id_provincia +
                 ", id_usuario=" + id_usuario +
-                ", estado=" + estado +
                 '}';
     }
 }
