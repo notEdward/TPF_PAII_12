@@ -1,5 +1,6 @@
 package com.example.tpf_paii_android.actividades.cursos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -84,6 +85,12 @@ public class PreguntasActivity extends AppCompatActivity {
         if (todasRespondidas) {
             Date fechaFinalizacion = new Date(); // Fecha de finalización actual
             cursoViewModel.registrarEvaluacion(idInscripcion, puntosObtenidos, fechaFinalizacion);
+
+            // Aviso que finalice con exito
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("cuestionarioFinalizado", true);
+            setResult(RESULT_OK, resultIntent);
+            finish();
         } else {
             Toast.makeText(this, "Debe responder todas las preguntas antes de enviar", Toast.LENGTH_SHORT).show();
         }

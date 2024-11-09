@@ -60,12 +60,20 @@
             android:layout_gravity="center_horizontal"
             android:paddingBottom="8dp" />
 
+        <!-- ProgressBar para mostrar mientras se carga el estado de inscripción -->
+        <ProgressBar
+            android:id="@+id/progressBarLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/btnIniciarCapacitacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text=" Registrarme "
-            android:backgroundTint="#3CB371"
             android:textColor="#FFFFFF"
             android:layout_gravity="center_horizontal"
             android:padding="12dp" />
@@ -74,9 +82,19 @@
             android:id="@+id/btnIniciarCurso"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/grey"
             android:enabled="false"
             android:text="Iniciar Curso"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnDescargarCertificado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Certificado"
+            android:textColor="#FFFFFF"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp" />
 

@@ -7,6 +7,7 @@ import com.example.tpf_paii_android.modelos.CategoriaCurso;
 import com.example.tpf_paii_android.modelos.Curso;
 import com.example.tpf_paii_android.modelos.Evaluacion;
 import com.example.tpf_paii_android.modelos.Inscripcion;
+import com.example.tpf_paii_android.modelos.InscripcionEstado;
 import com.example.tpf_paii_android.modelos.Opcion;
 import com.example.tpf_paii_android.modelos.Pregunta;
 
@@ -122,31 +123,33 @@ public class CursoRepository {
             }
         });
     }
-
-//    public void verificarInscripcionActiva(int idCurso, int idUsuario, DataCallback<Boolean> callback) {
-//        executor.execute(() -> {
-//            String query = "SELECT COUNT(*) FROM inscripciones WHERE id_curso = ? AND id_usuario = ? AND estado_inscripcion = 'activo'";
 //
-//            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
-//                 PreparedStatement statement = con.prepareStatement(query)) {
+//public void verificarInscripcionActiva(int idCurso, int idUsuario, DataCallback<Integer> callback) {
+//    executor.execute(() -> {
+//        String query = "SELECT id_inscripcion FROM inscripciones WHERE id_curso = ? AND id_usuario = ? AND estado_inscripcion = 'activo'";
 //
-//                Class.forName(DatabaseConnection.driver);
-//                statement.setInt(1, idCurso);
-//                statement.setInt(2, idUsuario);
+//        try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+//             PreparedStatement statement = con.prepareStatement(query)) {
 //
-//                ResultSet resultSet = statement.executeQuery();
-//                resultSet.next();
-//                int count = resultSet.getInt(1);
+//            Class.forName(DatabaseConnection.driver);
+//            statement.setInt(1, idCurso);
+//            statement.setInt(2, idUsuario);
 //
-//                mainHandler.post(() -> callback.onSuccess(count > 0));
-//            } catch (Exception e) {
-//                mainHandler.post(() -> callback.onFailure(e));
+//            ResultSet resultSet = statement.executeQuery();
+//            if (resultSet.next()) {
+//                int idInscripcion = resultSet.getInt("id_inscripcion");
+//                mainHandler.post(() -> callback.onSuccess(idInscripcion)); // Devolver el idInscripcion
+//            } else {
+//                mainHandler.post(() -> callback.onSuccess(null)); // Si no existe inscripción, devolver null
 //            }
-//        });
-//    }
-public void verificarInscripcionActiva(int idCurso, int idUsuario, DataCallback<Integer> callback) {
+//        } catch (Exception e) {
+//            mainHandler.post(() -> callback.onFailure(e)); // Manejo de error
+//        }
+//    });
+//}
+public void verificarInscripcionEstado(int idCurso, int idUsuario, DataCallback<InscripcionEstado> callback) {
     executor.execute(() -> {
-        String query = "SELECT id_inscripcion FROM inscripciones WHERE id_curso = ? AND id_usuario = ? AND estado_inscripcion = 'activo'";
+        String query = "SELECT id_inscripcion, estado_inscripcion FROM inscripciones WHERE id_curso = ? AND id_usuario = ?";
 
         try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
              PreparedStatement statement = con.prepareStatement(query)) {
@@ -158,9 +161,12 @@ public void verificarInscripcionActiva(int idCurso, int idUsuario, DataCallback<
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 int idInscripcion = resultSet.getInt("id_inscripcion");
-                mainHandler.post(() -> callback.onSuccess(idInscripcion)); // Devolver el idInscripcion
+                String estadoInscripcion = resultSet.getString("estado_inscripcion");
+
+                InscripcionEstado inscripcionEstado = new InscripcionEstado(idInscripcion, estadoInscripcion);
+                mainHandler.post(() -> callback.onSuccess(inscripcionEstado)); // Devolver el idInscripcion y estado
             } else {
-                mainHandler.post(() -> callback.onSuccess(null)); // Si no existe inscripción, devolver null
+                mainHandler.post(() -> callback.onSuccess(null)); // Si no existe inscripción
             }
         } catch (Exception e) {
             mainHandler.post(() -> callback.onFailure(e)); // Manejo de error
@@ -219,34 +225,46 @@ public void verificarInscripcionActiva(int idCurso, int idUsuario, DataCallback<
         });
     }
 
+public void registrarEvaluacion(Evaluacion evaluacion, DataCallback<Boolean> callback) {
+    executor.execute(() -> {
+        String queryEvaluacion = "INSERT INTO evaluaciones (id_inscripcion, nota_obtenida, fecha_finalizacion) VALUES (?, ?, ?)";
+        String queryInscripcion = "UPDATE inscripciones SET estado_inscripcion = ? WHERE id_inscripcion = ?";
 
-    public void registrarEvaluacion(Evaluacion evaluacion, DataCallback<Boolean> callback) {
-        executor.execute(() -> {
-            String query = "INSERT INTO evaluaciones (id_inscripcion, nota_obtenida, fecha_finalizacion) VALUES (?, ?, ?)";
+        try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+             PreparedStatement statementEvaluacion = con.prepareStatement(queryEvaluacion);
+             PreparedStatement statementInscripcion = con.prepareStatement(queryInscripcion)) {
 
-            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
-                 PreparedStatement statement = con.prepareStatement(query)) {
+            Class.forName(DatabaseConnection.driver);
 
-                Class.forName(DatabaseConnection.driver);
+            // Registrar la evaluación
+            statementEvaluacion.setInt(1, evaluacion.getIdInscripcion());
+            statementEvaluacion.setInt(2, evaluacion.getNotaObtenida());
+            statementEvaluacion.setDate(3, new java.sql.Date(evaluacion.getFechaFinalizacion().getTime()));
 
-                statement.setInt(1, evaluacion.getIdInscripcion());
-                statement.setInt(2, evaluacion.getNotaObtenida());
-                statement.setDate(3, new java.sql.Date(evaluacion.getFechaFinalizacion().getTime()));
+            int rowsInserted = statementEvaluacion.executeUpdate();
 
-                int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                // Actualizar estado de la inscripción
+                statementInscripcion.setString(1, "finalizado");
+                statementInscripcion.setInt(2, evaluacion.getIdInscripcion());
 
-                mainHandler.post(() -> {
-                    if (rowsInserted > 0) {
-                        callback.onSuccess(true);
-                    } else {
-                        callback.onFailure(new SQLException("No se pudo insertar la evaluación"));
-                    }
-                });
-            } catch (Exception e) {
-                mainHandler.post(() -> callback.onFailure(e));
+                int rowsUpdated = statementInscripcion.executeUpdate();
+
+                // Verificar si ambas operaciones fueron exitosas
+                if (rowsUpdated > 0) {
+                    mainHandler.post(() -> callback.onSuccess(true)); // Ambas operaciones fueron exitosas
+                } else {
+                    mainHandler.post(() -> callback.onFailure(new SQLException("No se pudo actualizar el estado de la inscripción")));
+                }
+            } else {
+                mainHandler.post(() -> callback.onFailure(new SQLException("No se pudo insertar la evaluación")));
             }
-        });
-    }
+
+        } catch (Exception e) {
+            mainHandler.post(() -> callback.onFailure(e));
+        }
+    });
+}
 
 
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.tpf_paii_android.modelos.Curso;
 import com.example.tpf_paii_android.modelos.Evaluacion;
 import com.example.tpf_paii_android.modelos.Inscripcion;
+import com.example.tpf_paii_android.modelos.InscripcionEstado;
 import com.example.tpf_paii_android.modelos.Pregunta;
 import com.example.tpf_paii_android.repositorios.CursoRepository;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class CursoViewModel extends ViewModel {
     private MutableLiveData<Exception> errorLiveData;
     private final MutableLiveData<Boolean> inscripcionExitosa = new MutableLiveData<>();
 //    private MutableLiveData<Boolean> inscripcionActiva = new MutableLiveData<>();
-private MutableLiveData<Integer> inscripcionActiva = new MutableLiveData<>();
+private MutableLiveData<InscripcionEstado> inscripcionActiva = new MutableLiveData<>();
     private final MutableLiveData<List<Pregunta>> preguntasConOpciones = new MutableLiveData<>();
     private MutableLiveData<Boolean> evaluacionExitosa = new MutableLiveData<>();
 
@@ -40,17 +41,15 @@ private MutableLiveData<Integer> inscripcionActiva = new MutableLiveData<>();
     public LiveData<Boolean> getInscripcionExitosa() {
         return inscripcionExitosa;
     }
-//    public LiveData<Boolean> getInscripcionActiva() {
-//        return inscripcionActiva;
-//    }
-public LiveData<Integer> getInscripcionActiva() {
-    return inscripcionActiva;
-}
+
     public LiveData<List<Pregunta>> getPreguntasConOpciones() {
         return preguntasConOpciones;
     }
     public LiveData<Boolean> getEvaluacionExitosa() {
         return evaluacionExitosa;
+    }
+    public MutableLiveData<InscripcionEstado> getInscripcionEstado() {
+        return inscripcionActiva;
     }
 
     public void cargarCursos() {
@@ -118,37 +117,41 @@ public LiveData<Integer> getInscripcionActiva() {
             }
         });
     }
-
-//    public void verificarInscripcionActiva(int idCurso, int idUsuario) {
-//        cursoRepository.verificarInscripcionActiva(idCurso, idUsuario, new CursoRepository.DataCallback<Boolean>() {
-//            @Override
-//            public void onSuccess(Boolean isActive) {
-//                inscripcionActiva.postValue(isActive);
-//            }
 //
-//            @Override
-//            public void onFailure(Exception e) {
-//                inscripcionActiva.postValue(false);  // Manejar error
+//public void verificarInscripcionActiva(int idCurso, int idUsuario) {
+//    cursoRepository.verificarInscripcionActiva(idCurso, idUsuario, new CursoRepository.DataCallback<Integer>() {
+//        @Override
+//        public void onSuccess(Integer idInscripcion) {
+//            if (idInscripcion != null) {
+//                // Si existe una inscripción activa, guardamos el idInscripcion
+//                inscripcionActiva.postValue(idInscripcion);
+//            } else {
+//                // Si no existe inscripción activa, pasamos null
+//                inscripcionActiva.postValue(null);
 //            }
-//        });
-//    }
-public void verificarInscripcionActiva(int idCurso, int idUsuario) {
-    cursoRepository.verificarInscripcionActiva(idCurso, idUsuario, new CursoRepository.DataCallback<Integer>() {
+//        }
+//
+//        @Override
+//        public void onFailure(Exception e) {
+//            // Manejo de error
+//            inscripcionActiva.postValue(null);
+//        }
+//    });
+//}
+public void verificarInscripcionEstado(int idCurso, int idUsuario) {
+    cursoRepository.verificarInscripcionEstado(idCurso, idUsuario, new CursoRepository.DataCallback<InscripcionEstado>() {
         @Override
-        public void onSuccess(Integer idInscripcion) {
-            if (idInscripcion != null) {
-                // Si existe una inscripción activa, guardamos el idInscripcion
-                inscripcionActiva.postValue(idInscripcion);
+        public void onSuccess(InscripcionEstado inscripcionEstado) {
+            if (inscripcionEstado != null) {
+                inscripcionActiva.postValue(inscripcionEstado); // Ahora tienes el idInscripcion y estado
             } else {
-                // Si no existe inscripción activa, pasamos null
-                inscripcionActiva.postValue(null);
+                inscripcionActiva.postValue(null); // Si no hay inscripción
             }
         }
 
         @Override
         public void onFailure(Exception e) {
-            // Manejo de error
-            inscripcionActiva.postValue(null);
+            inscripcionActiva.postValue(null); // Error al obtener el estado
         }
     });
 }
