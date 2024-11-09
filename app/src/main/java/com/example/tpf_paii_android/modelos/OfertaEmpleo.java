@@ -14,6 +14,14 @@ public class OfertaEmpleo {
     private String direccion;
     private Localidad id_localidad;
 
+    //Para constructoro simple
+    private int idEmpresa;
+    private int idTipoEmpleo;
+    private int idTipoModalidad;
+    private int idNivelEducativo;
+    private int idCurso;
+    private int idLocalidad;
+
     public OfertaEmpleo() {
     }
 
@@ -29,6 +37,23 @@ public class OfertaEmpleo {
         this.otrosRequisitos = otrosRequisitos;
         this.direccion = direccion;
         this.id_localidad = id_localidad;
+    }
+
+    // Constructor Simple para ver ofertas
+    public OfertaEmpleo(int id_ofertaEmpleo, int idEmpresa, String titulo, String descripcion, int idTipoEmpleo,
+                        int idTipoModalidad, int idNivelEducativo, int idCurso, String otrosRequisitos,
+                        String direccion, int idLocalidad) {
+        this.id_ofertaEmpleo = id_ofertaEmpleo;
+        this.idEmpresa = idEmpresa;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.idTipoEmpleo = idTipoEmpleo;
+        this.idTipoModalidad = idTipoModalidad;
+        this.idNivelEducativo = idNivelEducativo;
+        this.idCurso = idCurso;
+        this.otrosRequisitos = otrosRequisitos;
+        this.direccion = direccion;
+        this.idLocalidad = idLocalidad;
     }
 
     public int getId_ofertaEmpleo() {

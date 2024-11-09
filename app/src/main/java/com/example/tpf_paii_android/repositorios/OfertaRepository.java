@@ -45,7 +45,6 @@ public class OfertaRepository {
                             resultSet.getInt("id_curso"),
                             resultSet.getString("otros_requisitos"),
                             resultSet.getString("direccion"),
-                            resultSet.getInt("id_provincia"),
                             resultSet.getInt("id_localidad")
                     );
                     ofertas.add(oferta);
