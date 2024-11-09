@@ -58,6 +58,11 @@
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
+        <!-- Mostrar Ofertas -->
+                <activity android:name=".actividades.ofertas.OfertaActivity"
+                    android:label="Ofertas">
+                </activity>
+
         <!-- Actividad principal -->
         <activity
             android:name=".MainActivity"

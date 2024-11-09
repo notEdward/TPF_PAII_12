@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/imageOferta"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:src="@drawable/img3_tpf"/>
+
+    <TextView
+        android:id="@+id/tvTituloOferta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Título de la Oferta"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tvDescripcionOferta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descripción de la oferta"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tvVerOferta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ver oferta"
+        android:textColor="#0000FF"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp" />
+
+</LinearLayout>
