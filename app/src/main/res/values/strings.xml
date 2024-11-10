@@ -17,23 +17,41 @@
     <string name="rbTutor"> Tutor</string>
     <string name="btnIniciarRegistro">Iniciar Registro</string>
 
-    <!-- REGISTRAR EMPRESA-->
+    <!-- REGISTRAR -->
     <string name="tvRegistrarEmpresa">Registrar Empresa</string>
-    <string name="tvDatosEmp">Datos</string>
-    <string name="txtNombreEmp">Nombre</string>
+    <string name="tvRegistrarTutor">Registrar Tutor</string>
+    <string name="tvRegistrarEstudiante">Registrar Estudiante</string>
+    <string name="tvDatos">Datos</string>
+    <string name="txtNombre">Nombre</string>
+    <string name="txtApellido">Apellido</string>
+    <string name="txtDNI">DNI</string>
+    <string name="txtEdad">Edad</string>
+    <string name="txtOcupacion">Ocupación</string>
+    <string name="txtPasatiempos">Pasatiempos</string>
+    <string name="txtMasSobreVos">Mas sobre vos</string>
+    <string name="txtGenero">Género</string>
     <string name="txtDescripcionEmp">Descripcion</string>
     <string name="txtSectorEmp">Sector</string>
     <string name="txtNIdentificacionEmp"> N° de identificación fiscal</string>
-    <string name="tvUsuarioEmp">Usuario</string>
-    <string name="txtNombreUsuarioEmp">Nombre de usuario</string>
-    <string name="txtPassEmp">Contraseña</string>
-    <string name="txtRepetirPassEmp">Repetir contraseña</string>
-    <string name="tvContactoEmp">Contacto</string>
-    <string name="txtEmailEmp">Email</string>
-    <string name="txtTelefonoEmp">N° de teléfono</string>
-    <string name="tvUbicacionEmp">Ubicacion</string>
-    <string name="txtDireccionEmp">Dirección</string>
-    <string name="tvProvinciaEmp">Provincia</string>
-    <string name="tvLocalidadEmp">Localidad</string>
-    <string name="btnRegistrarEmp">Registrarse</string>
+    <string name="tvUsuario">Usuario</string>
+    <string name="txtNombreUsuario">Nombre de usuario</string>
+    <string name="txtPass">Contraseña</string>
+    <string name="txtRepetirPass">Repetir contraseña</string>
+    <string name="tvContacto">Contacto</string>
+    <string name="txtEmail">Email</string>
+    <string name="txtNivelEducativo">Nivel educativo</string>
+    <string name="txtEstado">Estado</string>
+    <string name="txtTelefono">N° de teléfono</string>
+    <string name="tvUbicacion">Ubicacion</string>
+    <string name="txtLugar">Lugar de trabajo</string>
+    <string name="txtCargo">Cargo ocupado</string>
+    <string name="txtTareas">Tareas realizadas</string>
+    <string name="txtDuracion">Duración</string>
+    <string name="txtDireccion">Dirección</string>
+    <string name="tvProvincia">Provincia</string>
+    <string name="tvLocalidad">Localidad</string>
+    <string name="tvEducacion">Educación</string>
+    <string name="tvExperienciaLaboral">Experiencia laboral</string>
+    <string name="tvInfoAdicional">Info Adicional</string>
+    <string name="btnRegistrar">Registrarse</string>
 </resources>

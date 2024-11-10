@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +9,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar6"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
@@ -21,12 +20,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:layout_width="382dp"
-        android:layout_height="716dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar6"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,60 +31,60 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/tvDatosTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="8dp"
-                android:text="Datos"
+                android:text="@string/tvDatos"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextText9"
+                android:id="@+id/txtNombreTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:ems="10"
-                android:hint="Nombre"
+                android:hint="@string/txtNombre"
                 android:inputType="text"
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/editTextText10"
+                android:id="@+id/txtApellidoTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:ems="10"
-                android:hint="Apellido"
+                android:hint="@string/txtApellido"
                 android:inputType="text"
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/editTextNumber"
+                android:id="@+id/txtDniTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:ems="10"
-                android:hint="DNI"
+                android:hint="@string/txtDNI"
                 android:inputType="number"
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/editTextNumber2"
+                android:id="@+id/txtEdadTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:ems="10"
-                android:hint="Edad"
+                android:hint="@string/txtEdad"
                 android:inputType="number"
                 android:textSize="20sp" />
 
@@ -97,17 +94,17 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView16"
+                    android:id="@+id/tvGeneroTutor"
                     android:layout_width="258dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
-                    android:text="Género"
+                    android:text="@string/txtGenero"
                     android:textSize="20sp" />
 
                 <Spinner
-                    android:id="@+id/spinner7"
+                    android:id="@+id/spGeneroTutor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -116,113 +113,117 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textView24"
+                android:id="@+id/tvUsuarioTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="25dp"
-                android:text="Usuario"
+                android:text="@string/tvUsuario"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextText11"
+                android:id="@+id/txtNombreUsuarioTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:ems="10"
-                android:hint="Nombre de usuario"
+                android:hint="@string/txtNombreUsuario"
                 android:inputType="text"
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/editTextTextPassword"
+                android:id="@+id/txtContrasenaTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:ems="10"
-                android:hint="Contraseña"
+                android:hint="@string/txtPass"
                 android:inputType="textPassword"
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/editTextTextPassword2"
+                android:id="@+id/txtRepetirContrasenaTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:ems="10"
-                android:hint="Repetir contraseña"
+                android:hint="@string/txtRepetirPass"
                 android:inputType="textPassword"
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/textView25"
+                android:id="@+id/tvInfoAdicionalTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="25dp"
-                android:text="Info adicional"
+                android:text="@string/tvInfoAdicional"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextText12"
+                android:id="@+id/txtOcupacionTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:ems="10"
-                android:hint="Ocupación"
+                android:hint="@string/txtOcupacion"
                 android:inputType="text"
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/editTextText13"
+                android:id="@+id/txtPasaTiemposTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:ems="10"
-                android:hint="Pasatiempos"
+                android:hint="@string/txtPasatiempos"
                 android:inputType="text"
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/editTextText14"
+                android:id="@+id/txtMasSobreTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginStart="15sp"
+                android:layout_marginTop="8sp"
+                android:layout_marginEnd="15sp"
                 android:ems="10"
-                android:hint="Mas sobre vos"
-                android:inputType="text"
+                android:gravity="start|top"
+                android:hint="@string/txtMasSobreVos"
+                android:inputType="textMultiLine"
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btnRegistrarseTutor"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Registrarse"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30sp"
+                android:layout_marginTop="8sp"
+                android:layout_marginEnd="30sp"
+                android:text="@string/btnRegistrar"
                 android:textSize="24sp" />
 
         </LinearLayout>
     </ScrollView>
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/tvRegistrarTutor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Registrar Tutor"
+        android:text="@string/tvRegistrarTutor"
         android:textColor="#FAF8F8"
         android:textSize="34sp"
         android:textStyle="bold"

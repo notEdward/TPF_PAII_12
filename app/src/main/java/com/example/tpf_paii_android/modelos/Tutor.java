@@ -28,7 +28,7 @@ public class Tutor extends Usuario{
         this.infoAdicional = infoAdicional;
     }
 
-    // Constructor que incluye Usuario 
+    // Constructor que incluye Usuario
     public Tutor(int idTutor, String dni, String nombre, String apellido, int edad, Genero idGenero, String ocupacion, String pasatiempos, String infoAdicional, Usuario usuario) {
         super(usuario);
         this.idTutor = idTutor;
