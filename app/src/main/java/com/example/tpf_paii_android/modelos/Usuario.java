@@ -10,6 +10,14 @@ public class Usuario {
     public Usuario() {
     }
 
+    // Constructor que recibe un objeto Usuario
+    public Usuario(Usuario usuario){
+        this.id_usuario = usuario.id_usuario;
+        this.nombreUsuario = usuario.nombreUsuario;
+        this.contrasenia = usuario.contrasenia;
+        this.id_tipoUsuario = usuario.id_tipoUsuario;
+    }
+
     public Usuario(String nombreUsuario, String contrasenia) {
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
