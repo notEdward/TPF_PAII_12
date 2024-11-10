@@ -2,7 +2,7 @@ package com.example.tpf_paii_android.modelos;
 
 public class Tutor {
 
-    private int dni;
+    private String dni; // El dni es varchar(20) en la bd
     private Usuario id_usuario;
     private String nombre;
     private String apellido;
@@ -12,10 +12,12 @@ public class Tutor {
     private String pasatiempos;
     private String infoAdicional;
 
+    // Constructor
     public Tutor() {
     }
 
-    public Tutor(int dni, Usuario id_usuario, String nombre, String apellido, int edad, Genero id_genero, String ocupacion, String pasatiempos, String infoAdicional) {
+    // Constructor
+    public Tutor(String dni, Usuario id_usuario, String nombre, String apellido, int edad, Genero id_genero, String ocupacion, String pasatiempos, String infoAdicional) {
         this.dni = dni;
         this.id_usuario = id_usuario;
         this.nombre = nombre;
@@ -27,12 +29,21 @@ public class Tutor {
         this.infoAdicional = infoAdicional;
     }
 
-    public int getDni() {
+    // Getters y setters
+    public String getDni() {
         return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public Usuario getId_usuario() {
         return id_usuario;
+    }
+
+    public void setId_usuario(Usuario id_usuario) {
+        this.id_usuario = id_usuario;
     }
 
     public String getNombre() {
@@ -91,10 +102,11 @@ public class Tutor {
         this.infoAdicional = infoAdicional;
     }
 
+    // Método toString
     @Override
     public String toString() {
         return "Tutor{" +
-                "dni=" + dni +
+                "dni='" + dni + '\'' +
                 ", id_usuario=" + id_usuario +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
