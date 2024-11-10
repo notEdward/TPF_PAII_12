@@ -223,7 +223,7 @@
                     android:layout_weight="1"
                     android:paddingStart="15dp"
                     android:paddingTop="8dp"
-                    android:text="@string/tvProvinciaEmp"
+                    android:text="@string/tvProvincia"
                     android:textSize="18sp" />
 
                 <Spinner
@@ -247,7 +247,7 @@
                     android:layout_weight="1"
                     android:paddingStart="15dp"
                     android:paddingEnd="8dp"
-                    android:text="@string/tvLocalidadEmp"
+                    android:text="@string/tvLocalidad"
                     android:textSize="18sp" />
 
                 <Spinner
