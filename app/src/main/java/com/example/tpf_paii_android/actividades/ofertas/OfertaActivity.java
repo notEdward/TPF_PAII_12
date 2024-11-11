@@ -1,8 +1,19 @@
 package com.example.tpf_paii_android.actividades.ofertas;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +21,10 @@ import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.adapters.OfertaAdapter;
 import com.example.tpf_paii_android.modelos.OfertaEmpleo;
 import com.example.tpf_paii_android.viewmodels.OfertaViewModel;
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class OfertaActivity extends AppCompatActivity implements OfertaAdapter.OnOfertaClickListener {
@@ -17,33 +32,99 @@ public class OfertaActivity extends AppCompatActivity implements OfertaAdapter.O
     private RecyclerView recyclerView;
     private OfertaAdapter adapter;
     private OfertaViewModel ofertaViewModel;
+    private EditText editTextBuscar;
+    private List<OfertaEmpleo> listaOfertasEmpleo = new ArrayList<>();
+    private Button btnFiltrar;
+
+    private int idUsuario;
+    private String nombreUsuario;
+    private DrawerLayout drawerLayout;
+
+    private static final int FILTER_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_oferta);
-
+        btnFiltrar = findViewById(R.id.btnFiltrar);
         recyclerView = findViewById(R.id.recyclerViewOfertas);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
+        recyclerView.setLayoutManager(gridLayoutManager);
 
         adapter = new OfertaAdapter(null, this);
         recyclerView.setAdapter(adapter);
 
         ofertaViewModel = new ViewModelProvider(this).get(OfertaViewModel.class);
 
-        ofertaViewModel.getOfertasLiveData().observe(this, ofertas -> {
+        //Prueba menu hamburguesa
+        idUsuario = 1; // intent.getIntExtra("id_usuario", -1);
+        nombreUsuario = "prueba";//intent.getStringExtra("nombre_usuario");
+        drawerLayout = findViewById(R.id.drawer_layout);
+        ImageView menuHamburguesa = findViewById(R.id.menu_hamburguesa);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        //listener
+        menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+        ////
+
+        // Observa ofertas filtradas
+        ofertaViewModel.getOfertasFiltradas().observe(this, ofertas -> {
             if (ofertas != null) {
                 adapter.setOfertas(ofertas);
             }
         });
+        ofertaViewModel.getErrorMessage().observe(this, error -> {
+            if (error != null) {
+                Toast.makeText(getApplicationContext(), "Error al cargar las ofertas", Toast.LENGTH_SHORT).show();
+            }
+        });
 
+        // carga ofertas inicial
         ofertaViewModel.loadOfertas();
-    }
 
+        // filtro buscar (por caracteres)
+        editTextBuscar = findViewById(R.id.editTextBuscar);
+        editTextBuscar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ofertaViewModel.filtrarOfertas(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        // btn filtrar
+        btnFiltrar.setOnClickListener(v -> {
+            // Abrir la actividad de filtros
+            Intent intent = new Intent(OfertaActivity.this, FiltroOfertaActivity.class);
+            startActivityForResult(intent, FILTER_REQUEST_CODE);
+        });
+    }
 
     @Override
     public void onVerOfertaClick(OfertaEmpleo oferta) {
     //dps ver el botno ver oferta
         System.out.println("Oferta seleccionada: " + oferta.getTitulo());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == FILTER_REQUEST_CODE && resultCode == RESULT_OK) {
+            //modalidades, tipos de empleo y cursos del filtro elegido
+            ArrayList<Integer> modalidadesSeleccionadas = data.getIntegerArrayListExtra("modalidadesSeleccionadas");
+            ArrayList<Integer> tiposEmpleoSeleccionados = data.getIntegerArrayListExtra("tiposEmpleoSeleccionados");
+            ArrayList<Integer> cursosSeleccionados = data.getIntegerArrayListExtra("cursosSeleccionados");
+
+            filtroOfertas(modalidadesSeleccionadas, tiposEmpleoSeleccionados, cursosSeleccionados);
+        }
+    }
+    private void filtroOfertas(ArrayList<Integer> modalidades, ArrayList<Integer> tiposEmpleo, ArrayList<Integer> cursos) {
+
+        ofertaViewModel.obtenerOfertasConFiltros(modalidades, tiposEmpleo, cursos);
     }
 }

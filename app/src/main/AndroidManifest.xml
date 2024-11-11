@@ -41,33 +41,40 @@
             android:exported="false" />
         <activity
             android:name=".actividades.registracion.RegistrarEstudiante"
-            android:exported="false" /> <!-- Actividad para iniciar registro -->
+            android:exported="false" />
+        <!-- Actividad para iniciar registro -->
         <activity
             android:name=".actividades.autenticacion.IniciarRegistro"
-            android:exported="false" /> <!-- Actividad cursos -->
+            android:exported="false" />
+        <!-- Actividad cursos -->
         <activity
             android:name=".actividades.cursos.CursoActivity"
             android:exported="false" />
         <activity
             android:name=".actividades.cursos.FiltroCursoActivity"
-            android:label="Filtro de Cursos"></activity>
+            android:label="Filtro de Cursos">
+
+        </activity>
         <activity
             android:name=".actividades.cursos.PreguntasActivity"
-            android:label="Preguntas de Cursos"></activity>
+            android:label="Preguntas de Cursos">
+
+        </activity>
         <activity
             android:name=".actividades.cursos.CursoDetalleActivity"
-            android:label="Cursos detalles"></activity> <!-- <activity -->
-        <!-- android:name=".actividades.cursos.CursoActivity" -->
-        <!-- android:exported="true"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
+            android:label="Cursos detalles">
+        </activity>
+        <!--Fin cursos-->
         <!-- Mostrar Ofertas -->
-        <activity
-            android:name=".actividades.ofertas.OfertaActivity"
-            android:label="Ofertas"></activity> <!-- Actividad principal -->
+                <activity android:name=".actividades.ofertas.OfertaActivity"
+                    android:label="Ofertas">
+                </activity>
+
+        <activity android:name=".actividades.ofertas.FiltroOfertaActivity"
+            android:label="Filtro de Ofertas">
+        </activity>
+        <!--Fin ofertas-->
+        <!-- Actividad principal -->
         <activity
             android:name=".MainActivity"
             android:exported="false" /> <!-- Actividad de Login, inicio de la app -->

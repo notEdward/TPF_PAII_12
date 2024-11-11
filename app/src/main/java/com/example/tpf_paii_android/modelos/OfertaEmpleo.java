@@ -152,4 +152,33 @@ public class OfertaEmpleo {
                 ", id_localidad=" + id_localidad +
                 '}';
     }
+
+    //Setters simplificados.
+    public int setId_ofertaEmpleo(int idOfertaEmpleo) {
+        return this.id_ofertaEmpleo = idOfertaEmpleo;
+    }
+
+    public int setId_empresa(int idEmpresa) {
+        return this.idEmpresa = idEmpresa;
+    }
+
+    public int setId_tipoModalidad(int idTipoModalidad) {
+        return this.idTipoModalidad = idTipoModalidad;
+    }
+
+    public int setId_localidad(int id_localidad) {
+        return this.idLocalidad = id_localidad;
+    }
+
+    public int setId_curso(int id_curso) {
+        return this.idCurso = id_curso;
+    }
+
+    public int setId_nivelEducativo(int id_nivelEducativo) {
+        return this.idNivelEducativo = id_nivelEducativo;
+    }
+    public int setId_tipoEmpleo(int id_tipoEmpleo) {
+        return this.idTipoEmpleo = id_tipoEmpleo;
+    }
+
 }

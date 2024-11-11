@@ -16,6 +16,14 @@ public class TipoEmpleo {
         return descripcion;
     }
 
+    //setters
+    public void setId_tipoEmpleo(int id_tipoEmpleo) {
+        this.id_tipoEmpleo = id_tipoEmpleo;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     @Override
     public String toString() {
         return "TipoEmpleo{" +

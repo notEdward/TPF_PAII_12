@@ -16,6 +16,14 @@ public class Modalidad {
         return descripcion;
     }
 
+    //setters
+    public void setId_modalidad(int id_modalidad) {
+        this.id_modalidad = id_modalidad;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     @Override
     public String toString() {
         return "Modalidad{" +
