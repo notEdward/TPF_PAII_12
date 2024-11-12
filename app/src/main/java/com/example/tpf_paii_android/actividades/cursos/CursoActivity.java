@@ -1,12 +1,15 @@
 package com.example.tpf_paii_android.actividades.cursos;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
@@ -16,6 +19,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.tpf_paii_android.R;
+import com.example.tpf_paii_android.actividades.menu_header.MenuHamburguesaActivity;
+import com.example.tpf_paii_android.actividades.ofertas.OfertaActivity;
 import com.example.tpf_paii_android.adapters.CursoAdapter;
 import com.example.tpf_paii_android.viewmodels.CursoViewModel;
 import com.google.android.material.navigation.NavigationView;
@@ -23,7 +28,7 @@ import com.google.android.material.navigation.NavigationView;
 import android.text.TextWatcher;
 import java.util.ArrayList;
 
-public class CursoActivity extends AppCompatActivity {
+public class CursoActivity extends MenuHamburguesaActivity {
 
     private RecyclerView recyclerViewCursos;
     private CursoAdapter cursoAdapter;
@@ -35,16 +40,20 @@ public class CursoActivity extends AppCompatActivity {
 
     private int idUsuario;
     private String nombreUsuario;
+    private String tipo_usuario;
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curso);
+
         //simulo recibir los datos del login
         // Recuperar los datos del usuario
         //Intent intent = getIntent();
         idUsuario = 1; // intent.getIntExtra("id_usuario", -1);
         nombreUsuario = "prueba";//intent.getStringExtra("nombre_usuario");
+        tipo_usuario = "Estudiante";
         ///
 
         //inicializaciones + configs
@@ -58,18 +67,26 @@ public class CursoActivity extends AppCompatActivity {
         recyclerViewCursos.setAdapter(cursoAdapter);
 
         //menu hamburguesa
-        drawerLayout = findViewById(R.id.drawer_layout);
-        ImageView menuHamburguesa = findViewById(R.id.menu_hamburguesa);
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        //listener
-        menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
-
+        setupDrawer(nombreUsuario, tipo_usuario);
+//        drawerLayout = findViewById(R.id.drawer_layout);
+//        ImageView menuHamburguesa = findViewById(R.id.menu_hamburguesa);
+//        NavigationView navigationView = findViewById(R.id.navigation_view);
+//        // Referencias a los TextView
+//        View headerView = navigationView.getHeaderView(0);
+//        TextView textoUsuario = headerView.findViewById(R.id.texto_usuario);
+//        TextView textoTipoUsuario = headerView.findViewById(R.id.texto_tipo_usuario);
+//        textoUsuario.setText(nombreUsuario);
+//        textoTipoUsuario.setText(tipo_usuario);
+//
+//        menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 //        navigationView.setNavigationItemSelectedListener(menuItem -> {
 //            int itemId = menuItem.getItemId();
 //            if (itemId == R.id.nav_cursos) {
-//                Toast.makeText(this, "Cursos seleccionados", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(this, CursoActivity.class);
+//                startActivity(intent);
 //            } else if (itemId == R.id.nav_ofertas_empleo) {
-//                Toast.makeText(this, "Ofertas de empleo seleccionadas", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(this, OfertaActivity.class);
+//                startActivity(intent);
 //            } else if (itemId == R.id.nav_tutorias) {
 //                Toast.makeText(this, "Tutorías seleccionadas", Toast.LENGTH_SHORT).show();
 //            } else if (itemId == R.id.nav_salir) {
@@ -93,7 +110,7 @@ public class CursoActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Error al cargar los cursos", Toast.LENGTH_SHORT).show();
             }
         });
-        // filtro cursos (escucho "en vivo")
+        // live listenr
         editTextBuscar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -109,7 +126,7 @@ public class CursoActivity extends AppCompatActivity {
         // ver filtros disponibles
         btnFiltrar.setOnClickListener(v -> {
             Intent intent = new Intent(CursoActivity.this, FiltroCursoActivity.class);
-            startActivityForResult(intent, REQUEST_FILTRO); // Código de solicitud para el filtro
+            startActivityForResult(intent, REQUEST_FILTRO); //cod q recibo del filtro
         });
         // filtro de cursos
         cursoViewModel.getCursosFiltrados().observe(this, cursos -> {

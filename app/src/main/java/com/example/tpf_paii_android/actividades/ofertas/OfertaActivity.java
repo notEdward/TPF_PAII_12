@@ -1,12 +1,16 @@
 package com.example.tpf_paii_android.actividades.ofertas;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tpf_paii_android.R;
+import com.example.tpf_paii_android.actividades.cursos.CursoActivity;
+import com.example.tpf_paii_android.actividades.menu_header.MenuHamburguesaActivity;
 import com.example.tpf_paii_android.adapters.OfertaAdapter;
 import com.example.tpf_paii_android.modelos.OfertaEmpleo;
 import com.example.tpf_paii_android.viewmodels.OfertaViewModel;
@@ -27,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class OfertaActivity extends AppCompatActivity implements OfertaAdapter.OnOfertaClickListener {
+public class OfertaActivity extends MenuHamburguesaActivity {
 
     private RecyclerView recyclerView;
     private OfertaAdapter adapter;
@@ -39,9 +45,11 @@ public class OfertaActivity extends AppCompatActivity implements OfertaAdapter.O
     private int idUsuario;
     private String nombreUsuario;
     private DrawerLayout drawerLayout;
+    private String tipo_usuario;
 
     private static final int FILTER_REQUEST_CODE = 100;
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,19 +59,42 @@ public class OfertaActivity extends AppCompatActivity implements OfertaAdapter.O
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        adapter = new OfertaAdapter(null, this);
+        adapter = new OfertaAdapter(this,null);
         recyclerView.setAdapter(adapter);
 
         ofertaViewModel = new ViewModelProvider(this).get(OfertaViewModel.class);
 
-        //Prueba menu hamburguesa
+        //menu hamburguesa
         idUsuario = 1; // intent.getIntExtra("id_usuario", -1);
         nombreUsuario = "prueba";//intent.getStringExtra("nombre_usuario");
-        drawerLayout = findViewById(R.id.drawer_layout);
-        ImageView menuHamburguesa = findViewById(R.id.menu_hamburguesa);
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        //listener
-        menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+        tipo_usuario = "Estudiante";
+        setupDrawer(nombreUsuario, tipo_usuario);
+//        drawerLayout = findViewById(R.id.drawer_layout);
+//        ImageView menuHamburguesa = findViewById(R.id.menu_hamburguesa);
+//        NavigationView navigationView = findViewById(R.id.navigation_view);
+//        View headerView = navigationView.getHeaderView(0);
+//        TextView textoUsuario = headerView.findViewById(R.id.texto_usuario);
+//        TextView textoTipoUsuario = headerView.findViewById(R.id.texto_tipo_usuario);
+//        textoUsuario.setText(nombreUsuario);
+//        textoTipoUsuario.setText(tipo_usuario);
+//        menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+//        navigationView.setNavigationItemSelectedListener(menuItem -> {
+//            int itemId = menuItem.getItemId();
+//            if (itemId == R.id.nav_cursos) {
+//                Intent intent = new Intent(this, CursoActivity.class);
+//                startActivity(intent);
+//            } else if (itemId == R.id.nav_ofertas_empleo) {
+//                Intent intent = new Intent(this, OfertaActivity.class);
+//                startActivity(intent);
+//            } else if (itemId == R.id.nav_tutorias) {
+//                Toast.makeText(this, "Tutorías seleccionadas", Toast.LENGTH_SHORT).show();
+//            } else if (itemId == R.id.nav_salir) {
+//                Toast.makeText(this, "Salir", Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//            drawerLayout.closeDrawer(Gravity.START);
+//            return true;
+//        });
         ////
 
         // Observa ofertas filtradas
@@ -102,12 +133,6 @@ public class OfertaActivity extends AppCompatActivity implements OfertaAdapter.O
             Intent intent = new Intent(OfertaActivity.this, FiltroOfertaActivity.class);
             startActivityForResult(intent, FILTER_REQUEST_CODE);
         });
-    }
-
-    @Override
-    public void onVerOfertaClick(OfertaEmpleo oferta) {
-    //dps ver el botno ver oferta
-        System.out.println("Oferta seleccionada: " + oferta.getTitulo());
     }
 
     @Override

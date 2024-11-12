@@ -106,14 +106,14 @@
     <!-- Botón Aplicar -->
     <Button
         android:id="@+id/btnAplicarFiltros"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Aplicar"
-        android:backgroundTint="#8A2BE2"
+        android:backgroundTint="#3CB371"
         android:textColor="#FFFFFF"
         android:layout_margin="16dp"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:required="true" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:required="true" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="true"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:required="true"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -20,19 +15,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TPF_PAII_Android"
-        tools:targetApi="31">
-        <activity
-            android:name=".actividades.tutores.TutorActivity"
-            android:exported="false" />
+        tools:targetApi="31" >
         <activity
             android:name=".actividades.registracion.RegistrarTutor"
-            android:exported="false" /> <!-- Actividades relacionadas con el chat -->
+            android:exported="false" />
+        <!-- Actividades relacionadas con el chat -->
         <activity
             android:name=".actividades.chat.ChatDialog"
-            android:exported="false" /> <!-- Actividades relacionadas con tutorías -->
+            android:exported="false" />
+        <!-- Actividades relacionadas con tutorías -->
         <activity
             android:name=".actividades.tutorias.Tutorias"
-            android:exported="false" /> <!-- Actividades relacionadas con el registro -->
+            android:exported="false" />
+        <!-- Actividades relacionadas con el registro -->
         <activity
             android:name=".actividades.registracion.RegistrarEmpresa"
             android:exported="false" />
@@ -41,52 +36,68 @@
             android:exported="false" />
         <activity
             android:name=".actividades.registracion.RegistrarEstudiante"
-            android:exported="false" />
-        <!-- Actividad para iniciar registro -->
+            android:exported="false" /> <!-- Actividad para iniciar registro -->
         <activity
             android:name=".actividades.autenticacion.IniciarRegistro"
             android:exported="false" />
+
         <!-- Actividad cursos -->
-        <activity
-            android:name=".actividades.cursos.CursoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".actividades.cursos.FiltroCursoActivity"
+        <activity   android:name=".actividades.cursos.CursoActivity"
+                    android:exported="false"
+                    android:launchMode="singleTop"/>
+
+        <activity android:name=".actividades.cursos.FiltroCursoActivity"
             android:label="Filtro de Cursos">
-
         </activity>
-        <activity
-            android:name=".actividades.cursos.PreguntasActivity"
+
+        <activity android:name=".actividades.cursos.PreguntasActivity"
             android:label="Preguntas de Cursos">
+        </activity>
 
+        <activity android:name=".actividades.cursos.CursoDetalleActivity"
+            android:label="Filtro de Cursos">
         </activity>
-        <activity
-            android:name=".actividades.cursos.CursoDetalleActivity"
-            android:label="Cursos detalles">
-        </activity>
-        <!--Fin cursos-->
+        <!--        <activity-->
+        <!--            android:name=".actividades.cursos.CursoActivity"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.MAIN" />-->
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
+        <!-- Fin actividad cursos -->
         <!-- Mostrar Ofertas -->
                 <activity android:name=".actividades.ofertas.OfertaActivity"
-                    android:label="Ofertas">
-                </activity>
-
+                    android:label="Ofertas"
+                    android:launchMode="singleTop"/>
+<!--        <activity-->
+<!--            android:name=".actividades.ofertas.OfertaActivity"-->
+<!--            android:exported="true"-->
+<!--            android:launchMode="singleTop">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
         <activity android:name=".actividades.ofertas.FiltroOfertaActivity"
             android:label="Filtro de Ofertas">
         </activity>
-        <!--Fin ofertas-->
-        <!-- Actividad principal -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" /> <!-- Actividad de Login, inicio de la app -->
-        <activity
-            android:name=".actividades.autenticacion.Login"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".actividades.ofertas.OfertaDetalleActivity"
+            android:label="Filtro de Ofertas">
         </activity>
+        <!-- Actividad principal -->
+                <activity
+                    android:name=".MainActivity"
+                    android:exported="false" /> <!-- Actividad de Login, inicio de la app -->
+                <activity
+                    android:name=".actividades.autenticacion.Login"
+                    android:exported="true" >
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+                </activity>
     </application>
 
 </manifest>

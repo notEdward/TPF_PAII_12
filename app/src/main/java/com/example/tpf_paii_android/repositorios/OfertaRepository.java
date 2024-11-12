@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.example.tpf_paii_android.conexion_database.DatabaseConnection;
 import com.example.tpf_paii_android.modelos.Curso;
 import com.example.tpf_paii_android.modelos.Modalidad;
+import com.example.tpf_paii_android.modelos.OfertaDetalle;
 import com.example.tpf_paii_android.modelos.OfertaEmpleo;
 import com.example.tpf_paii_android.modelos.TipoEmpleo;
 
@@ -23,6 +24,7 @@ public class OfertaRepository {
 
     public interface DataCallback<T> {
         void onSuccess(T result);
+
         void onFailure(Exception e);
     }
 
@@ -211,6 +213,130 @@ public class OfertaRepository {
             }
         });
     }
-
     //fin filtros
+
+    //Comienzo de detalle Oferta
+    public void obtenerDetallesOferta(int idOfertaEmpleo, DataCallback<OfertaDetalle> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            OfertaDetalle detalle = null;
+            String query = "SELECT o.titulo, o.descripcion, o.direccion, " +
+                    "c.nombre_curso AS nombre_curso, " +
+                    "l.nombre AS nombre_localidad, p.nombre AS nombre_provincia, " +
+                    "m.descripcion AS descripcion_modalidad, " +
+                    "te.descripcion AS descripcion_tipo_empleo " +
+                    "FROM ofertas_empleos o " +
+                    "JOIN curso c ON o.id_curso = c.id_curso " +
+                    "JOIN localidad l ON o.id_localidad = l.id_localidad " +
+                    "JOIN provincia p ON l.id_provincia = p.id_provincia " +
+                    "JOIN modalidad m ON o.id_tipo_modalidad = m.id_modalidad " +
+                    "JOIN tipo_empleo te ON o.id_tipo_empleo = te.id_tipo_empleo " +
+                    "WHERE o.id_oferta_empleo = ?";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement stmt = con.prepareStatement(query)) {
+
+                stmt.setInt(1, idOfertaEmpleo);  // Establece el id de la oferta a buscar
+                try (ResultSet resultSet = stmt.executeQuery()) {
+                    if (resultSet.next()) {
+                        // Crea un objeto OfertaDetalle con los resultados obtenidos
+                        detalle = new OfertaDetalle(
+                                idOfertaEmpleo,  // Asigna el ID de la oferta
+                                resultSet.getString("titulo"),
+                                resultSet.getString("descripcion"),
+                                resultSet.getString("direccion"),
+                                resultSet.getString("nombre_curso"),  // Esto es el nombre del curso, pasamos aquí
+                                resultSet.getString("nombre_localidad") + ", " + resultSet.getString("nombre_provincia"),
+                                resultSet.getString("nombre_provincia"),  // O el valor que consideres para provincia
+                                resultSet.getString("descripcion_modalidad"),
+                                resultSet.getString("descripcion_tipo_empleo")
+                        );
+                    }
+                }
+
+                // Enviar los detalles obtenidos en el hilo principal
+                OfertaDetalle finalDetalle = detalle;
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (finalDetalle != null) {
+                        callback.onSuccess(finalDetalle);
+                    } else {
+                        callback.onFailure(new Exception("No se encontraron detalles para la oferta."));
+                    }
+                });
+
+            } catch (Exception e) {
+                // Manejo de excepciones y error en la ejecución
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
+////fin detalle oferta
+//postulaciones
+public void registrarPostulacion(int idOfertaEmpleo, int idUsuario, DataCallback<String> callback) {
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    executor.execute(() -> {
+        String mensaje;
+
+        // Consulta para verificar si el usuario ya está postulado
+        String consultaVerificarPostulacion = "SELECT * FROM postulaciones WHERE id_oferta_empleo = ? AND id_usuario = ?";
+
+        try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+             PreparedStatement stmtVerificarPostulacion = con.prepareStatement(consultaVerificarPostulacion)) {
+
+            stmtVerificarPostulacion.setInt(1, idOfertaEmpleo);
+            stmtVerificarPostulacion.setInt(2, idUsuario);
+            ResultSet rsVerificacion = stmtVerificarPostulacion.executeQuery();
+
+            if (rsVerificacion.next()) {
+                // El usuario ya está postulado a esta oferta
+                mensaje = "Ya se ha postulado a esta oferta.";
+            } else {
+                // Consulta de elegibilidad
+                String consultaElegibilidad = "SELECT * FROM inscripciones i " +
+                        "JOIN evaluaciones e ON i.id_inscripcion = e.id_inscripcion " +
+                        "WHERE i.id_usuario = ? AND i.id_curso = " +
+                        "(SELECT id_curso FROM ofertas_empleos WHERE id_oferta_empleo = ?) " +
+                        "AND i.estado_inscripcion = 'finalizado' AND e.nota_obtenida >= 6";
+
+                try (PreparedStatement stmtElegibilidad = con.prepareStatement(consultaElegibilidad)) {
+
+                    stmtElegibilidad.setInt(1, idUsuario);
+                    stmtElegibilidad.setInt(2, idOfertaEmpleo);
+                    ResultSet rsElegibilidad = stmtElegibilidad.executeQuery();
+
+                    if (rsElegibilidad.next()) {
+                        // Insertar la postulación si cumple con los requisitos
+                        String consultaPostulacion = "INSERT INTO postulaciones (id_oferta_empleo, id_usuario, estado_postulacion, fecha_postulacion) VALUES (?, ?, 'pendiente', ?)";
+
+                        try (PreparedStatement stmtPostulacion = con.prepareStatement(consultaPostulacion)) {
+                            stmtPostulacion.setInt(1, idOfertaEmpleo);
+                            stmtPostulacion.setInt(2, idUsuario);
+                            stmtPostulacion.setDate(3, new java.sql.Date(System.currentTimeMillis())); // Fecha actual
+                            stmtPostulacion.executeUpdate();
+                            mensaje = "Postulación realizada con éxito.";
+                        }
+                    } else {
+                        mensaje = "El usuario no cumple con los requisitos para postularse.";
+                    }
+
+                    rsElegibilidad.close();
+                }
+            }
+
+            rsVerificacion.close();
+
+            String finalMensaje = mensaje;
+            new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(finalMensaje));
+
+        } catch (Exception e) {
+            new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+        }
+    });
+}
+
+
+
+
+
 }
