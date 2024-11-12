@@ -27,6 +27,10 @@ public class Pregunta {
         return pregunta;
     }
 
+    public String getTipoPregunta() {
+        return tipoPregunta;
+    }
+
     public List<Opcion> getOpciones() {
         return opciones;
     }
@@ -41,5 +45,9 @@ public class Pregunta {
         this.respuestaSeleccionada = respuestaSeleccionada;
     }
     public void setOpciones(List<Opcion> opciones) { this.opciones = opciones; }
+
+    public void setIdPregunta(int idPregunta) {
+        this.idPregunta = idPregunta;
+    }
 
 }

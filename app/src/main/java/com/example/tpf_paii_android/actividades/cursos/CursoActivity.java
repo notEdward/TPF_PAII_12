@@ -34,6 +34,7 @@ public class CursoActivity extends MenuHamburguesaActivity {
     private CursoAdapter cursoAdapter;
     private CursoViewModel cursoViewModel;
     private Button btnFiltrar;
+    private Button btnCrear;
     private EditText editTextBuscar;
     private static final int REQUEST_FILTRO = 1;
     private DrawerLayout drawerLayout;
@@ -53,50 +54,25 @@ public class CursoActivity extends MenuHamburguesaActivity {
         //Intent intent = getIntent();
         idUsuario = 1; // intent.getIntExtra("id_usuario", -1);
         nombreUsuario = "prueba";//intent.getStringExtra("nombre_usuario");
-        tipo_usuario = "Estudiante";
+        tipo_usuario = "admin";
         ///
 
         //inicializaciones + configs
         cursoViewModel = new ViewModelProvider(this).get(CursoViewModel.class);
         recyclerViewCursos = findViewById(R.id.recyclerViewCursos);
         btnFiltrar = findViewById(R.id.btnFiltrar);
+        btnCrear = findViewById(R.id.btnCrear); // admin
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
         recyclerViewCursos.setLayoutManager(gridLayoutManager);
         recyclerViewCursos.setHasFixedSize(true);
         cursoAdapter = new CursoAdapter(new ArrayList<>());
         recyclerViewCursos.setAdapter(cursoAdapter);
 
+        if ("admin".equals(tipo_usuario)) {
+            btnCrear.setVisibility(View.VISIBLE);
+        }
         //menu hamburguesa
         setupDrawer(nombreUsuario, tipo_usuario);
-//        drawerLayout = findViewById(R.id.drawer_layout);
-//        ImageView menuHamburguesa = findViewById(R.id.menu_hamburguesa);
-//        NavigationView navigationView = findViewById(R.id.navigation_view);
-//        // Referencias a los TextView
-//        View headerView = navigationView.getHeaderView(0);
-//        TextView textoUsuario = headerView.findViewById(R.id.texto_usuario);
-//        TextView textoTipoUsuario = headerView.findViewById(R.id.texto_tipo_usuario);
-//        textoUsuario.setText(nombreUsuario);
-//        textoTipoUsuario.setText(tipo_usuario);
-//
-//        menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
-//        navigationView.setNavigationItemSelectedListener(menuItem -> {
-//            int itemId = menuItem.getItemId();
-//            if (itemId == R.id.nav_cursos) {
-//                Intent intent = new Intent(this, CursoActivity.class);
-//                startActivity(intent);
-//            } else if (itemId == R.id.nav_ofertas_empleo) {
-//                Intent intent = new Intent(this, OfertaActivity.class);
-//                startActivity(intent);
-//            } else if (itemId == R.id.nav_tutorias) {
-//                Toast.makeText(this, "Tutorías seleccionadas", Toast.LENGTH_SHORT).show();
-//            } else if (itemId == R.id.nav_salir) {
-//                Toast.makeText(this, "Salir", Toast.LENGTH_SHORT).show();
-//                finish();
-//            }
-//            drawerLayout.closeDrawer(Gravity.START);
-//            return true;
-//        });
-        //fin menu//
 
         ////FILTROS POR LUPITA
         editTextBuscar = findViewById(R.id.editTextBuscar); // campo de busq
@@ -123,7 +99,7 @@ public class CursoActivity extends MenuHamburguesaActivity {
             public void afterTextChanged(Editable s) {}
         });
         ////////
-        // ver filtros disponibles
+        // ver filtros disponibles listeners
         btnFiltrar.setOnClickListener(v -> {
             Intent intent = new Intent(CursoActivity.this, FiltroCursoActivity.class);
             startActivityForResult(intent, REQUEST_FILTRO); //cod q recibo del filtro
@@ -134,6 +110,14 @@ public class CursoActivity extends MenuHamburguesaActivity {
                 cursoAdapter.actualizarCursos(cursos);
             }
         });
+        btnCrear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CursoActivity.this, CrearCursoActivity.class);
+                startActivity(intent);
+            }
+        });
+
         cursoViewModel.cargarCursos();
     }
 

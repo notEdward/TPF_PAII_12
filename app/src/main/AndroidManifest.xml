@@ -57,6 +57,10 @@
         <activity android:name=".actividades.cursos.CursoDetalleActivity"
             android:label="Filtro de Cursos">
         </activity>
+
+        <activity android:name=".actividades.cursos.CrearCursoActivity"
+            android:label="Filtro de Cursos">
+        </activity>
         <!--        <activity-->
         <!--            android:name=".actividades.cursos.CursoActivity"-->
         <!--            android:exported="true">-->

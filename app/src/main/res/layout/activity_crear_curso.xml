@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- LinearLayout principal que contiene todo -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#FFFFFF">
+
+        <!-- Banner de "CREAR CURSO" (Fijo) -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8A2BE2"
+            android:padding="16dp">
+            <!-- Título "CREAR CURSO" -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CREAR CURSO"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+
+        <!-- ScrollView para permitir desplazamiento del contenido debajo del banner -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"> <!-- Ocupa el espacio restante después del banner -->
+
+            <!-- LinearLayout para el contenido desplazable -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Nombre del curso -->
+                <EditText
+                    android:id="@+id/etNombreCurso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre del curso"
+                    android:padding="12dp" />
+
+                <!-- Descripción del curso -->
+                <EditText
+                    android:id="@+id/etDescripcionCurso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Descripción del curso"
+                    android:padding="12dp" />
+
+                <TextView
+                    android:id="@+id/txtCategorias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Categoria:"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Categoría del curso -->
+                <Spinner
+                    android:id="@+id/spinnerCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:padding="8dp" />
+
+                <!-- Cantidad de respuestas correctas para aprobar -->
+                <EditText
+                    android:id="@+id/etRespuestasCorrectas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:hint="Cantidad de respuestas correctas para aprobar"
+                    android:padding="12dp" />
+
+                <TextView
+                    android:id="@+id/txtEstado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Estado:"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Estado del curso -->
+                <Spinner
+                    android:id="@+id/spinnerEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:padding="8dp" />
+
+                <!-- Contenedor para preguntas y respuestas -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Preguntas y Respuestas"
+                    android:textSize="16sp"
+                    android:paddingTop="16dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/contenedorPreguntas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp" />
+
+                <!-- Botón para añadir nuevas preguntas -->
+                <Button
+                    android:id="@+id/btnAñadirPregunta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Añadir Pregunta"
+                    android:padding="8dp"
+                    android:layout_gravity="center" />
+
+                <!-- Botón para guardar el curso -->
+                <Button
+                    android:id="@+id/btnGuardarCurso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#3CB371"
+                    android:text="Guardar Curso"
+                    android:padding="8dp"
+                    android:layout_marginTop="16dp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

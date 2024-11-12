@@ -29,21 +29,17 @@ public class MenuHamburguesaActivity extends AppCompatActivity {
 
     @SuppressLint("WrongConstant")
     protected void setupDrawer(String nombreUsuario, String tipoUsuario) {
-        // Configuración del menú hamburguesa
         drawerLayout = findViewById(R.id.drawer_layout);
         ImageView menuHamburguesa = findViewById(R.id.menu_hamburguesa);
         NavigationView navigationView = findViewById(R.id.navigation_view);
 
-        // Referencias a los TextView
         View headerView = navigationView.getHeaderView(0);
         TextView textoUsuario = headerView.findViewById(R.id.texto_usuario);
         TextView textoTipoUsuario = headerView.findViewById(R.id.texto_tipo_usuario);
 
-        // Asignar los valores de usuario
         textoUsuario.setText(nombreUsuario);
         textoTipoUsuario.setText(tipoUsuario);
 
-        // Configuración de listeners para el menú
         menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {

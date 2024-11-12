@@ -140,7 +140,7 @@ public class OfertaRepository {
                             resultSet.getString("descripcion"),
                             resultSet.getInt("id_categoria"),
                             resultSet.getString("respuestas_correctas"),
-                            resultSet.getString("estado")
+                            resultSet.getInt("estado")
                     );
                     cursos.add(curso);
                 }
@@ -277,10 +277,7 @@ public void registrarPostulacion(int idOfertaEmpleo, int idUsuario, DataCallback
     ExecutorService executor = Executors.newSingleThreadExecutor();
     executor.execute(() -> {
         String mensaje;
-
-        // Consulta para verificar si el usuario ya está postulado
         String consultaVerificarPostulacion = "SELECT * FROM postulaciones WHERE id_oferta_empleo = ? AND id_usuario = ?";
-
         try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
              PreparedStatement stmtVerificarPostulacion = con.prepareStatement(consultaVerificarPostulacion)) {
 
@@ -289,10 +286,8 @@ public void registrarPostulacion(int idOfertaEmpleo, int idUsuario, DataCallback
             ResultSet rsVerificacion = stmtVerificarPostulacion.executeQuery();
 
             if (rsVerificacion.next()) {
-                // El usuario ya está postulado a esta oferta
                 mensaje = "Ya se ha postulado a esta oferta.";
             } else {
-                // Consulta de elegibilidad
                 String consultaElegibilidad = "SELECT * FROM inscripciones i " +
                         "JOIN evaluaciones e ON i.id_inscripcion = e.id_inscripcion " +
                         "WHERE i.id_usuario = ? AND i.id_curso = " +
@@ -334,9 +329,5 @@ public void registrarPostulacion(int idOfertaEmpleo, int idUsuario, DataCallback
         }
     });
 }
-
-
-
-
 
 }

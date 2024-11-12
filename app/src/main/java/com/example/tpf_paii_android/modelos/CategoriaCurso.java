@@ -29,10 +29,13 @@ public class CategoriaCurso {
 
     // Método opcional para obtener una representación en texto
     @Override
+//    public String toString() {
+//        return "CategoriaCurso{" +
+//                "idCategoria=" + idCategoria +
+//                ", descripcion='" + descripcion + '\'' +
+//                '}';
+//    }
     public String toString() {
-        return "CategoriaCurso{" +
-                "idCategoria=" + idCategoria +
-                ", descripcion='" + descripcion + '\'' +
-                '}';
+        return descripcion;
     }
 }

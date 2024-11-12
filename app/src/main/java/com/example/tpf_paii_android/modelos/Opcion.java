@@ -14,6 +14,13 @@ public class Opcion {
         this.esCorrecta = esCorrecta;
     }
 
+    // Constructor
+    public Opcion(int idPregunta, String opcionTexto, boolean esCorrecta) {
+        this.idPregunta = idPregunta;
+        this.opcionTexto = opcionTexto;
+        this.esCorrecta = esCorrecta;
+    }
+
     // Getters y Setters
     public int getIdOpcion() {
         return idOpcion;
@@ -46,4 +53,5 @@ public class Opcion {
     public void setEsCorrecta(boolean esCorrecta) {
         this.esCorrecta = esCorrecta;
     }
+
 }

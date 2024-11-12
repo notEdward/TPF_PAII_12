@@ -47,7 +47,7 @@ public class CursoRepository {
                             resultSet.getString("descripcion"),
                             resultSet.getInt("id_categoria"),
                             resultSet.getString("respuestas_correctas"),
-                            resultSet.getString("estado")
+                            resultSet.getInt("estado")
                     );
                     cursos.add(curso);
                 }
@@ -265,6 +265,177 @@ public void registrarEvaluacion(Evaluacion evaluacion, DataCallback<Boolean> cal
         }
     });
 }
+//ADMIN crear
+    public void obtenerCategorias(OfertaRepository.DataCallback<List<CategoriaCurso>> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            List<CategoriaCurso> categorias = new ArrayList<>();
+            String query = "SELECT * FROM categorias";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 Statement statement = con.createStatement();
+                 ResultSet resultSet = statement.executeQuery(query)) {
+
+                while (resultSet.next()) {
+                    CategoriaCurso categoria = new CategoriaCurso(
+                            resultSet.getInt("id_categoria"),
+                            resultSet.getString("descripcion")
+                    );
+                    categorias.add(categoria);
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(categorias));
+
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+//    public void guardarCurso(Curso curso, List<Pregunta> preguntas, List<Opcion> opciones, DataCallback<Boolean> callback) {
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//        executor.execute(() -> {
+//            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass)) {
+//                // Guardar el curso
+//                String queryCurso = "INSERT INTO curso (nombre_curso, descripcion, id_categoria, respuestas_correctas, estado) VALUES (?, ?, ?, ?, ?)";
+//                try (PreparedStatement stmt = con.prepareStatement(queryCurso, Statement.RETURN_GENERATED_KEYS)) {
+//                    stmt.setString(1, curso.getNombreCurso());
+//                    stmt.setString(2, curso.getDescripcion());
+//                    stmt.setInt(3, curso.getIdCategoria());
+//                    stmt.setString(4, curso.getRespuestasCorrectas());
+//                    stmt.setInt(5, curso.getEstado());
+//                    stmt.executeUpdate();
+//                    ResultSet generatedKeys = stmt.getGeneratedKeys();
+//                    if (generatedKeys.next()) {
+//                        int idCurso = generatedKeys.getInt(1);
+//                        // Guardar las preguntas y obtener sus IDs
+//                        guardarPreguntas(con, idCurso, preguntas);
+//                        // Guardar las opciones utilizando los IDs de las preguntas
+//                        guardarOpciones(con, preguntas, opciones);
+//                    }
+//                }
+//                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(true));
+//            } catch (Exception e) {
+//                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+//            }
+//        });
+//    }
+//
+//    private void guardarPreguntas(Connection con, int idCurso, List<Pregunta> preguntas) throws SQLException {
+//        String queryPregunta = "INSERT INTO preguntas (id_curso, pregunta, tipo_pregunta) VALUES (?, ?, ?)";
+//        try (PreparedStatement stmt = con.prepareStatement(queryPregunta, Statement.RETURN_GENERATED_KEYS)) {
+//            for (Pregunta pregunta : preguntas) {
+//                stmt.setInt(1, idCurso);
+//                stmt.setString(2, pregunta.getPregunta());
+//                stmt.setString(3, pregunta.getTipoPregunta());
+//                stmt.addBatch();
+//            }
+//            stmt.executeBatch();
+//
+//            ResultSet rs = stmt.getGeneratedKeys();
+//            int index = 0;
+//            while (rs.next()) {
+//                preguntas.get(index).setIdPregunta(rs.getInt(1)); // Asegura que el ID se asigna
+//                index++;
+//            }
+//        }
+//    }
+//
+//    private void guardarOpciones(Connection con, List<Pregunta> preguntas, List<Opcion> opciones) throws SQLException {
+//        String queryOpcion = "INSERT INTO opciones (id_pregunta, opcion_texto, es_correcta) VALUES (?, ?, ?)";
+//        try (PreparedStatement stmt = con.prepareStatement(queryOpcion)) {
+//            for (Opcion opcion : opciones) {
+//                if (opcion.getIdPregunta() == 0) {
+//                    // Busca y asigna el ID de pregunta usando preguntas
+//                    for (Pregunta pregunta : preguntas) {
+//                        if (pregunta.getPregunta().equals(opcion.getOpcionTexto())) { // Verifica contenido
+//                            opcion.setIdPregunta(pregunta.getIdPregunta());
+//                        }
+//                    }
+//                }
+//                stmt.setInt(1, opcion.getIdPregunta());
+//                stmt.setString(2, opcion.getOpcionTexto());
+//                stmt.setBoolean(3, opcion.isEsCorrecta());
+//                stmt.addBatch();
+//            }
+//            stmt.executeBatch();
+//        }
+//    }
+
+    public void guardarCurso(Curso curso, List<Pregunta> preguntas, List<Opcion> opciones, DataCallback<Boolean> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass)) {
+                // Guardar el curso
+                String queryCurso = "INSERT INTO curso (nombre_curso, descripcion, id_categoria, respuestas_correctas, estado) VALUES (?, ?, ?, ?, ?)";
+                try (PreparedStatement stmt = con.prepareStatement(queryCurso, Statement.RETURN_GENERATED_KEYS)) {
+                    stmt.setString(1, curso.getNombreCurso());
+                    stmt.setString(2, curso.getDescripcion());
+                    stmt.setInt(3, curso.getIdCategoria());
+                    stmt.setString(4, curso.getRespuestasCorrectas());
+                    stmt.setInt(5, curso.getEstado());
+                    stmt.executeUpdate();
+                    ResultSet generatedKeys = stmt.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        int idCurso = generatedKeys.getInt(1);
+
+                        // Guardar las preguntas y obtener sus IDs
+                        List<Integer> preguntaIds = guardarPreguntas(con, idCurso, preguntas);
+
+                        // Asignar IDs de preguntas a las opciones y guardarlas
+                        asignarIdsPreguntaAOpciones(preguntaIds, opciones);
+                        guardarOpciones(con, opciones);
+                    }
+                }
+                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(true));
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
+    private List<Integer> guardarPreguntas(Connection con, int idCurso, List<Pregunta> preguntas) throws SQLException {
+        List<Integer> preguntaIds = new ArrayList<>();
+        String queryPregunta = "INSERT INTO preguntas (id_curso, pregunta, tipo_pregunta) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = con.prepareStatement(queryPregunta, Statement.RETURN_GENERATED_KEYS)) {
+            for (Pregunta pregunta : preguntas) {
+                stmt.setInt(1, idCurso);
+                stmt.setString(2, pregunta.getPregunta());
+                stmt.setString(3, pregunta.getTipoPregunta());
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            while (rs.next()) {
+                preguntaIds.add(rs.getInt(1));  // Guarda el ID de cada pregunta generada
+            }
+        }
+        return preguntaIds;  // Devuelve la lista de IDs generados para las preguntas
+    }
+
+    private void asignarIdsPreguntaAOpciones(List<Integer> preguntaIds, List<Opcion> opciones) {
+        for (int i = 0; i < opciones.size(); i++) {
+            // Asocia cada opción con el ID de su pregunta correspondiente
+            opciones.get(i).setIdPregunta(preguntaIds.get(i / 2));  // Asume 3 opciones por pregunta
+        }
+    }
+
+    private void guardarOpciones(Connection con, List<Opcion> opciones) throws SQLException {
+        String queryOpcion = "INSERT INTO opciones (id_pregunta, opcion_texto, es_correcta) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = con.prepareStatement(queryOpcion)) {
+            for (Opcion opcion : opciones) {
+                stmt.setInt(1, opcion.getIdPregunta());
+                stmt.setString(2, opcion.getOpcionTexto());
+                stmt.setBoolean(3, opcion.isEsCorrecta());
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        }
+    }
+
+
+
+
 
 
 }

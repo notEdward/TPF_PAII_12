@@ -7,11 +7,19 @@ public class Curso {
     private String descripcion;
     private int idCategoria;
     private String respuestasCorrectas;
-    private String estado;
+    private int estado;
 
     // Constructor
-    public Curso(int idCurso, String nombreCurso, String descripcion, int idCategoria, String respuestasCorrectas, String estado) {
+    public Curso(int idCurso, String nombreCurso, String descripcion, int idCategoria, String respuestasCorrectas, int estado) {
         this.idCurso = idCurso;
+        this.nombreCurso = nombreCurso;
+        this.descripcion = descripcion;
+        this.idCategoria = idCategoria;
+        this.respuestasCorrectas = respuestasCorrectas;
+        this.estado = estado;
+    }
+    // Constructor
+    public Curso(String nombreCurso, String descripcion, int idCategoria, String respuestasCorrectas, int estado) {
         this.nombreCurso = nombreCurso;
         this.descripcion = descripcion;
         this.idCategoria = idCategoria;
@@ -35,6 +43,6 @@ public class Curso {
     public String getRespuestasCorrectas() { return respuestasCorrectas; }
     public void setRespuestasCorrectas(String respuestasCorrectas) { this.respuestasCorrectas = respuestasCorrectas; }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public int getEstado() { return estado; }
+    public void setEstado(int estado) { this.estado = estado; }
 }

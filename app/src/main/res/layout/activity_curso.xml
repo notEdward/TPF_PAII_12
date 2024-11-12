@@ -52,6 +52,13 @@
                 android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_weight="1" />
+            <Button
+                android:id="@+id/btnCrear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#3CB371"
+                android:text="Crear"
+                android:visibility="gone" /> <!-- Inicialmente oculto -->
 
             <Button
                 android:id="@+id/btnFiltrar"

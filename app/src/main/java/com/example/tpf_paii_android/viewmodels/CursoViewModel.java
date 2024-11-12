@@ -3,10 +3,13 @@ package com.example.tpf_paii_android.viewmodels;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.tpf_paii_android.modelos.CategoriaCurso;
 import com.example.tpf_paii_android.modelos.Curso;
 import com.example.tpf_paii_android.modelos.Evaluacion;
 import com.example.tpf_paii_android.modelos.Inscripcion;
 import com.example.tpf_paii_android.modelos.InscripcionEstado;
+import com.example.tpf_paii_android.modelos.Opcion;
 import com.example.tpf_paii_android.modelos.Pregunta;
 import com.example.tpf_paii_android.repositorios.CursoRepository;
 import java.util.ArrayList;
@@ -19,10 +22,12 @@ public class CursoViewModel extends ViewModel {
     private MutableLiveData<List<Curso>> cursosFiltradosLiveData;
     private MutableLiveData<Exception> errorLiveData;
     private final MutableLiveData<Boolean> inscripcionExitosa = new MutableLiveData<>();
-//    private MutableLiveData<Boolean> inscripcionActiva = new MutableLiveData<>();
 private MutableLiveData<InscripcionEstado> inscripcionActiva = new MutableLiveData<>();
     private final MutableLiveData<List<Pregunta>> preguntasConOpciones = new MutableLiveData<>();
     private MutableLiveData<Boolean> evaluacionExitosa = new MutableLiveData<>();
+    private final MutableLiveData<List<CategoriaCurso>> categoriasLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> cursoGuardadoLiveData = new MutableLiveData<>();
+
 
     public CursoViewModel() {
         cursoRepository = new CursoRepository();
@@ -50,6 +55,12 @@ private MutableLiveData<InscripcionEstado> inscripcionActiva = new MutableLiveDa
     }
     public MutableLiveData<InscripcionEstado> getInscripcionEstado() {
         return inscripcionActiva;
+    }
+    public LiveData<List<CategoriaCurso>> getCategoriasLiveData() {
+        return categoriasLiveData;
+    }
+    public LiveData<Boolean> getCursoGuardadoLiveData() {
+        return cursoGuardadoLiveData;
     }
 
     public void cargarCursos() {
@@ -117,27 +128,7 @@ private MutableLiveData<InscripcionEstado> inscripcionActiva = new MutableLiveDa
             }
         });
     }
-//
-//public void verificarInscripcionActiva(int idCurso, int idUsuario) {
-//    cursoRepository.verificarInscripcionActiva(idCurso, idUsuario, new CursoRepository.DataCallback<Integer>() {
-//        @Override
-//        public void onSuccess(Integer idInscripcion) {
-//            if (idInscripcion != null) {
-//                // Si existe una inscripción activa, guardamos el idInscripcion
-//                inscripcionActiva.postValue(idInscripcion);
-//            } else {
-//                // Si no existe inscripción activa, pasamos null
-//                inscripcionActiva.postValue(null);
-//            }
-//        }
-//
-//        @Override
-//        public void onFailure(Exception e) {
-//            // Manejo de error
-//            inscripcionActiva.postValue(null);
-//        }
-//    });
-//}
+
 public void verificarInscripcionEstado(int idCurso, int idUsuario) {
     cursoRepository.verificarInscripcionEstado(idCurso, idUsuario, new CursoRepository.DataCallback<InscripcionEstado>() {
         @Override
@@ -187,4 +178,36 @@ public void verificarInscripcionEstado(int idCurso, int idUsuario) {
             }
         });
     }
+
+    //admin
+    public void obtenerCategorias() {
+        cursoRepository.obtenerCategorias(new CursoRepository.DataCallback<List<CategoriaCurso>>() {
+            @Override
+            public void onSuccess(List<CategoriaCurso> categorias) {
+                categoriasLiveData.setValue(categorias);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Manejo de errores (log o mensaje al usuario)
+            }
+        });
+    }
+
+    //admin crear curso
+    // Método para guardar el curso
+    public void guardarCurso(Curso curso, List<Pregunta> preguntas, List<Opcion> opciones) {
+        cursoRepository.guardarCurso(curso, preguntas, opciones, new CursoRepository.DataCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean success) {
+                cursoGuardadoLiveData.postValue(true);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                cursoGuardadoLiveData.postValue(false);
+            }
+        });
+    }
+
 }

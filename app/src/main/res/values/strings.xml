@@ -54,4 +54,11 @@
     <string name="tvExperienciaLaboral">Experiencia laboral</string>
     <string name="tvInfoAdicional">Info Adicional</string>
     <string name="btnRegistrar">Registrarse</string>
+
+<!--    estado crear curso-->
+    <string-array name="estado_array">
+        <item>Activo</item>
+        <item>Inactivo</item>
+    </string-array>
+
 </resources>

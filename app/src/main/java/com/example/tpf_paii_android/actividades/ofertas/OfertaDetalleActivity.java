@@ -31,10 +31,8 @@ public class OfertaDetalleActivity extends AppCompatActivity {
         idUsuario = 1; // Para pruebas
         nombreUsuario = "prueba";
 
-        // Obtén el ID de la oferta pasada en el Intent
         idOfertaEmpleo = getIntent().getIntExtra("id_oferta_empleo", -1);
-
-        // Enlaza las vistas del layout
+        //vinculo
         tvTitulo = findViewById(R.id.tvTitulo);
         ivImagenOferta = findViewById(R.id.ivImagenOferta);
         tvDescripcion = findViewById(R.id.tvDescripcion);
