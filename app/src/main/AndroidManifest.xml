@@ -22,11 +22,10 @@
         <!-- Actividades relacionadas con el chat -->
         <activity
             android:name=".actividades.chat.ChatDialog"
-            android:exported="false" />
-        <!-- Actividades relacionadas con tutorías -->
-        <activity
-            android:name=".actividades.tutorias.Tutorias"
-            android:exported="false" />
+            android:exported="false" /> <!-- Actividades relacionadas con tutorías -->
+        <!--        <activity-->
+        <!--            android:name=".actividades.tutorias.Tutorias"-->
+        <!--            android:exported="false" /> -->
         <!-- Actividades relacionadas con el registro -->
         <activity
             android:name=".actividades.registracion.RegistrarEmpresa"
@@ -42,9 +41,11 @@
             android:exported="false" />
 
         <!-- Actividad cursos -->
-        <activity   android:name=".actividades.cursos.CursoActivity"
-                    android:exported="false"
-                    android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".actividades.cursos.CursoActivity"
+            android:exported="false"
+            android:launchMode="singleTop"/>
 
         <activity android:name=".actividades.cursos.FiltroCursoActivity"
             android:label="Filtro de Cursos">
@@ -57,32 +58,31 @@
         <activity android:name=".actividades.cursos.CursoDetalleActivity"
             android:label="Filtro de Cursos">
         </activity>
+        <activity android:name=".actividades.cursos.CrearCursoActivity" />
+        <activity android:name=".actividades.cursos.ModificarCursoActivity" />
+        <!--                <activity-->
+        <!--                    android:name=".actividades.cursos.CursoActivity"-->
+        <!--                    android:exported="true">-->
+        <!--                    <intent-filter>-->
+        <!--                        <action android:name="android.intent.action.MAIN" />-->
+        <!--                        <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--                    </intent-filter>-->
+        <!--                </activity>-->
 
-        <activity android:name=".actividades.cursos.CrearCursoActivity"
-            android:label="Filtro de Cursos">
+        <!-- Fin actividad cursos -->
+        <!-- Mostrar Ofertas -->
+        <activity android:name=".actividades.ofertas.OfertaActivity"
+            android:label="Ofertas">
         </activity>
         <!--        <activity-->
-        <!--            android:name=".actividades.cursos.CursoActivity"-->
-        <!--            android:exported="true">-->
+        <!--            android:name=".actividades.ofertas.OfertaActivity"-->
+        <!--            android:exported="true"-->
+        <!--            android:launchMode="singleTop">-->
         <!--            <intent-filter>-->
         <!--                <action android:name="android.intent.action.MAIN" />-->
         <!--                <category android:name="android.intent.category.LAUNCHER" />-->
         <!--            </intent-filter>-->
         <!--        </activity>-->
-        <!-- Fin actividad cursos -->
-        <!-- Mostrar Ofertas -->
-                <activity android:name=".actividades.ofertas.OfertaActivity"
-                    android:label="Ofertas"
-                    android:launchMode="singleTop"/>
-<!--        <activity-->
-<!--            android:name=".actividades.ofertas.OfertaActivity"-->
-<!--            android:exported="true"-->
-<!--            android:launchMode="singleTop">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
         <activity android:name=".actividades.ofertas.FiltroOfertaActivity"
             android:label="Filtro de Ofertas">
         </activity>
@@ -90,18 +90,18 @@
             android:label="Filtro de Ofertas">
         </activity>
         <!-- Actividad principal -->
-                <activity
-                    android:name=".MainActivity"
-                    android:exported="false" /> <!-- Actividad de Login, inicio de la app -->
-                <activity
-                    android:name=".actividades.autenticacion.Login"
-                    android:exported="true" >
-                    <intent-filter>
-                        <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" /> <!-- Actividad de Login, inicio de la app -->
+        <activity
+            android:name=".actividades.autenticacion.Login"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                        <category android:name="android.intent.category.LAUNCHER" />
-                    </intent-filter>
-                </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

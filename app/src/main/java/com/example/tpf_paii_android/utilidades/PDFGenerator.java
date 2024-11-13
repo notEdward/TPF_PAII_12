@@ -26,13 +26,24 @@ public class PDFGenerator {
     public void crearCertificadoPDF(String nombreCurso, String nombreUsuario, String fechaFinalizacion) {
         try {
 
-            File path = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "Certificados");
-            if (!path.exists()) {
-                path.mkdirs();
+//            File path = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "Certificados");
+//            if (!path.exists()) {
+//                path.mkdirs();
+//            }
+//
+//            // crep pdf
+//            File file = new File(path, "Certificado_" + nombreCurso + ".pdf");
+
+            // Downloads
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File certFolder = new File(path, "Certificados");
+            if (!certFolder.exists()) {
+                certFolder.mkdirs();
             }
 
-            // crep pdf
-            File file = new File(path, "Certificado_" + nombreCurso + ".pdf");
+            // Crear el archivo PDF
+            File file = new File(certFolder, "Certificado_" + nombreCurso + ".pdf");
+
             PdfWriter writer = new PdfWriter(file);
             PdfDocument pdf = new PdfDocument(writer);
 

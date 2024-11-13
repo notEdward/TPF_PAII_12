@@ -65,7 +65,7 @@ public class CursoActivity extends MenuHamburguesaActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
         recyclerViewCursos.setLayoutManager(gridLayoutManager);
         recyclerViewCursos.setHasFixedSize(true);
-        cursoAdapter = new CursoAdapter(new ArrayList<>());
+        cursoAdapter = new CursoAdapter(new ArrayList<>(), tipo_usuario);
         recyclerViewCursos.setAdapter(cursoAdapter);
 
         if ("admin".equals(tipo_usuario)) {
@@ -118,6 +118,17 @@ public class CursoActivity extends MenuHamburguesaActivity {
             }
         });
 
+        // Observando el LiveData para saber si la baja fue exitosa
+        cursoViewModel.getBajaCursoLiveData().observe(this, result -> {
+            if (result != null) {
+                if (result) {
+                    Toast.makeText(CursoActivity.this, "Curso dado de baja", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(CursoActivity.this, "Error al dar de baja el curso", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         cursoViewModel.cargarCursos();
     }
 
@@ -132,4 +143,9 @@ public class CursoActivity extends MenuHamburguesaActivity {
             }
         }
     }
+
+    public void darDeBajaCurso(int idCurso) {
+        cursoViewModel.actualizarEstadoCurso(idCurso, 0); // Cambiar el estado a 0
+    }
+
 }

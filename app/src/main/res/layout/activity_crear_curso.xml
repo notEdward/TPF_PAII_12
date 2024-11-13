@@ -100,7 +100,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Preguntas y Respuestas"
+                    android:text="Preguntas y respuestas (opción 1 será la correcta)"
                     android:textSize="16sp"
                     android:paddingTop="16dp"
                     android:textStyle="bold" />

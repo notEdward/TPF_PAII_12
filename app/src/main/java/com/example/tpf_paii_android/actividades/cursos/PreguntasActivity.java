@@ -79,12 +79,21 @@ public class PreguntasActivity extends AppCompatActivity {
                 todasRespondidas = false;
                 break;
             } else if (pregunta.getRespuestaSeleccionada().isEsCorrecta()) {
-                puntosObtenidos += 2;
+                puntosObtenidos += 1;
             }
         }
         if (todasRespondidas) {
+            // Calculo de nota obtenid
+            int cantidadDePreguntas = preguntas.size();
+            double porcentaje = (cantidadDePreguntas > 0) ? (puntosObtenidos * 100.0 / cantidadDePreguntas) : 0.0;
+            int nota = (int) Math.round(porcentaje / 10.0);
+            if (nota < 1) {
+                nota = 1;
+            } else if (nota > 10) {
+                nota = 10;
+            }
             Date fechaFinalizacion = new Date(); // Fecha de finalización actual
-            cursoViewModel.registrarEvaluacion(idInscripcion, puntosObtenidos, fechaFinalizacion);
+            cursoViewModel.registrarEvaluacion(idInscripcion, nota, fechaFinalizacion);
 
             // Aviso que finalice con exito
             Intent resultIntent = new Intent();

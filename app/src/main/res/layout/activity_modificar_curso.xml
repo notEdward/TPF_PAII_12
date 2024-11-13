@@ -1,0 +1,79 @@
+<!-- activity_modificar_curso.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- Banner de "MODIFICAR CURSO" -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#8A2BE2">
+
+        <!-- Título "MODIFICAR CURSO" -->
+        <TextView
+            android:id="@+id/modificar_curso_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MODIFICAR CURSO"
+            android:textSize="25sp"
+            android:textColor="#FFFFFF"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <!-- Contenido de la pantalla -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Título del curso -->
+        <TextView
+            android:id="@+id/txtNombreCurso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombre del Curso"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <!-- Imagen del curso -->
+        <ImageView
+            android:id="@+id/imgCurso"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:contentDescription="Imagen del Curso"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img1_tpf" />
+
+        <!-- Descripción actual del curso (solo lectura) -->
+        <TextView
+            android:id="@+id/txtDescripcionCurso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descripción actual del Curso"
+            android:paddingTop="8dp"
+            android:paddingBottom="16dp" />
+
+        <!-- Campo para ingresar la nueva descripción -->
+        <EditText
+            android:id="@+id/etDescripcionCurso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nueva Descripción del Curso"
+            android:inputType="textMultiLine"
+            android:minHeight="48dp" />
+
+        <!-- Botón para guardar los cambios -->
+        <Button
+            android:id="@+id/btnGuardarCambios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guardar Cambios"
+            android:layout_gravity="end"
+            android:paddingTop="16dp" />
+    </LinearLayout>
+
+</LinearLayout>

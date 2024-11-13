@@ -27,6 +27,8 @@ private MutableLiveData<InscripcionEstado> inscripcionActiva = new MutableLiveDa
     private MutableLiveData<Boolean> evaluacionExitosa = new MutableLiveData<>();
     private final MutableLiveData<List<CategoriaCurso>> categoriasLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> cursoGuardadoLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> bajaCursoLiveData = new MutableLiveData<>();
+
 
 
     public CursoViewModel() {
@@ -62,7 +64,9 @@ private MutableLiveData<InscripcionEstado> inscripcionActiva = new MutableLiveDa
     public LiveData<Boolean> getCursoGuardadoLiveData() {
         return cursoGuardadoLiveData;
     }
-
+    public LiveData<Boolean> getBajaCursoLiveData() {
+        return bajaCursoLiveData;
+    }
     public void cargarCursos() {
         cursoRepository.getAllCursos(new CursoRepository.DataCallback<ArrayList<Curso>>() {
             @Override
@@ -167,13 +171,11 @@ public void verificarInscripcionEstado(int idCurso, int idUsuario) {
         cursoRepository.registrarEvaluacion(evaluacion, new CursoRepository.DataCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                // Notificar a la actividad que la evaluación se registró exitosamente
                 evaluacionExitosa.postValue(true);
             }
 
             @Override
             public void onFailure(Exception e) {
-                // Notificar a la actividad que hubo un fallo al registrar la evaluación
                 evaluacionExitosa.postValue(false);
             }
         });
@@ -189,7 +191,6 @@ public void verificarInscripcionEstado(int idCurso, int idUsuario) {
 
             @Override
             public void onFailure(Exception e) {
-                // Manejo de errores (log o mensaje al usuario)
             }
         });
     }
@@ -207,6 +208,32 @@ public void verificarInscripcionEstado(int idCurso, int idUsuario) {
             public void onFailure(Exception e) {
                 cursoGuardadoLiveData.postValue(false);
             }
+        });
+    }
+
+    public void modificarDescripcionCurso(int idCurso, String nuevaDescripcion) {
+        cursoRepository.modificarDescripcionCurso(idCurso, nuevaDescripcion, new CursoRepository.DataCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+            }
+        });
+    }
+    //baja
+    public void actualizarEstadoCurso(int idCurso, int estado) {
+        cursoRepository.actualizarEstadoCurso(idCurso, estado, new CursoRepository.DataCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                bajaCursoLiveData.setValue(result);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                bajaCursoLiveData.setValue(false);
+                 }
         });
     }
 

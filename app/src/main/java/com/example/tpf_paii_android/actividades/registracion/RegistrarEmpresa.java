@@ -154,13 +154,25 @@ public class RegistrarEmpresa extends AppCompatActivity {
 
         EmpresaRepository er = new EmpresaRepository();
         UsuarioRepository ur = new UsuarioRepository();
-        if(ur.registrarUsuario(user)){
-            Toast.makeText(this, "usuario registrada con éxito.", Toast.LENGTH_SHORT).show();
-            if(er.registrarEmpresa(emp)){
+//        if(ur.registrarUsuario(user)){
+//            Toast.makeText(this, "usuario registrada con éxito.", Toast.LENGTH_SHORT).show();
+//            if(er.registrarEmpresa(emp)){
+//                Toast.makeText(this, "Empresa registrada con éxito.", Toast.LENGTH_SHORT).show();
+//            }
+//            else Toast.makeText(this, "Empresa error", Toast.LENGTH_SHORT).show();
+//        }
+//        else Toast.makeText(this, "user error.", Toast.LENGTH_SHORT).show();
+        int idUsuario = ur.registrarUsuario(user);
+        if (idUsuario != -1) {
+            Toast.makeText(this, "Usuario registrado con éxito.", Toast.LENGTH_SHORT).show();
+
+            if (er.registrarEmpresa(emp,idUsuario)) {
                 Toast.makeText(this, "Empresa registrada con éxito.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error al registrar la empresa", Toast.LENGTH_SHORT).show();
             }
-            else Toast.makeText(this, "Empresa error", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error al registrar el usuario.", Toast.LENGTH_SHORT).show();
         }
-        else Toast.makeText(this, "user error.", Toast.LENGTH_SHORT).show();
     }
 }

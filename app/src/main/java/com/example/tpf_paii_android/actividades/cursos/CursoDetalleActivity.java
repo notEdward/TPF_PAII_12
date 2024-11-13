@@ -20,6 +20,11 @@ import com.example.tpf_paii_android.adapters.PreguntasAdapter;
 import com.example.tpf_paii_android.utilidades.PDFGenerator;
 import com.example.tpf_paii_android.viewmodels.CursoViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class CursoDetalleActivity extends AppCompatActivity {
 
     private TextView txtNombreCurso, txtDescripcionCurso;
@@ -104,8 +109,10 @@ public class CursoDetalleActivity extends AppCompatActivity {
                         btnDescargarCertificado.setEnabled(true);
                         btnDescargarCertificado.setOnClickListener(v -> {
                             //pdf
-                            generarPDFCertificado(nombreCurso, nombreUsuario, "10/11/2024"); // Fecha de ejemplo
+                            String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
                             Toast.makeText(CursoDetalleActivity.this, "Descargando certificado...", Toast.LENGTH_SHORT).show();
+                            generarPDFCertificado(nombreCurso,nombreUsuario, currentDate);
+
                         });
                         break;
 
