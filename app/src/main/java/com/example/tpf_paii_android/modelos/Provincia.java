@@ -8,17 +8,27 @@ public class Provincia {
     public Provincia() {
     }
 
-    public String getNombreProvincia() {
-        return nombre;
-    }
-
-    public int getId_provincia() {
+    public int getId_provincia(int idProvincia) {
         return id_provincia;
     }
 
+    public int getId_provincia() { return id_provincia;  }
+
+    public void setId_provincia(int id_provincia) {
+        this.id_provincia = id_provincia;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
     @Override
     public String toString() {
-        return "id_provincia=" + id_provincia +", nombre='" + nombre;
+        return nombre;
     }
+
 }

@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 
 
 public class TutorRepository {
-
+/*
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -116,5 +116,5 @@ public class TutorRepository {
                 mainHandler.post(() -> callback.onFailure(e));
             }
         });
-    }
+    }*/
 }

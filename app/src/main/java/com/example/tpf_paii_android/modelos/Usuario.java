@@ -5,7 +5,7 @@ public class Usuario {
     private int id_usuario;
     private String nombreUsuario;
     private String contrasenia;
-    private TipoUsuario id_tipoUsuario;
+    private int id_tipoUsuario;
 
     public Usuario() {
     }
@@ -18,12 +18,13 @@ public class Usuario {
         this.id_tipoUsuario = usuario.id_tipoUsuario;
     }
 
-    public Usuario(String nombreUsuario, String contrasenia) {
+    public Usuario(String nombreUsuario, String contrasenia, int tipo) {
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
+        this.id_tipoUsuario= tipo;
     }
 
-    public TipoUsuario getId_tipoUsuario() {
+    public int getId_tipoUsuario() {
         return id_tipoUsuario;
     }
 

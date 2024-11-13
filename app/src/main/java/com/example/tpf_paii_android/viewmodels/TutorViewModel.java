@@ -19,8 +19,8 @@ public class TutorViewModel extends ViewModel {
 
     // Método para obtener el tutor desde el repositorio
     public void cargarTutorPorUsuario(int idUsuario){
-        Tutor tutor = tutorRepository.obtenerTutorPorIdUsuario(idUsuario);
-        tutorLiveData.setValue(tutor);
+        //Tutor tutor = tutorRepository.obtenerTutorPorIdUsuario(idUsuario);
+        //tutorLiveData.setValue(tutor);
     }
 
     // Getter LiveData

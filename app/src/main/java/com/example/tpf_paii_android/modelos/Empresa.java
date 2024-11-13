@@ -10,15 +10,14 @@ public class Empresa {
     private String email;
     private String telefono;
     private String direccion;
-    private Localidad id_localidad;
+    private int id_localidad;
     private Usuario id_usuario;
 
 
     public Empresa() {
     }
 
-    public Empresa(int id_empresa, String nombre, String descripcion, String sector, String n_identificacionFiscal, String email, String telefono, String direccion, Localidad id_localidad, Usuario id_usuario) {
-        this.id_empresa = id_empresa;
+    public Empresa(String nombre, String descripcion, String sector, String n_identificacionFiscal, String email, String telefono, String direccion, int id_localidad, Usuario id_usuario) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.sector = sector;
@@ -32,6 +31,10 @@ public class Empresa {
 
     public int getId_empresa() {
         return id_empresa;
+    }
+
+    public void setId_empresa(int id_empresa) {
+        this.id_empresa = id_empresa;
     }
 
     public String getNombre() {
@@ -90,18 +93,21 @@ public class Empresa {
         this.direccion = direccion;
     }
 
-    public Localidad getId_localidad() {
+    public int getId_localidad() {
         return id_localidad;
     }
 
-    public void setId_localidad(Localidad id_localidad) {
+    public void setId_localidad(int id_localidad) {
         this.id_localidad = id_localidad;
     }
 
-     public Usuario getId_usuario() {
+    public Usuario getId_usuario() {
         return id_usuario;
     }
 
+    public void setId_usuario(Usuario id_usuario) {
+        this.id_usuario = id_usuario;
+    }
 
     @Override
     public String toString() {
