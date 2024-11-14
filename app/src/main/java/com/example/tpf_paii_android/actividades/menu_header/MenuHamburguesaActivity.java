@@ -16,6 +16,7 @@ import androidx.core.view.GravityCompat;
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.actividades.cursos.CursoActivity;
 import com.example.tpf_paii_android.actividades.ofertas.OfertaActivity;
+import com.example.tpf_paii_android.actividades.tutorias.ForosActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MenuHamburguesaActivity extends AppCompatActivity {
@@ -49,8 +50,8 @@ public class MenuHamburguesaActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_ofertas_empleo) {
                 startActivity(new Intent(this, OfertaActivity.class));
             } else if (itemId == R.id.nav_tutorias) {
-                Toast.makeText(this, "Tutorías seleccionadas", Toast.LENGTH_SHORT).show();
-            } else if (itemId == R.id.nav_salir) {
+                startActivity(new Intent(this, ForosActivity.class));
+                } else if (itemId == R.id.nav_salir) {
                 Toast.makeText(this, "Salir", Toast.LENGTH_SHORT).show();
                 finish();
             }
