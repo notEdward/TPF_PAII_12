@@ -53,7 +53,7 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
         Context context = holder.itemView.getContext();
 
         holder.itemView.setOnClickListener(v -> {
-            if ("admin".equals(tipoUsuario)) {
+            if ("ADMIN".equals(tipoUsuario.toUpperCase())) {
                 // Crear el PopupMenu para opciones de administrador
                 PopupMenu popupMenu = new PopupMenu(context, holder.itemView);
                 popupMenu.inflate(R.menu.menu_opciones_curso);

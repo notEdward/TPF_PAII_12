@@ -36,7 +36,7 @@ public class OfertaRepository {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<OfertaEmpleo> ofertas = new ArrayList<>();
-            String query = "SELECT * FROM ofertas_empleos";
+            String query = "SELECT * FROM ofertas_empleos WHERE estado = 1";
 
             try {
                 Class.forName(DatabaseConnection.driver);

@@ -127,7 +127,7 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
                 Intent intent = new Intent(context, OfertaDetalleActivity.class);
                 intent.putExtra("tituloOferta", oferta.getTitulo());
                 intent.putExtra("descripcionOferta", oferta.getDescripcion());
-                intent.putExtra("idOfertaEmpleo", oferta.getId_ofertaEmpleo());
+                intent.putExtra("id_oferta_empleo", oferta.getId_ofertaEmpleo());
                 context.startActivity(intent);
             }
         });

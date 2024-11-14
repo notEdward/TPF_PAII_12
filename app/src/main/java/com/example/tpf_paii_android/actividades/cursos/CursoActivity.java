@@ -82,7 +82,7 @@ public class CursoActivity extends MenuHamburguesaActivity {
         cursoAdapter = new CursoAdapter(new ArrayList<>(), tipo_usuario);
         recyclerViewCursos.setAdapter(cursoAdapter);
 
-        if ("admin".equals(tipo_usuario)) {
+        if ("ADMIN".equals(tipo_usuario.toUpperCase())) {
             btnCrear.setVisibility(View.VISIBLE);
         }
         //menu hamburguesa

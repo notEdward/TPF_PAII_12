@@ -167,6 +167,7 @@ public class CursoDetalleActivity extends AppCompatActivity {
                 // Deshabilitar el botón de iniciar curso y habilitar el de certificado
                 btnIniciarCurso.setEnabled(false);
                 btnDescargarCertificado.setEnabled(true);
+                cursoViewModel.verificarInscripcionEstado(idCurso, idUsuario);
             }
         }
     }

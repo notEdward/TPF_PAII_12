@@ -228,6 +228,7 @@ public void verificarInscripcionEstado(int idCurso, int idUsuario) {
             @Override
             public void onSuccess(Boolean result) {
                 bajaCursoLiveData.setValue(result);
+                cargarCursos();
             }
 
             @Override

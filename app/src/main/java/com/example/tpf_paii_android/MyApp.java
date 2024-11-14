@@ -4,8 +4,8 @@ import android.app.Application;
 
 public class MyApp extends Application {
     private int idUsuario = 4; // Valor predeterminado, puedes cambiarlo
-    private String tipoUsuario = "Empresa"; // Valor predeterminado, puedes cambiarlo
-    private String nombreUsuario = "empresa";
+    private String tipoUsuario = "Admin"; // Valor predeterminado, puedes cambiarlo
+    private String nombreUsuario = "pepito";
 
     public int getIdUsuario() {
         return idUsuario;
