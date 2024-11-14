@@ -2,6 +2,7 @@ package com.example.tpf_paii_android.modelos;
 
 public class OfertaEmpleo {
 
+    public int getIdEmpresa;
     private int id_ofertaEmpleo;
     private Empresa id_empresa;
     private String titulo;
@@ -54,6 +55,25 @@ public class OfertaEmpleo {
         this.otrosRequisitos = otrosRequisitos;
         this.direccion = direccion;
         this.idLocalidad = idLocalidad;
+    }
+
+    // Constructor Simple para ver ofertas
+    public OfertaEmpleo(int idEmpresa, String titulo, String descripcion, int idTipoEmpleo,
+                        int idTipoModalidad, int idNivelEducativo, int idCurso, String otrosRequisitos,
+                        String direccion, int idLocalidad) {
+        this.idEmpresa = idEmpresa;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.idTipoEmpleo = idTipoEmpleo;
+        this.idTipoModalidad = idTipoModalidad;
+        this.idNivelEducativo = idNivelEducativo;
+        this.idCurso = idCurso;
+        this.otrosRequisitos = otrosRequisitos;
+        this.direccion = direccion;
+        this.idLocalidad = idLocalidad;
+    }
+    public int getIdEmpresa() {
+        return idEmpresa;
     }
 
     public int getId_ofertaEmpleo() {
@@ -181,4 +201,43 @@ public class OfertaEmpleo {
         return this.idTipoEmpleo = id_tipoEmpleo;
     }
 
+    public int getIdTipoEmpleo() {
+        return idTipoEmpleo;
+    }
+
+    public void setIdTipoEmpleo(int idTipoEmpleo) {
+        this.idTipoEmpleo = idTipoEmpleo;
+    }
+
+    public int getIdModalidad() {
+        return idTipoModalidad;
+    }
+
+    public void setIdModalidad(int idModalidad) {
+        this.idTipoModalidad = idModalidad;
+    }
+
+    public int getIdNivelEducativo() {
+        return idNivelEducativo;
+    }
+
+    public void setIdNivelEducativo(int idNivelEducativo) {
+        this.idNivelEducativo = idNivelEducativo;
+    }
+
+    public int getIdCurso() {
+        return idCurso;
+    }
+
+    public void setIdCurso(int idCurso) {
+        this.idCurso = idCurso;
+    }
+
+    public int getIdLocalidad() {
+        return idLocalidad;
+    }
+
+    public void setIdLocalidad(int idLocalidad) {
+        this.idLocalidad = idLocalidad;
+    }
 }

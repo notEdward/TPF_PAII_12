@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Banner en toda la pantalla -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8A2BE2"
+            android:padding="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ALTA OFERTA"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+
+        <!-- Contenido principal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Campo de título -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Título" />
+            <EditText
+                android:id="@+id/etTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Título de la oferta" />
+
+            <!-- Campo de descripción -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripción" />
+            <EditText
+                android:id="@+id/etDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Descripción de la oferta" />
+
+            <!-- Campo de dirección -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dirección" />
+            <EditText
+                android:id="@+id/etDireccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Dirección de la oferta" />
+
+            <!-- Spinner para tipo de empleo -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo de empleo" />
+            <Spinner
+                android:id="@+id/spinnerTipoEmpleo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Spinner para modalidad -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modalidad" />
+            <Spinner
+                android:id="@+id/spinnerModalidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Spinner para nivel educativo -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nivel educativo" />
+            <Spinner
+                android:id="@+id/spinnerNivelEducativo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Spinner para curso requerido -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Curso requerido" />
+            <Spinner
+                android:id="@+id/spinnerCurso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Spinner para provincia -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Provincia" />
+            <Spinner
+                android:id="@+id/spinnerProvincia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Spinner para localidad -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Localidad" />
+            <Spinner
+                android:id="@+id/spinnerLocalidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Botón para confirmar la creación -->
+            <Button
+                android:id="@+id/btnCrearOferta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Crear Oferta"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

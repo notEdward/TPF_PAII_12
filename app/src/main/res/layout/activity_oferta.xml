@@ -51,6 +51,13 @@
                 android:layout_weight="1" />
 
             <Button
+                android:id="@+id/btnCrear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Publicar"
+                android:backgroundTint="#3CB371"
+                android:visibility="gone" /> <!-- Inicialmente oculto -->
+            <Button
                 android:id="@+id/btnFiltrar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

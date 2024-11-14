@@ -11,10 +11,11 @@ public class OfertaDetalle {
     private String provincia;
     private String modalidad;
     private String tipoEmpleo;
-
+    private String otrosRequisitos;
+    
     public OfertaDetalle(int id_oferta_empleo, String titulo, String descripcion, String direccion,
                          String nombreCurso, String localidad, String provincia,
-                         String modalidad, String tipoEmpleo) {  // Constructor corregido a OfertaDetalle
+                         String modalidad, String tipoEmpleo, String otrosRequisitos) {  // Constructor corregido a OfertaDetalle
         this.id_oferta_empleo = id_oferta_empleo;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -24,6 +25,7 @@ public class OfertaDetalle {
         this.provincia = provincia;
         this.modalidad = modalidad;
         this.tipoEmpleo = tipoEmpleo;
+        this.otrosRequisitos = otrosRequisitos;
     }
 
     // Getters y setters
@@ -97,6 +99,14 @@ public class OfertaDetalle {
 
     public void setTipoEmpleo(String tipoEmpleo) {
         this.tipoEmpleo = tipoEmpleo;
+    }
+
+    public String getOtrosRequisitos() {
+        return otrosRequisitos;
+    }
+
+    public void setOtrosRequisitos(String otrosRequisitos) {
+        this.otrosRequisitos = otrosRequisitos;
     }
 }
 

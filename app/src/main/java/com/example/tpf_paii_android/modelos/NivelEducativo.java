@@ -23,4 +23,12 @@ public class NivelEducativo {
                 ", descripcion='" + descripcion + '\'' +
                 '}';
     }
+
+    public void setId_nivelEducativo(int idNivelEducativo) {
+        this.id_nivelEducativo = idNivelEducativo;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 }

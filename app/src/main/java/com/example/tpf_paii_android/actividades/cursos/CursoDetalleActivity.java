@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tpf_paii_android.MyApp;
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.adapters.PreguntasAdapter;
 import com.example.tpf_paii_android.utilidades.PDFGenerator;
@@ -74,8 +75,13 @@ public class CursoDetalleActivity extends AppCompatActivity {
         idCurso = intent.getIntExtra("idCurso", 0);
 
         // Simulación de datos del usuario
-        idUsuario = 1; // Para pruebas
-        nombreUsuario = "prueba";
+//        idUsuario = 1; // Para pruebas
+//        nombreUsuario = "prueba";
+
+        MyApp app = (MyApp) getApplication();
+        idUsuario = app.getIdUsuario();
+//        tipo_usuario = app.getTipoUsuario();
+        nombreUsuario = app.getNombreUsuario();
 
         // Asignar datos a las vistas
         txtNombreCurso.setText(nombreCurso);

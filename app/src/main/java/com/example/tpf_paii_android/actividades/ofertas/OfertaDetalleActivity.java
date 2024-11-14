@@ -9,13 +9,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
+
+import com.example.tpf_paii_android.MyApp;
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.viewmodels.OfertaViewModel;
 
 public class OfertaDetalleActivity extends AppCompatActivity {
 
     private int idOfertaEmpleo; // ID de la oferta a consultar
-    private TextView tvTitulo, tvDescripcion, tvDireccion, tvCurso, tvLocalidad, tvModalidad, tvTipoEmpleo;
+    private TextView tvTitulo, tvDescripcion, tvDireccion, tvCurso, tvLocalidad, tvModalidad, tvTipoEmpleo, tvOtrosRequisitos;
     private ImageView ivImagenOferta;
     private OfertaViewModel ofertaViewModel;
     private int idUsuario;
@@ -28,8 +30,12 @@ public class OfertaDetalleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detalle_oferta);
 
         //simulo recibir el usuario
-        idUsuario = 1; // Para pruebas
-        nombreUsuario = "prueba";
+//        idUsuario = 1; // Para pruebas
+//        nombreUsuario = "prueba";
+        MyApp app = (MyApp) getApplication();
+        idUsuario = app.getIdUsuario();
+//        tipo_usuario = app.getTipoUsuario();
+        nombreUsuario = app.getNombreUsuario();
 
         idOfertaEmpleo = getIntent().getIntExtra("id_oferta_empleo", -1);
         //vinculo
@@ -41,6 +47,7 @@ public class OfertaDetalleActivity extends AppCompatActivity {
         tvLocalidad = findViewById(R.id.tvLocalidad);
         tvModalidad = findViewById(R.id.tvModalidad);
         tvTipoEmpleo = findViewById(R.id.tvTipoEmpleo);
+        tvOtrosRequisitos = findViewById(R.id.tvOtrosRequisitos);
 
         // Inicializa el ViewModel
         ofertaViewModel = new ViewModelProvider(this).get(OfertaViewModel.class);
@@ -56,7 +63,7 @@ public class OfertaDetalleActivity extends AppCompatActivity {
                 tvLocalidad.setText("Localidad: " + ofertaDetalle.getLocalidad());
                 tvModalidad.setText("Modalidad: " + ofertaDetalle.getModalidad());
                 tvTipoEmpleo.setText("Tipo de empleo: " + ofertaDetalle.getTipoEmpleo());
-
+                tvOtrosRequisitos.setText("Otros requisitos: " + ofertaDetalle.getOtrosRequisitos());
                 // Puedes cargar la imagen de la oferta, por ejemplo, usando una librería como Glide
 //                Glide.with(this)
 //                        .load(ofertaDetalle.getImagenOfertaUrl()) // Suponiendo que tienes la URL de la imagen

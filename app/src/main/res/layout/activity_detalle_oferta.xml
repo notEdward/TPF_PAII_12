@@ -111,6 +111,14 @@
             android:paddingTop="8dp"
             android:layout_marginStart="8dp" />
 
+        <TextView
+            android:id="@+id/tvOtrosRequisitos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Otros requisitos"
+            android:paddingTop="8dp"
+            android:layout_marginStart="8dp" />
+
         <!-- Botón para postularse al empleo centrado y reducido -->
         <Button
             android:id="@+id/btnPostularse"

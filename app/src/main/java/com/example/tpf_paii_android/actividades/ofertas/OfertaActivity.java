@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tpf_paii_android.MyApp;
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.actividades.cursos.CursoActivity;
 import com.example.tpf_paii_android.actividades.menu_header.MenuHamburguesaActivity;
@@ -58,44 +59,29 @@ public class OfertaActivity extends MenuHamburguesaActivity {
         recyclerView = findViewById(R.id.recyclerViewOfertas);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
         recyclerView.setLayoutManager(gridLayoutManager);
-
+        Button btnCrear = findViewById(R.id.btnCrear);
         adapter = new OfertaAdapter(this,null);
         recyclerView.setAdapter(adapter);
 
         ofertaViewModel = new ViewModelProvider(this).get(OfertaViewModel.class);
 
         //menu hamburguesa
-        idUsuario = 1; // intent.getIntExtra("id_usuario", -1);
-        nombreUsuario = "prueba";//intent.getStringExtra("nombre_usuario");
-        tipo_usuario = "Estudiante";
+//        idUsuario = 1;
+//        nombreUsuario = "prueba";
+//        tipo_usuario = "Empresa";
+//        setupDrawer(nombreUsuario, tipo_usuario);
+        // Trato de traer los valores de la actividad anterior, sino pongo por default
+//        Intent initIntent = getIntent();
+//        idUsuario = initIntent.hasExtra("idUsuario") ? initIntent.getIntExtra("idUsuario", 1) : 4;
+//        nombreUsuario = initIntent.hasExtra("nombreUsuario") ? initIntent.getStringExtra("nombreUsuario") : "prueba";
+//        tipo_usuario = initIntent.hasExtra("tipo_usuario") ? initIntent.getStringExtra("tipo_usuario") : "Empresa";
+//        setupDrawer(nombreUsuario, tipo_usuario);
+        MyApp app = (MyApp) getApplication();
+        int idUsuario = app.getIdUsuario();
+        tipo_usuario = app.getTipoUsuario();
+        String nombreUsuario = app.getNombreUsuario();
+
         setupDrawer(nombreUsuario, tipo_usuario);
-//        drawerLayout = findViewById(R.id.drawer_layout);
-//        ImageView menuHamburguesa = findViewById(R.id.menu_hamburguesa);
-//        NavigationView navigationView = findViewById(R.id.navigation_view);
-//        View headerView = navigationView.getHeaderView(0);
-//        TextView textoUsuario = headerView.findViewById(R.id.texto_usuario);
-//        TextView textoTipoUsuario = headerView.findViewById(R.id.texto_tipo_usuario);
-//        textoUsuario.setText(nombreUsuario);
-//        textoTipoUsuario.setText(tipo_usuario);
-//        menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
-//        navigationView.setNavigationItemSelectedListener(menuItem -> {
-//            int itemId = menuItem.getItemId();
-//            if (itemId == R.id.nav_cursos) {
-//                Intent intent = new Intent(this, CursoActivity.class);
-//                startActivity(intent);
-//            } else if (itemId == R.id.nav_ofertas_empleo) {
-//                Intent intent = new Intent(this, OfertaActivity.class);
-//                startActivity(intent);
-//            } else if (itemId == R.id.nav_tutorias) {
-//                Toast.makeText(this, "Tutorías seleccionadas", Toast.LENGTH_SHORT).show();
-//            } else if (itemId == R.id.nav_salir) {
-//                Toast.makeText(this, "Salir", Toast.LENGTH_SHORT).show();
-//                finish();
-//            }
-//            drawerLayout.closeDrawer(Gravity.START);
-//            return true;
-//        });
-        ////
 
         // Observa ofertas filtradas
         ofertaViewModel.getOfertasFiltradas().observe(this, ofertas -> {
@@ -126,6 +112,16 @@ public class OfertaActivity extends MenuHamburguesaActivity {
             @Override
             public void afterTextChanged(Editable s) {}
         });
+        //btn alta
+        if ("Empresa".equals(tipo_usuario)) {
+            btnCrear.setVisibility(View.VISIBLE);
+            btnCrear.setOnClickListener(view -> {
+                Intent intent = new Intent(OfertaActivity.this, AltaOfertaActivity.class);
+                startActivity(intent);
+            });
+        } else {
+            btnCrear.setVisibility(View.GONE);
+        }
 
         // btn filtrar
         btnFiltrar.setOnClickListener(v -> {
@@ -151,5 +147,11 @@ public class OfertaActivity extends MenuHamburguesaActivity {
     private void filtroOfertas(ArrayList<Integer> modalidades, ArrayList<Integer> tiposEmpleo, ArrayList<Integer> cursos) {
 
         ofertaViewModel.obtenerOfertasConFiltros(modalidades, tiposEmpleo, cursos);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ofertaViewModel.loadOfertas();
     }
 }

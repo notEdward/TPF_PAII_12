@@ -70,10 +70,6 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
 
                     } else if (item.getItemId() == R.id.opcion_modificar) {
                         // Acción para "Modificar" curso
-//                        Intent intentModificar = new Intent(context, ModificarCursoActivity.class);
-//                        intentModificar.putExtra("idCurso", curso.getIdCurso());
-//                        context.startActivity(intentModificar);
-//                        return true;
                         Intent intentModificar = new Intent(context, ModificarCursoActivity.class);
                         intentModificar.putExtra("idCurso", curso.getIdCurso());
                         intentModificar.putExtra("nombreCurso", curso.getNombreCurso());

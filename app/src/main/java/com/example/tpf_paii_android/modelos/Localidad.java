@@ -6,6 +6,8 @@ public class Localidad {
     private Provincia id_provincia;
     private String nombre;
 
+    private int idProvincia;
+
     public Localidad() {
     }
 
@@ -38,5 +40,8 @@ public class Localidad {
         return  nombre;
     }
 
+    public void setId_provincia(int idProvincia) {
+        this.idProvincia = idProvincia;
+    }
 }
 

@@ -5,9 +5,12 @@ import android.text.TextUtils;
 
 import com.example.tpf_paii_android.conexion_database.DatabaseConnection;
 import com.example.tpf_paii_android.modelos.Curso;
+import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Modalidad;
+import com.example.tpf_paii_android.modelos.NivelEducativo;
 import com.example.tpf_paii_android.modelos.OfertaDetalle;
 import com.example.tpf_paii_android.modelos.OfertaEmpleo;
+import com.example.tpf_paii_android.modelos.Provincia;
 import com.example.tpf_paii_android.modelos.TipoEmpleo;
 
 import java.sql.Connection;
@@ -220,7 +223,7 @@ public class OfertaRepository {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             OfertaDetalle detalle = null;
-            String query = "SELECT o.titulo, o.descripcion, o.direccion, " +
+            String query = "SELECT o.titulo, o.descripcion, o.direccion, o.otros_requisitos, " +
                     "c.nombre_curso AS nombre_curso, " +
                     "l.nombre AS nombre_localidad, p.nombre AS nombre_provincia, " +
                     "m.descripcion AS descripcion_modalidad, " +
@@ -249,7 +252,8 @@ public class OfertaRepository {
                                 resultSet.getString("nombre_localidad") + ", " + resultSet.getString("nombre_provincia"),
                                 resultSet.getString("nombre_provincia"),  // O el valor que consideres para provincia
                                 resultSet.getString("descripcion_modalidad"),
-                                resultSet.getString("descripcion_tipo_empleo")
+                                resultSet.getString("descripcion_tipo_empleo"),
+                                resultSet.getString("otros_requisitos")
                         );
                     }
                 }
@@ -329,5 +333,212 @@ public void registrarPostulacion(int idOfertaEmpleo, int idUsuario, DataCallback
         }
     });
 }
+//empresa alta
+public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback) {
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+    executor.execute(() -> {
+        List<NivelEducativo> nivelesEducativos = new ArrayList<>();
+        String query = "SELECT * FROM nivel_educativo";
+
+        try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+             Statement statement = con.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                NivelEducativo nivel = new NivelEducativo();
+                nivel.setId_nivelEducativo(resultSet.getInt("id_nivel_educativo"));
+                nivel.setDescripcion(resultSet.getString("descripcion"));
+                nivelesEducativos.add(nivel);
+            }
+
+            new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(nivelesEducativos));
+
+        } catch (Exception e) {
+            new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+        }
+    });
+}
+    public void obtenerLocalidades(DataCallback<List<Localidad>> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            List<Localidad> localidades = new ArrayList<>();
+            String query = "SELECT * FROM localidad";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 Statement statement = con.createStatement();
+                 ResultSet resultSet = statement.executeQuery(query)) {
+
+                while (resultSet.next()) {
+                    Localidad localidad = new Localidad();
+                    localidad.setId_localidad(resultSet.getInt("id_localidad"));
+                    localidad.setNombre(resultSet.getString("nombre"));
+                    localidad.setId_provincia(resultSet.getInt("id_provincia"));
+                    localidades.add(localidad);
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(localidades));
+
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
+    public void obtenerProvincias(DataCallback<List<Provincia>> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            List<Provincia> provincias = new ArrayList<>();
+            String query = "SELECT * FROM provincia";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 Statement statement = con.createStatement();
+                 ResultSet resultSet = statement.executeQuery(query)) {
+
+                while (resultSet.next()) {
+                    Provincia provincia = new Provincia();
+                    provincia.setId_provincia(resultSet.getInt("id_provincia"));
+                    provincia.setNombre(resultSet.getString("nombre"));
+                    provincias.add(provincia);
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(provincias));
+
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+    public void obtenerLocalidadesPorProvincia(int idProvincia, DataCallback<List<Localidad>> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            List<Localidad> localidades = new ArrayList<>();
+            String query = "SELECT * FROM localidad WHERE id_provincia = ?";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+                preparedStatement.setInt(1, idProvincia);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Localidad localidad = new Localidad();
+                        localidad.setId_localidad(resultSet.getInt("id_localidad"));
+                        localidad.setNombre(resultSet.getString("nombre"));
+                        localidad.setId_provincia(resultSet.getInt("id_provincia"));
+                        localidades.add(localidad);
+                    }
+
+                    new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(localidades));
+
+                }
+
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+    // En OfertaRepository
+//    public void guardarOferta(OfertaEmpleo oferta, DataCallback<String> callback) {
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//        executor.execute(() -> {
+//            String query = "INSERT INTO ofertas_empleos (id_empresa, titulo, descripcion, direccion, id_tipo_empleo, id_tipo_modalidad, id_nivel_educativo, id_curso, id_localidad, id_empresa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+//                 PreparedStatement stmt = con.prepareStatement(query)) {
+//
+//                stmt.setString(1, oferta.getTitulo());
+//                stmt.setString(2, oferta.getDescripcion());
+//                stmt.setString(3, oferta.getDireccion());
+//                stmt.setInt(4, oferta.getId_tipoEmpleo());
+//                stmt.setInt(5, oferta.getId_modalidad());
+//                stmt.setInt(6, oferta.getId_nivelEducativo());
+//                stmt.setInt(7, oferta.getId_curso());
+//                stmt.setInt(8, oferta.getId_localidad());
+//                stmt.setInt(9, oferta.getId_empresa());
+//
+//                int result = stmt.executeUpdate();
+//                if (result > 0) {
+//                    new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess("Oferta guardada exitosamente"));
+//                } else {
+//                    new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(new Exception("Error al guardar la oferta")));
+//                }
+//            } catch (Exception e) {
+//                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+//            }
+//        });
+//    }
+//
+//    // En OfertaRepository
+//    public void obtenerIdEmpresaPorUsuario(int idUsuario, DataCallback<Integer> callback) {
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//        executor.execute(() -> {
+//            String query = "SELECT id_empresa FROM usuarios WHERE id_usuario = ?";
+//            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+//                 PreparedStatement stmt = con.prepareStatement(query)) {
+//
+//                stmt.setInt(1, idUsuario);
+//                try (ResultSet resultSet = stmt.executeQuery()) {
+//                    if (resultSet.next()) {
+//                        int idEmpresa = resultSet.getInt("id_empresa");
+//                        new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(idEmpresa));
+//                    } else {
+//                        new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(new Exception("No se encontró la empresa para el usuario")));
+//                    }
+//                }
+//            } catch (Exception e) {
+//                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+//            }
+//        });
+//    }
+    public void guardarOferta(OfertaEmpleo oferta, DataCallback<String> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            String query = "INSERT INTO ofertas_empleos (id_empresa, titulo, descripcion, id_tipo_empleo, id_tipo_modalidad, id_nivel_educativo, id_curso, otros_requisitos, direccion, id_localidad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement stmt = con.prepareStatement(query)) {
+
+                stmt.setInt(1, oferta.getIdEmpresa());  // Cambié de setString a setInt para los IDs
+                stmt.setString(2, oferta.getTitulo());
+                stmt.setString(3, oferta.getDescripcion());
+                stmt.setInt(4, oferta.getIdTipoEmpleo());
+                stmt.setInt(5, oferta.getIdModalidad());
+                stmt.setInt(6, oferta.getIdNivelEducativo());
+                stmt.setInt(7, oferta.getIdCurso());
+                stmt.setString(8, oferta.getOtrosRequisitos());
+                stmt.setString(9, oferta.getDireccion());
+                stmt.setInt(10, oferta.getIdLocalidad());
+
+                int result = stmt.executeUpdate();
+                if (result > 0) {
+                    new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess("Oferta guardada exitosamente"));
+                } else {
+                    new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(new Exception("Error al guardar la oferta")));
+                }
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
+    // Método para obtener el ID de la empresa por el ID de usuario
+    public void obtenerIdEmpresaPorUsuario(int idUsuario, DataCallback<Integer> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            String query = "SELECT id_empresa FROM empresa WHERE id_usuario = ?";
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement stmt = con.prepareStatement(query)) {
+
+                stmt.setInt(1, idUsuario);
+                try (ResultSet resultSet = stmt.executeQuery()) {
+                    if (resultSet.next()) {
+                        int idEmpresa = resultSet.getInt("id_empresa");
+                        new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(idEmpresa));
+                    } else {
+                        new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(new Exception("No se encontró la empresa para el usuario")));
+                    }
+                }
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
 
 }
