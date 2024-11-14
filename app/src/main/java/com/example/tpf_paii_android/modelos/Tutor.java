@@ -1,5 +1,7 @@
 package com.example.tpf_paii_android.modelos;
 
+import androidx.annotation.NonNull;
+
 public class Tutor extends Usuario{
 
     private int idTutor; // AUTOINCREMENT en la DB
@@ -7,7 +9,7 @@ public class Tutor extends Usuario{
     private String nombre;
     private String apellido;
     private int edad;
-    private Genero idGenero;
+    private int idGenero;
     private String ocupacion;
     private String pasatiempos;
     private String infoAdicional;
@@ -16,22 +18,10 @@ public class Tutor extends Usuario{
     public Tutor() {
     }
 
-    // Constructor sin idTutor porque es AUTOINCREMENT en la DB
-    public Tutor(String dni, String nombre, String apellido, int edad, Genero idGenero, String ocupacion, String pasatiempos, String infoAdicional) {
-        this.dni = dni;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.edad = edad;
-        this.idGenero = idGenero;
-        this.ocupacion = ocupacion;
-        this.pasatiempos = pasatiempos;
-        this.infoAdicional = infoAdicional;
-    }
 
     // Constructor que incluye Usuario
-    public Tutor(int idTutor, String dni, String nombre, String apellido, int edad, Genero idGenero, String ocupacion, String pasatiempos, String infoAdicional, Usuario usuario) {
-        super(usuario);
-        this.idTutor = idTutor;
+    public Tutor(String dni, String nombre, String apellido, int edad, int idGenero, String ocupacion, String pasatiempos, String infoAdicional, Usuario usuario) {
+        super(usuario.getNombreUsuario(), usuario.getContrasenia(), usuario.getId_tipoUsuario());
         this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -85,11 +75,11 @@ public class Tutor extends Usuario{
         this.edad = edad;
     }
 
-    public Genero getIdGenero() {
+    public int getIdGenero() {
         return idGenero;
     }
 
-    public void setIdGenero(Genero idGenero) {
+    public void setIdGenero(int idGenero) {
         this.idGenero = idGenero;
     }
 
@@ -121,6 +111,7 @@ public class Tutor extends Usuario{
     // Método toString
 
 
+    @NonNull
     @Override
     public String toString() {
         return "Tutor{" +
@@ -129,7 +120,7 @@ public class Tutor extends Usuario{
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 ", edad=" + edad +
-                ", genero=" + idGenero +
+                ", idGenero=" + idGenero +
                 ", ocupacion='" + ocupacion + '\'' +
                 ", pasatiempos='" + pasatiempos + '\'' +
                 ", infoAdicional='" + infoAdicional + '\'' +

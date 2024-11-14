@@ -1,30 +1,30 @@
 package com.example.tpf_paii_android.modelos;
 
+import androidx.annotation.NonNull;
+
 public class Usuario {
 
     private int id_usuario;
     private String nombreUsuario;
     private String contrasenia;
-    private int id_tipoUsuario;
+    private TipoUsuario id_tipoUsuario;
 
     public Usuario() {
     }
 
-    // Constructor que recibe un objeto Usuario
-    public Usuario(Usuario usuario){
-        this.id_usuario = usuario.id_usuario;
-        this.nombreUsuario = usuario.nombreUsuario;
-        this.contrasenia = usuario.contrasenia;
-        this.id_tipoUsuario = usuario.id_tipoUsuario;
-    }
-
-    public Usuario(String nombreUsuario, String contrasenia, int tipo) {
+    public Usuario(String nombreUsuario, String contrasenia) {
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
-        this.id_tipoUsuario= tipo;
     }
 
-    public int getId_tipoUsuario() {
+    // Constructor con tipoUsuario
+    public Usuario(String nombreUsuario, String contrasenia, TipoUsuario id_tipoUsuario) {
+        this.nombreUsuario = nombreUsuario;
+        this.contrasenia = contrasenia;
+        this.id_tipoUsuario = id_tipoUsuario;
+    }
+
+    public TipoUsuario getId_tipoUsuario() {
         return id_tipoUsuario;
     }
 
@@ -49,6 +49,7 @@ public class Usuario {
         this.contrasenia = contrasenia;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Usuario{" +

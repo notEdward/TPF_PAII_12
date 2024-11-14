@@ -1,11 +1,18 @@
 package com.example.tpf_paii_android.modelos;
 
+import androidx.annotation.NonNull;
+
 public class Genero {
 
     private int id_genero;
     private String descripcion;
 
     public Genero() {
+    }
+
+    public Genero (int id_genero, String descripcion) {
+        this.id_genero = id_genero;
+        this.descripcion = descripcion;
     }
 
     public int getId_genero() {
@@ -16,11 +23,9 @@ public class Genero {
         return descripcion;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return "Genero{" +
-                "id_genero=" + id_genero +
-                ", descripcion='" + descripcion + '\'' +
-                '}';
+        return descripcion;
     }
 }

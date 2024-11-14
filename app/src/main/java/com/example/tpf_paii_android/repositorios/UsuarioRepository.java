@@ -2,7 +2,6 @@ package com.example.tpf_paii_android.repositorios;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.tpf_paii_android.conexion_database.DatabaseConnection;
@@ -20,6 +19,18 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class UsuarioRepository {
+
+    /*
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
+    private final Context context;
+
+    public UsuarioRepository(Context context){
+        this.context = context;
+    }
+    */
+
 
     public interface DataCallback<T> {
         void onSuccess(T result);
@@ -73,7 +84,7 @@ public class UsuarioRepository {
 //    }
 
     //Simulacion Asincronica
-    public Integer registrarUsuario(Usuario user) {
+   public Integer registrarUsuario(Usuario user) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Integer> futureResult = executor.submit(() -> {
             String query = "INSERT INTO usuario (nombre_usuario, contrasena, id_tipo_usuario) VALUES (?, ?, ?)";
@@ -148,5 +159,60 @@ public class UsuarioRepository {
         }
     }
 
+
+/*
+    // Metodo para REGISTRAR un usuario ASYNC
+    public void registrarUsuario(Usuario usuario, int tipoUsuario, DataCallback<Integer> callback) { // Recibe el tipo de usuario por parametro
+        executor.execute(() -> {
+
+          // Verifica si el usuario ya existe
+            boolean existe = existeUsuario(usuario.getNombreUsuario());
+
+            if (existe) {
+                mainHandler.post(() -> {
+                    callback.onFailure(new SQLException("El nombre de usuario ya existe."));
+                    Toast.makeText(context, "El nombre de usuario ya existe.", Toast.LENGTH_SHORT).show();
+                });
+                return;
+            }
+
+            String query = "INSERT INTO usuario (nombre_usuario, contrasena, id_tipo_usuario) VALUES (?, ?, ?)";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass) ;
+                 PreparedStatement preparedStatement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+                // Parametros para insertar
+                preparedStatement.setString(1, usuario.getNombreUsuario());
+                preparedStatement.setString(2, usuario.getContrasenia());
+                preparedStatement.setInt(3, tipoUsuario);
+
+                // Ejecuto consulta de INSERT
+                int filasAfectadas = preparedStatement.executeUpdate();
+                if (filasAfectadas > 0) {
+                    // Si se inserta correctamente, obtenemos el id_usuario generado automaticamente
+                    try (ResultSet generateKeys = preparedStatement.getGeneratedKeys()) {
+                        if(generateKeys.next()) {
+                            int id_usuario = generateKeys.getInt(1);
+                            mainHandler.post(() -> {
+                                callback.onSuccess(id_usuario); // Retorna ID generado
+                                Toast.makeText(context, "Usuario registrado exitosamente", Toast.LENGTH_SHORT).show();
+                            });
+                        }
+                    }
+                } else {
+                    mainHandler.post(() -> {
+                        callback.onFailure(new SQLException("Error al registrar usuario"));
+                        Toast.makeText(context, "Error al registrar usuario", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            } catch (SQLException e) {
+                mainHandler.post(() -> {
+                    callback.onFailure(e);
+                    Toast.makeText(context, "Error en la conexion con la base de datos", Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+*/
 
 }
