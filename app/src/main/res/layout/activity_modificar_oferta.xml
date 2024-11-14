@@ -1,0 +1,39 @@
+<!-- res/layout/activity_modificar_oferta.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modificar Oferta"
+        android:textSize="20sp"
+        android:paddingBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/etTituloOferta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Título"/>
+
+    <EditText
+        android:id="@+id/etDescripcionOferta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Descripción"
+        android:inputType="textMultiLine"
+        android:lines="4"
+        android:gravity="top"/>
+
+    <!-- Agrega aquí otros campos necesarios, como dropdowns para modalidad, tipo empleo, etc. -->
+
+    <Button
+        android:id="@+id/btnGuardarCambios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guardar Cambios"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="16dp"/>
+</LinearLayout>

@@ -63,6 +63,12 @@
                 android:layout_height="wrap_content"
                 android:hint="Dirección de la oferta" />
 
+            <EditText
+                android:id="@+id/etOtroRequisito"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Otros requisitos" />
+
             <!-- Spinner para tipo de empleo -->
             <TextView
                 android:layout_width="wrap_content"

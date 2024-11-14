@@ -14,6 +14,7 @@ import com.example.tpf_paii_android.modelos.OfertaDetalle;
 import com.example.tpf_paii_android.modelos.OfertaEmpleo;
 import com.example.tpf_paii_android.modelos.Provincia;
 import com.example.tpf_paii_android.modelos.TipoEmpleo;
+import com.example.tpf_paii_android.repositorios.CursoRepository;
 import com.example.tpf_paii_android.repositorios.OfertaRepository;
 
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ private MutableLiveData<List<TipoEmpleo>> tiposEmpleoLiveData = new MutableLiveD
     private MutableLiveData<List<Localidad>> localidadesLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Provincia>> provinciasLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> ofertaCreadaExitosamente = new MutableLiveData<>();
+//baja
+private MutableLiveData<Boolean> bajaOfertaLiveData = new MutableLiveData<>();
 
     ////
 
@@ -71,6 +74,10 @@ private MutableLiveData<List<TipoEmpleo>> tiposEmpleoLiveData = new MutableLiveD
     public LiveData<List<Provincia>> getProvinciasLiveData() { return provinciasLiveData; }
     public LiveData<Boolean> getOfertaCreadaExitosamente() {
         return ofertaCreadaExitosamente;
+    }
+    //baja
+    public LiveData<Boolean> getBajaOfertaLiveData() {
+        return bajaOfertaLiveData;
     }
     ////
     public void loadOfertas() {
@@ -276,6 +283,19 @@ private MutableLiveData<List<TipoEmpleo>> tiposEmpleoLiveData = new MutableLiveD
         });
     }
 
+    //baja
+    public void actualizarEstadoOferta(int idOferta, int estado) {
+        ofertaRepository.actualizarEstadoOferta(idOferta, estado, new OfertaRepository.DataCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                bajaOfertaLiveData.setValue(result);
+            }
 
+            @Override
+            public void onFailure(Exception e) {
+                bajaOfertaLiveData.setValue(false);
+            }
+        });
+    }
 
 }

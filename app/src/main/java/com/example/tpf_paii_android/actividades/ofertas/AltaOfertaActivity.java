@@ -39,7 +39,7 @@ public class AltaOfertaActivity extends AppCompatActivity {
     private Spinner spinnerCurso;
     private Spinner spinnerLocalidad;
     private Spinner spinnerProvincia;
-    private EditText etTitulo, etDescripcion, etDireccion;
+    private EditText etTitulo, etDescripcion, etDireccion, etOtroRequisito;
 //    private Spinner spinnerTipoEmpleo, spinnerModalidad, spinnerNivelEducativo, spinnerCurso, spinnerProvincia, spinnerLocalidad;
     private Button btnCrearOferta;
     private ProvinciaAdapter provinciaAdapter;
@@ -57,6 +57,7 @@ public class AltaOfertaActivity extends AppCompatActivity {
         etTitulo = findViewById(R.id.etTitulo);
         etDescripcion = findViewById(R.id.etDescripcion);
         etDireccion = findViewById(R.id.etDireccion);
+        etOtroRequisito = findViewById(R.id.etOtroRequisito);
         spinnerTipoEmpleo = findViewById(R.id.spinnerTipoEmpleo);
         spinnerModalidad = findViewById(R.id.spinnerModalidad);
         spinnerNivelEducativo = findViewById(R.id.spinnerNivelEducativo);
@@ -111,6 +112,7 @@ public class AltaOfertaActivity extends AppCompatActivity {
             String titulo = etTitulo.getText().toString();
             String descripcion = etDescripcion.getText().toString();
             String direccion = etDireccion.getText().toString();
+            String otro_requisito = etOtroRequisito.getText().toString();
 
             // Obtener valores seleccionados de los spinners
             TipoEmpleo tipoEmpleoSeleccionado = (TipoEmpleo) spinnerTipoEmpleo.getSelectedItem();
@@ -141,7 +143,7 @@ public class AltaOfertaActivity extends AppCompatActivity {
                             modalidadSeleccionada.getId_modalidad(), // ID de la modalidad
                             nivelEducativoSeleccionado.getId_nivelEducativo(), // ID del nivel educativo
                             cursoSeleccionado.getIdCurso(), // ID del curso seleccionado
-                            "otros_requisitos", // Otros requisitos (puedes ajustarlo según sea necesario)
+                            otro_requisito, // Otros requisitos (puedes ajustarlo según sea necesario)
                             direccion, // Dirección de la oferta
                             localidadSeleccionada.getId_localidad() // ID de la localidad seleccionada
                     );

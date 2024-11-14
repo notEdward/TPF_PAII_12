@@ -60,7 +60,14 @@ public class OfertaActivity extends MenuHamburguesaActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
         recyclerView.setLayoutManager(gridLayoutManager);
         Button btnCrear = findViewById(R.id.btnCrear);
-        adapter = new OfertaAdapter(this,null);
+
+        MyApp app = (MyApp) getApplication();
+        idUsuario = app.getIdUsuario();
+        tipo_usuario = app.getTipoUsuario();
+        nombreUsuario = app.getNombreUsuario();
+        setupDrawer(nombreUsuario, tipo_usuario);
+
+        adapter = new OfertaAdapter(this,null, tipo_usuario);
         recyclerView.setAdapter(adapter);
 
         ofertaViewModel = new ViewModelProvider(this).get(OfertaViewModel.class);
@@ -76,12 +83,7 @@ public class OfertaActivity extends MenuHamburguesaActivity {
 //        nombreUsuario = initIntent.hasExtra("nombreUsuario") ? initIntent.getStringExtra("nombreUsuario") : "prueba";
 //        tipo_usuario = initIntent.hasExtra("tipo_usuario") ? initIntent.getStringExtra("tipo_usuario") : "Empresa";
 //        setupDrawer(nombreUsuario, tipo_usuario);
-        MyApp app = (MyApp) getApplication();
-        int idUsuario = app.getIdUsuario();
-        tipo_usuario = app.getTipoUsuario();
-        String nombreUsuario = app.getNombreUsuario();
 
-        setupDrawer(nombreUsuario, tipo_usuario);
 
         // Observa ofertas filtradas
         ofertaViewModel.getOfertasFiltradas().observe(this, ofertas -> {
@@ -129,6 +131,17 @@ public class OfertaActivity extends MenuHamburguesaActivity {
             Intent intent = new Intent(OfertaActivity.this, FiltroOfertaActivity.class);
             startActivityForResult(intent, FILTER_REQUEST_CODE);
         });
+
+        // Observando el LiveData para saber si la baja fue exitosa
+        ofertaViewModel.getBajaOfertaLiveData().observe(this, result -> {
+            if (result != null) {
+                if (result) {
+                    Toast.makeText(OfertaActivity.this, "Oferta dada de baja", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(OfertaActivity.this, "Error al dar de baja el curso", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -153,5 +166,8 @@ public class OfertaActivity extends MenuHamburguesaActivity {
     protected void onResume() {
         super.onResume();
         ofertaViewModel.loadOfertas();
+    }
+    public void darDeBajaOferta(int idOferta) {
+        ofertaViewModel.actualizarEstadoOferta(idOferta, 0); // Cambiar el estado a 0
     }
 }

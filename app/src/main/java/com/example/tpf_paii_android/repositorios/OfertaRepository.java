@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -436,58 +437,7 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
             }
         });
     }
-    // En OfertaRepository
-//    public void guardarOferta(OfertaEmpleo oferta, DataCallback<String> callback) {
-//        ExecutorService executor = Executors.newSingleThreadExecutor();
-//        executor.execute(() -> {
-//            String query = "INSERT INTO ofertas_empleos (id_empresa, titulo, descripcion, direccion, id_tipo_empleo, id_tipo_modalidad, id_nivel_educativo, id_curso, id_localidad, id_empresa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
-//                 PreparedStatement stmt = con.prepareStatement(query)) {
-//
-//                stmt.setString(1, oferta.getTitulo());
-//                stmt.setString(2, oferta.getDescripcion());
-//                stmt.setString(3, oferta.getDireccion());
-//                stmt.setInt(4, oferta.getId_tipoEmpleo());
-//                stmt.setInt(5, oferta.getId_modalidad());
-//                stmt.setInt(6, oferta.getId_nivelEducativo());
-//                stmt.setInt(7, oferta.getId_curso());
-//                stmt.setInt(8, oferta.getId_localidad());
-//                stmt.setInt(9, oferta.getId_empresa());
-//
-//                int result = stmt.executeUpdate();
-//                if (result > 0) {
-//                    new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess("Oferta guardada exitosamente"));
-//                } else {
-//                    new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(new Exception("Error al guardar la oferta")));
-//                }
-//            } catch (Exception e) {
-//                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
-//            }
-//        });
-//    }
-//
-//    // En OfertaRepository
-//    public void obtenerIdEmpresaPorUsuario(int idUsuario, DataCallback<Integer> callback) {
-//        ExecutorService executor = Executors.newSingleThreadExecutor();
-//        executor.execute(() -> {
-//            String query = "SELECT id_empresa FROM usuarios WHERE id_usuario = ?";
-//            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
-//                 PreparedStatement stmt = con.prepareStatement(query)) {
-//
-//                stmt.setInt(1, idUsuario);
-//                try (ResultSet resultSet = stmt.executeQuery()) {
-//                    if (resultSet.next()) {
-//                        int idEmpresa = resultSet.getInt("id_empresa");
-//                        new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(idEmpresa));
-//                    } else {
-//                        new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(new Exception("No se encontró la empresa para el usuario")));
-//                    }
-//                }
-//            } catch (Exception e) {
-//                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
-//            }
-//        });
-//    }
+
     public void guardarOferta(OfertaEmpleo oferta, DataCallback<String> callback) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
@@ -540,5 +490,59 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
             }
         });
     }
+
+    public void actualizarOferta(OfertaEmpleo oferta, DataCallback<Boolean> callback) {
+        // Ejecutar en un hilo secundario
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            try (Connection connection = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass)) {
+                // Código de conexión y actualización a la base de datos
+                String updateQuery = "UPDATE ofertas_empleos SET titulo = ?, descripcion = ? WHERE id_oferta_empleo = ?";
+                PreparedStatement statement = connection.prepareStatement(updateQuery);
+                statement.setString(1, oferta.getTitulo());
+                statement.setString(2, oferta.getDescripcion());
+                statement.setInt(3, oferta.getId_ofertaEmpleo());
+
+                int rowsAffected = statement.executeUpdate();
+                statement.close();
+
+                // Llama al callback en el hilo principal si se actualizó correctamente
+                boolean exito = rowsAffected > 0;
+                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(exito));
+
+            } catch (Exception e) {
+                // En caso de error, envía la excepción al callback de falla
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
+    //baja
+    public void actualizarEstadoOferta(int idOferta, int nuevoEstado, OfertaRepository.DataCallback<Boolean> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            try {
+                Class.forName(DatabaseConnection.driver);
+                Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+
+                // estado del curso a 0 (inactivo)
+                String query = "UPDATE ofertas_empleos SET estado = ? WHERE id_oferta_empleo = ?";
+                PreparedStatement statement = con.prepareStatement(query);
+                statement.setInt(1, nuevoEstado);
+                statement.setInt(2, idOferta);
+
+                int rowsAffected = statement.executeUpdate();
+                statement.close();
+                con.close();
+
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    callback.onSuccess(rowsAffected > 0);
+                });
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
 
 }

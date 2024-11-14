@@ -72,40 +72,43 @@
 
         <!-- Fin actividad cursos -->
         <!-- Mostrar Ofertas -->
-        <activity android:name=".actividades.ofertas.OfertaActivity"
-            android:label="Ofertas">
-        </activity>
-<!--                <activity-->
-<!--                    android:name=".actividades.ofertas.OfertaActivity"-->
-<!--                    android:exported="true"-->
-<!--                    android:launchMode="singleTop">-->
-<!--                    <intent-filter>-->
-<!--                        <action android:name="android.intent.action.MAIN" />-->
-<!--                        <category android:name="android.intent.category.LAUNCHER" />-->
-<!--                    </intent-filter>-->
-<!--                </activity>-->
+                <activity android:name=".actividades.ofertas.OfertaActivity"
+                    android:label="Ofertas">
+                </activity>
+<!--        <activity-->
+<!--            android:name=".actividades.ofertas.OfertaActivity"-->
+<!--            android:exported="true"-->
+<!--            android:launchMode="singleTop">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
         <activity android:name=".actividades.ofertas.FiltroOfertaActivity"
             android:label="Filtro de Ofertas">
         </activity>
         <activity android:name=".actividades.ofertas.OfertaDetalleActivity"
-            android:label="Filtro de Ofertas">
+            android:label="Detalle de Ofertas">
         </activity>
         <activity android:name=".actividades.ofertas.AltaOfertaActivity"
             android:label="Alta de Ofertas">
         </activity>
-        <!-- Actividad principal -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" /> <!-- Actividad de Login, inicio de la app -->
-        <activity
-            android:name=".actividades.autenticacion.Login"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".actividades.ofertas.ModificarOfertaActivity"
+            android:label="Modif de Ofertas">
         </activity>
+        <!-- Actividad principal -->
+                <activity
+                    android:name=".MainActivity"
+                    android:exported="false" /> <!-- Actividad de Login, inicio de la app -->
+                <activity
+                    android:name=".actividades.autenticacion.Login"
+                    android:exported="true" >
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+                </activity>
     </application>
 
 </manifest>
