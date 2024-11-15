@@ -1,5 +1,6 @@
 package com.example.tpf_paii_android.actividades.tutores;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.tpf_paii_android.R;
+import com.example.tpf_paii_android.actividades.autenticacion.Login;
 import com.example.tpf_paii_android.modelos.Genero;
 import com.example.tpf_paii_android.modelos.TipoUsuario;
 import com.example.tpf_paii_android.modelos.Tutor;
@@ -75,6 +77,9 @@ public class TutorActivity extends AppCompatActivity {
         tutorViewModel.getRegistroExitoso().observe(this, isSuccess -> {
             if (isSuccess) {
                 Toast.makeText(this, "Tutor registrado exitosamente", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+                finish();
             }
         });
 

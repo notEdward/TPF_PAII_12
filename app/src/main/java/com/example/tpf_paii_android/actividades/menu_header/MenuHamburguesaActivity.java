@@ -14,6 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.core.view.GravityCompat;
 
 import com.example.tpf_paii_android.R;
+import com.example.tpf_paii_android.actividades.autenticacion.Login;
 import com.example.tpf_paii_android.actividades.cursos.CursoActivity;
 import com.example.tpf_paii_android.actividades.ofertas.OfertaActivity;
 import com.example.tpf_paii_android.actividades.tutorias.ForosActivity;
@@ -52,7 +53,8 @@ public class MenuHamburguesaActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_tutorias) {
                 startActivity(new Intent(this, ForosActivity.class));
                 } else if (itemId == R.id.nav_salir) {
-                Toast.makeText(this, "Salir", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Saliste exitosamente", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, Login.class));
                 finish();
             }
             drawerLayout.closeDrawer(Gravity.START);

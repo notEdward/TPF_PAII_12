@@ -16,6 +16,7 @@ import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.actividades.registracion.RegistrarEmpresa;
 import com.example.tpf_paii_android.actividades.registracion.RegistrarEstudiante;
 import com.example.tpf_paii_android.actividades.registracion.RegistrarTutor;
+import com.example.tpf_paii_android.actividades.tutores.TutorActivity;
 
 public class IniciarRegistro extends AppCompatActivity {
 
@@ -53,7 +54,7 @@ public class IniciarRegistro extends AppCompatActivity {
                 startActivity(intent);
             } else if (seleccionId == R.id.rbTutor){
                 // Dirige a RegistrarTutor Activity
-                 Intent intent = new Intent(IniciarRegistro.this, RegistrarTutor.class);
+                 Intent intent = new Intent(IniciarRegistro.this, TutorActivity.class);
                  startActivity(intent);
             } else {
                 Toast.makeText(this, "Por favor, selecciona una opción.", Toast.LENGTH_SHORT).show();

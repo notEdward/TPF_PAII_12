@@ -8,6 +8,7 @@ public class Usuario {
     private String nombreUsuario;
     private String contrasenia;
     private TipoUsuario id_tipoUsuario;
+    private int idTipoUsuario;
 
     public Usuario() {
     }
@@ -22,6 +23,17 @@ public class Usuario {
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
         this.id_tipoUsuario = id_tipoUsuario;
+    }
+
+    // Constructor con tipoUsuario
+    public Usuario(String nombreUsuario, String contrasenia, int idTipoUsuario) {
+        this.nombreUsuario = nombreUsuario;
+        this.contrasenia = contrasenia;
+        this.idTipoUsuario = idTipoUsuario;
+    }
+
+    public int getIdTipoUsuario() {
+        return idTipoUsuario;
     }
 
     public TipoUsuario getId_tipoUsuario() {

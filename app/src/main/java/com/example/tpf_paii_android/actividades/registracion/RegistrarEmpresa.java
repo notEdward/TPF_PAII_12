@@ -1,5 +1,6 @@
 package com.example.tpf_paii_android.actividades.registracion;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,11 +14,9 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tpf_paii_android.R;
+import com.example.tpf_paii_android.actividades.autenticacion.Login;
 import com.example.tpf_paii_android.modelos.Empresa;
 import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Provincia;
@@ -168,6 +167,11 @@ public class RegistrarEmpresa extends AppCompatActivity {
 
             if (er.registrarEmpresa(emp,idUsuario)) {
                 Toast.makeText(this, "Empresa registrada con éxito.", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+                finish();
+
             } else {
                 Toast.makeText(this, "Error al registrar la empresa", Toast.LENGTH_SHORT).show();
             }
