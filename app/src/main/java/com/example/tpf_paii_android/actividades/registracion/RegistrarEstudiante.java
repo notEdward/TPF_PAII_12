@@ -223,7 +223,6 @@ public class RegistrarEstudiante extends AppCompatActivity {
     }
 
 
-
     public void registrarEstudiante(){
 
         String Dni = txtDni.getText().toString();
@@ -241,19 +240,12 @@ public class RegistrarEstudiante extends AppCompatActivity {
         String tarea = txtTareas.getText().toString();
         String duracion = txtDuracion.getText().toString();
 
-        Genero genero = (Genero) spGenero.getSelectedItem();
-        int idGenero = genero.getId_genero();
-        Localidad Loc = (Localidad) spLocalidad.getSelectedItem();
-        int idLocalidad = Loc.getId_localidad();
-        NivelEducativo nivelEdu = (NivelEducativo) spNivelEducativo.getSelectedItem();
-        int idNivelEdu = nivelEdu.getId_nivelEducativo();
-        EstadoNivelEducativo estado = (EstadoNivelEducativo) spEstado.getSelectedItem();
-        int idEstadoEdu = estado.getId_estadoNivelEducativo();
+
 
         if (nombre.isEmpty() || apellido.isEmpty() || Dni.isEmpty() || nombreUsuario.isEmpty() || contrasena.isEmpty() ||
            repetirContrasena.isEmpty() || email.isEmpty() || telefono.isEmpty() || direccion.isEmpty() ||
            lugar.isEmpty() || cargo.isEmpty() || tarea.isEmpty() || duracion.isEmpty() ||
-            (spLocalidad == null) || (spProvincia.getSelectedItemPosition()==0) || (spGenero.getSelectedItemPosition()==0) ||
+            (spLocalidad.getSelectedItem()==null) || (spProvincia.getSelectedItemPosition()==0) || (spGenero.getSelectedItemPosition()==0) ||
             (spNivelEducativo.getSelectedItemPosition()==0) || (spEstado.getSelectedItemPosition()==0) ) {
 
             Toast.makeText(RegistrarEstudiante.this, "Por favor, complete todos los campos.", Toast.LENGTH_SHORT).show();
@@ -262,8 +254,18 @@ public class RegistrarEstudiante extends AppCompatActivity {
 
         if (!contrasena.equals(repetirContrasena)) {
             Toast.makeText(this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show();
+            txtContrasena.requestFocus();
             return;
         }
+
+        Genero genero = (Genero) spGenero.getSelectedItem();
+        int idGenero = genero.getId_genero();
+        Localidad Loc = (Localidad) spLocalidad.getSelectedItem();
+        int idLocalidad = Loc.getId_localidad();
+        NivelEducativo nivelEdu = (NivelEducativo) spNivelEducativo.getSelectedItem();
+        int idNivelEdu = nivelEdu.getId_nivelEducativo();
+        EstadoNivelEducativo estado = (EstadoNivelEducativo) spEstado.getSelectedItem();
+        int idEstadoEdu = estado.getId_estadoNivelEducativo();
 
         Usuario user = new Usuario(nombreUsuario,contrasena,1);
         Estudiante est = new Estudiante(Dni, user, nombre, apellido, idGenero, email, telefono,
@@ -275,6 +277,11 @@ public class RegistrarEstudiante extends AppCompatActivity {
 
         int idUsuario = ur.registrarUsuario(user);
         if (idUsuario != -1) {
+            if(idUsuario ==0){
+                Toast.makeText(this, "El usuario ya existe!", Toast.LENGTH_SHORT).show();
+                txtNombreUser.requestFocus();
+                return;
+            }
             ExperienciaLaboral expLaboral = new ExperienciaLaboral(user,lugar,cargo,tarea,duracion);
                 if(elr.registrarExpLaboral(expLaboral,idUsuario)){
                     if (er.registrarEstudiante(est,idUsuario)) {
@@ -290,6 +297,7 @@ public class RegistrarEstudiante extends AppCompatActivity {
                 }
         } else {
             Toast.makeText(this, "Error al registrar el usuario.", Toast.LENGTH_SHORT).show();
+            txtNombreUser.requestFocus();
         }
     }
 }

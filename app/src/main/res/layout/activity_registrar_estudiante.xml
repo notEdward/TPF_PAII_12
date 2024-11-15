@@ -75,7 +75,7 @@
                 android:layout_marginEnd="15dp"
                 android:ems="10"
                 android:hint="@string/txtDNI"
-                android:inputType="text"
+                android:inputType="number"
                 android:textSize="20sp" />
 
             <LinearLayout

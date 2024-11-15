@@ -159,6 +159,7 @@ public class RegistrarEmpresa extends AppCompatActivity {
 
         if (!contrasena.equals(repetirContrasena)) {
             Toast.makeText(this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show();
+            txtContrasena.requestFocus();
             return;
         }
 
@@ -173,8 +174,12 @@ public class RegistrarEmpresa extends AppCompatActivity {
 
         int idUsuario = ur.registrarUsuario(user);
         if (idUsuario != -1) {
-            Toast.makeText(this, "Usuario registrado con éxito.", Toast.LENGTH_SHORT).show();
-
+            //Toast.makeText(this, "Usuario registrado con éxito.", Toast.LENGTH_SHORT).show();
+            if(idUsuario ==0){
+                Toast.makeText(this, "El usuario ya existe!", Toast.LENGTH_SHORT).show();
+                txtNombreUser.requestFocus();
+                return;
+            }
             if (er.registrarEmpresa(emp,idUsuario)) {
                 Toast.makeText(this, "Empresa registrada con éxito.", Toast.LENGTH_SHORT).show();
 

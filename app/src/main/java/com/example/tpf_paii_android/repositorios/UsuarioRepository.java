@@ -68,6 +68,7 @@ public class UsuarioRepository {
                 }
             } else {
                 System.out.println("El usuario ya existe en la base de datos.");
+                return 0;
             }
             return idGenerado;
         });
