@@ -4,14 +4,17 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.conexion_database.DatabaseConnection;
 import com.example.tpf_paii_android.modelos.Foro;
 import com.example.tpf_paii_android.modelos.ForoMensaje;
+import com.example.tpf_paii_android.modelos.UsuarioInfo;
 
 import java.util.List;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -164,6 +167,139 @@ public class ForoRepository {
             }
         });
     }
+
+    public LiveData<UsuarioInfo> obtenerUsuarioInfo(int idUsuario, String tipoUsuario) {
+        MutableLiveData<UsuarioInfo> usuarioInfoLiveData = new MutableLiveData<>();
+
+        executor.execute(() -> {
+            Connection con = null;
+            try {
+                con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+
+                String query = "";
+                int imagenResId;
+                switch (tipoUsuario.toUpperCase()) {
+                    case "TUTOR":
+                        query = "SELECT nombre, apellido, info_adicional FROM tutor WHERE id_usuario = ?";
+                        imagenResId = R.drawable.tutores;
+                        break;
+                    case "EMPRESA":
+                        query = "SELECT nombre, sector, descripcion FROM empresa WHERE id_usuario = ?";
+                        imagenResId = R.drawable.empresa;
+                        break;
+                    case "ESTUDIANTE":
+                        query = "SELECT nombre, apellido, email FROM estudiante WHERE id_usuario = ?";
+                        imagenResId = R.drawable.estudiante;
+                        break;
+                    default:
+                         return;
+                }
+
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setInt(1, idUsuario);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        if (rs.next()) {
+                            String nombre = rs.getString("nombre");
+                            String apellido = tipoUsuario.equals("empresa") ? rs.getString("sector") : rs.getString("apellido");
+                            String infoAdicional = rs.getString(tipoUsuario.equals("empresa") ? "descripcion" : "info_adicional");
+
+                            UsuarioInfo usuarioInfo = new UsuarioInfo(
+                                    tipoUsuario, nombre, apellido, infoAdicional, imagenResId
+                            );
+                            usuarioInfoLiveData.postValue(usuarioInfo);
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                if (con != null) {
+                    try {
+                        con.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        return usuarioInfoLiveData;
+    }
+
+
+        // Obtener la información del usuario según su tipo
+//        public LiveData<UsuarioInfo> obtenerUsuarioInfo(int idUsuario, String tipoUsuario) {
+//            MutableLiveData<UsuarioInfo> usuarioInfoLiveData = new MutableLiveData<>();
+//
+//            new Thread(() -> {
+//                Connection con = null;
+//                try {
+//                    // Conexión a la base de datos (asegúrate de que la conexión esté correcta)
+//                    con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+//
+//                    String query = "";
+//                    int imagenResId = R.drawable.tutor;  // Imagen por defecto si no se encuentra tipo
+//
+//                    // Aquí decidimos qué consulta hacer dependiendo del tipo de usuario
+//                    if (tipoUsuario != null) {
+//                        switch (tipoUsuario.toUpperCase()) {
+//                            case "TUTOR":
+//                                query = "SELECT nombre, apellido, info_adicional FROM tutor WHERE id_usuario = ?";
+//                                imagenResId = R.drawable.tutores;
+//                                break;
+//                            case "EMPRESA":
+//                                query = "SELECT nombre, sector, descripcion FROM empresa WHERE id_usuario = ?";
+//                                imagenResId = R.drawable.empresa;
+//                                break;
+//                            case "ESTUDIANTE":
+//                                query = "SELECT nombre, apellido, email FROM estudiante WHERE id_usuario = ?";
+//                                imagenResId = R.drawable.estudiante;
+//                                break;
+//                            default:
+//                                // Si no es ningún tipo de usuario conocido, cargar datos vacíos o predeterminados
+//                                query = "SELECT nombre_usuario FROM usuario WHERE id_usuario = ?";  // Solo nombre de usuario
+//                                imagenResId = R.drawable.tutor;
+//                                break;
+//                        }
+//                    }
+//
+//                    // Preparar la consulta y ejecutarla
+//                    try (PreparedStatement stmt = con.prepareStatement(query)) {
+//                        stmt.setInt(1, idUsuario);
+//                        try (ResultSet rs = stmt.executeQuery()) {
+//                            if (rs.next()) {
+//                                String nombre = rs.getString("nombre");
+//                                String apellido = tipoUsuario.equals("empresa") ? rs.getString("sector") : rs.getString("apellido");
+//                                String infoAdicional = rs.getString(tipoUsuario.equals("empresa") ? "descripcion" : "info_adicional");
+//
+//                                // Crear un objeto UsuarioInfo con los datos obtenidos
+//                                UsuarioInfo usuarioInfo = new UsuarioInfo(
+//                                        tipoUsuario, nombre, apellido, infoAdicional, imagenResId
+//                                );
+//                                usuarioInfoLiveData.postValue(usuarioInfo);
+//                            } else {
+//                                // Si no se encuentran resultados, retornamos un objeto UsuarioInfo vacío
+//                                usuarioInfoLiveData.postValue(new UsuarioInfo("ADMIN", "", "", "", R.drawable.tutor));
+//                            }
+//                        }
+//                    }
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                    // Manejar el error en caso de fallos
+//                    usuarioInfoLiveData.postValue(null);
+//                } finally {
+//                    if (con != null) {
+//                        try {
+//                            con.close();
+//                        } catch (SQLException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }).start();
+//
+//            return usuarioInfoLiveData;
+//        }
 
 }
 

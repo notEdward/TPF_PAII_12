@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.tpf_paii_android.modelos.Foro;
+import com.example.tpf_paii_android.modelos.UsuarioInfo;
 import com.example.tpf_paii_android.repositorios.ForoRepository;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class ForoViewModel extends AndroidViewModel {
     private ForoRepository foroRepository;
     private MutableLiveData<List<Foro>> foros;
     private MutableLiveData<Boolean> isHiloCreated;
+    private LiveData<UsuarioInfo> usuarioInfoLiveData;
 
     public ForoViewModel(Application application) {
         super(application);
@@ -53,5 +55,12 @@ public class ForoViewModel extends AndroidViewModel {
             }
         });
         return isHiloCreated;
+    }
+
+    public LiveData<UsuarioInfo> obtenerUsuarioInfo(int idUsuario, String tipoUsuario) {
+        if (usuarioInfoLiveData == null) {
+            usuarioInfoLiveData = foroRepository.obtenerUsuarioInfo(idUsuario, tipoUsuario);
+        }
+        return usuarioInfoLiveData;
     }
 }
