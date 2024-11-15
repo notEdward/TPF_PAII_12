@@ -19,11 +19,18 @@ public class Genero {
         return id_genero;
     }
 
+    public void setId_genero(int id_genero) {
+        this.id_genero = id_genero;
+    }
+
     public String getDescripcion() {
         return descripcion;
     }
 
-    @NonNull
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     @Override
     public String toString() {
         return descripcion;

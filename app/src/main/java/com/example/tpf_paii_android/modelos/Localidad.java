@@ -11,6 +11,11 @@ public class Localidad {
     public Localidad() {
     }
 
+    public Localidad(int id_localidad, String nombre) {
+        this.id_localidad = id_localidad;
+        this.nombre = nombre;
+    }
+
     public int getId_localidad() {
         return id_localidad;
     }

@@ -21,7 +21,6 @@ import java.util.concurrent.Future;
 
 public class UsuarioRepository {
 
-
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -29,64 +28,15 @@ public class UsuarioRepository {
 
     public UsuarioRepository(Context context){
         this.context = context;
-
     }
 
     public UsuarioRepository() {
-
     }
-
 
     public interface DataCallback<T> {
         void onSuccess(T result);
         void onFailure(Exception e);
     }
-
-//    public boolean registrarUsuario(Usuario user) {
-//        boolean registrado = false;
-//        String query = "INSERT INTO usuario (nombre_usuario, contrasena, id_tipo_usuario) VALUES (?, ?, ?)";
-//
-//        // Verifica si el usuario existe antes de registrarlo
-//        if (!ExisteUsuario(user.getNombreUsuario())) {
-//            try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
-//                 PreparedStatement ps = cn.prepareStatement(query)) {
-//
-//                ps.setString(1, user.getNombreUsuario());
-//                ps.setString(2, user.getContrasenia());
-//                ps.setInt(3, user.getId_tipoUsuario());
-//
-//                // Ejecuta la consulta y verifica si se registrp el usuario
-//                int filasAfectadas = ps.executeUpdate();
-//                registrado = filasAfectadas > 0;
-//
-//            } catch (SQLException e) {
-//                System.err.println("Error al registrar el usuario: " + e.getMessage());
-//                e.printStackTrace();
-//            }
-//        } else {
-//            System.out.println("El usuario ya existe en la base de datos.");
-//        }
-//
-//        return registrado;
-//    }
-//
-//
-//    public boolean ExisteUsuario(String nombreUser) {
-//        String query1 = "SELECT * FROM usuario WHERE nombre_usuario = ?";
-//        try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
-//             PreparedStatement ps = cn.prepareStatement(query1)) {
-//
-//            ps.setString(1, nombreUser);
-//            ResultSet rs = ps.executeQuery();
-//
-//            return rs.next(); // Devuelve true si encuentra un registro
-//
-//        } catch (SQLException e) {
-//            System.err.println("Error en la consulta de existencia de usuario: " + e.getMessage());
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
 
     //Simulacion Asincronica
    public Integer registrarUsuario(Usuario user) {

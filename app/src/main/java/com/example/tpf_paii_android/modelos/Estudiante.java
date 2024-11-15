@@ -2,23 +2,25 @@ package com.example.tpf_paii_android.modelos;
 
 public class Estudiante {
 
-    private int dni;
+    private String dni;
     private Usuario id_usuario;
     private String nombre;
     private String apellido;
-    private Genero id_genero;
+    private int id_genero;
     private String email;
     private String telefono;
     private String direccion;
-    private Localidad id_localidad;
-    private NivelEducativo id_nivelEducativo;
-    private EstadoNivelEducativo id_estadoNivelEducativo;
+    private int id_localidad;
+    private int id_nivelEducativo;
+    private int id_estadoNivelEducativo;
 
 
     public Estudiante() {
     }
 
-    public Estudiante(int DNI, Usuario id_usuario, String nombre, String apellido, Genero id_genero, String email, String telefono, String direccion, Localidad id_localidad, NivelEducativo id_nivelEducativo, EstadoNivelEducativo id_estadoNivelEducativo) {
+    public Estudiante(String DNI, Usuario id_usuario, String nombre, String apellido, int id_genero, String email,
+                      String telefono, String direccion, int id_localidad, int id_nivelEducativo,
+                      int id_estadoNivelEducativo) {
         this.dni = DNI;
         this.id_usuario = id_usuario;
         this.nombre = nombre;
@@ -32,13 +34,20 @@ public class Estudiante {
         this.id_estadoNivelEducativo = id_estadoNivelEducativo;
     }
 
-    public int getDni() {
+    public String getDni() {
         return dni;
     }
 
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
 
     public Usuario getId_usuario() {
         return id_usuario;
+    }
+
+    public void setId_usuario(Usuario id_usuario) {
+        this.id_usuario = id_usuario;
     }
 
     public String getNombre() {
@@ -57,11 +66,11 @@ public class Estudiante {
         this.apellido = apellido;
     }
 
-    public Genero getId_genero() {
+    public int getId_genero() {
         return id_genero;
     }
 
-    public void setId_genero(Genero id_genero) {
+    public void setId_genero(int id_genero) {
         this.id_genero = id_genero;
     }
 
@@ -89,27 +98,27 @@ public class Estudiante {
         this.direccion = direccion;
     }
 
-    public Localidad getId_localidad() {
+    public int getId_localidad() {
         return id_localidad;
     }
 
-    public void setId_localidad(Localidad id_localidad) {
+    public void setId_localidad(int id_localidad) {
         this.id_localidad = id_localidad;
     }
 
-    public NivelEducativo getId_nivelEducativo() {
+    public int getId_nivelEducativo() {
         return id_nivelEducativo;
     }
 
-    public void setId_nivelEducativo(NivelEducativo id_nivelEducativo) {
+    public void setId_nivelEducativo(int id_nivelEducativo) {
         this.id_nivelEducativo = id_nivelEducativo;
     }
 
-    public EstadoNivelEducativo getId_estadoNivelEducativo() {
+    public int getId_estadoNivelEducativo() {
         return id_estadoNivelEducativo;
     }
 
-    public void setId_estadoNivelEducativo(EstadoNivelEducativo id_estadoNivelEducativo) {
+    public void setId_estadoNivelEducativo(int id_estadoNivelEducativo) {
         this.id_estadoNivelEducativo = id_estadoNivelEducativo;
     }
 

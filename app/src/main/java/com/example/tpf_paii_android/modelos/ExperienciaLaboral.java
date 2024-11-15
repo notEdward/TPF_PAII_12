@@ -3,7 +3,7 @@ package com.example.tpf_paii_android.modelos;
 public class ExperienciaLaboral {
 
     private int id_experienciaLaboral;
-    private Estudiante dniEstudiante;
+    private Usuario id_Usuario;
     private String lugar;
     private String cargo;
     private String tareas;
@@ -12,9 +12,8 @@ public class ExperienciaLaboral {
     public ExperienciaLaboral() {
     }
 
-    public ExperienciaLaboral(int id_experienciaLaboral, Estudiante dniEstudiante, String lugar, String cargo, String tareas, String duracion) {
-        this.id_experienciaLaboral = id_experienciaLaboral;
-        this.dniEstudiante = dniEstudiante;
+    public ExperienciaLaboral( Usuario id_Usuario, String lugar, String cargo, String tareas, String duracion) {
+        this.id_Usuario = id_Usuario;
         this.lugar = lugar;
         this.cargo = cargo;
         this.tareas = tareas;
@@ -25,8 +24,16 @@ public class ExperienciaLaboral {
         return id_experienciaLaboral;
     }
 
-    public Estudiante getDniEstudiante() {
-        return dniEstudiante;
+    public void setId_experienciaLaboral(int id_experienciaLaboral) {
+        this.id_experienciaLaboral = id_experienciaLaboral;
+    }
+
+    public Usuario getId_Usuario() {
+        return id_Usuario;
+    }
+
+    public void setId_Usuario(Usuario id_Usuario) {
+        this.id_Usuario = id_Usuario;
     }
 
     public String getLugar() {
@@ -65,7 +72,7 @@ public class ExperienciaLaboral {
     public String toString() {
         return "ExperienciaLaboral{" +
                 "id_experienciaLaboral=" + id_experienciaLaboral +
-                ", dniEstudiante=" + dniEstudiante +
+                ", id_Usuario=" + id_Usuario +
                 ", lugar='" + lugar + '\'' +
                 ", cargo='" + cargo + '\'' +
                 ", tareas='" + tareas + '\'' +

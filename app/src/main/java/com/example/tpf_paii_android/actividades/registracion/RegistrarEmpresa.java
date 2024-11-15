@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.actividades.autenticacion.Login;
@@ -40,13 +43,17 @@ public class RegistrarEmpresa extends AppCompatActivity {
 
     private ArrayAdapter<Provincia> provinciaAdapter;
     private ArrayAdapter<Localidad> localidadAdapter;
-    private boolean isInitialLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registrar_empresa);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         txtNombre = findViewById(R.id.txtNombreEmp);
         txtDescripcion = findViewById(R.id.txtDescripcionEmp);
@@ -62,28 +69,27 @@ public class RegistrarEmpresa extends AppCompatActivity {
         spLocalidad = findViewById(R.id.spLocalidadEmp);
         btnRegistrarse = findViewById(R.id.btnRegistrarseEmp);
 
+
         btnRegistrarse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(RegistrarEmpresa.this, "click.", Toast.LENGTH_SHORT).show();
                 registrarEmpresa();
             }
         });
 
         fetchProvincias();
 
-        // Establecer un listener para el Spinner de provincias
+        // Listener para el spinner de provincias
         spProvincia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (!isInitialLoad) {
+                if (position > 0) { // Verifica que no sea el primer ítem
                     Provincia provinciaSeleccionada = (Provincia) spProvincia.getSelectedItem();
                     if (provinciaSeleccionada != null) {
                         fetchLocalidadesByProvincia(provinciaSeleccionada.getId_provincia());
                     }
                 } else {
-                    isInitialLoad = false; // Marca que la carga inicial ya pasó
+                    spLocalidad.setAdapter(null); // Limpiar localidades si no se selecciona una provincia válida
                 }
             }
 
@@ -92,22 +98,25 @@ public class RegistrarEmpresa extends AppCompatActivity {
                 // No hacer nada si no se selecciona nada
             }
         });
-
     }
 
     public void fetchProvincias() {
         // Ejecutar la consulta en un hilo secundario
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
-
             ProvinciaRepository provinciaRepository = new ProvinciaRepository();
             ArrayList<Provincia> listaProvincias = provinciaRepository.fetchProvincias();
+
+            // Agregar el ítem inicial
+            Provincia placeholder = new Provincia(0, "Seleccione Provincia");
+            listaProvincias.add(0, placeholder);
 
             // Actualizar la UI en el hilo principal
             new Handler(Looper.getMainLooper()).post(() -> {
                 provinciaAdapter = new ArrayAdapter<>(RegistrarEmpresa.this, android.R.layout.simple_spinner_item, listaProvincias);
                 provinciaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spProvincia.setAdapter(provinciaAdapter);
+                spProvincia.setSelection(0); // "Elegí provincia" seleccionado por defecto
             });
         });
     }
@@ -115,7 +124,6 @@ public class RegistrarEmpresa extends AppCompatActivity {
     public void fetchLocalidadesByProvincia(int provinciaId) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
-
             LocalidadRepository localidadRepository = new LocalidadRepository();
             ArrayList<Localidad> listaLocalidades = localidadRepository.fetchLocalidadesByProvincia(provinciaId);
 
@@ -128,9 +136,8 @@ public class RegistrarEmpresa extends AppCompatActivity {
         });
     }
 
-    public void registrarEmpresa(){
 
-        Toast.makeText(this, "Intentando registrar la empresa...", Toast.LENGTH_SHORT).show();
+    public void registrarEmpresa(){
 
         String nombreEmpresa = txtNombre.getText().toString();
         String descripcion = txtDescripcion.getText().toString();
@@ -143,24 +150,27 @@ public class RegistrarEmpresa extends AppCompatActivity {
         String telefono = txtTelefono.getText().toString();
         String direccion = txtDireccion.getText().toString();
 
+        if(nombreEmpresa.isEmpty() || descripcion.isEmpty() || sector.isEmpty() || nIdentificacionFiscal.isEmpty() ||
+        nombreUsuario.isEmpty() || contrasena.isEmpty() || repetirContrasena.isEmpty() || email.isEmpty() ||
+        telefono.isEmpty() || direccion.isEmpty() || (spProvincia.getSelectedItemPosition()==0) ){
+            Toast.makeText(RegistrarEmpresa.this, "Por favor, complete todos los campos.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!contrasena.equals(repetirContrasena)) {
             Toast.makeText(this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        Localidad Loc = (Localidad) spLocalidad.getSelectedItem();
+        int idLocSelec = Loc.getId_localidad();
+
         Usuario user = new Usuario(nombreUsuario,contrasena,2);
-        Empresa emp = new Empresa(nombreEmpresa, descripcion,sector, nIdentificacionFiscal, email, telefono, direccion, 2,user);
+        Empresa emp = new Empresa(nombreEmpresa, descripcion,sector, nIdentificacionFiscal, email, telefono, direccion, idLocSelec,user);
 
         EmpresaRepository er = new EmpresaRepository();
         UsuarioRepository ur = new UsuarioRepository();
-//        if(ur.registrarUsuario(user)){
-//            Toast.makeText(this, "usuario registrada con éxito.", Toast.LENGTH_SHORT).show();
-//            if(er.registrarEmpresa(emp)){
-//                Toast.makeText(this, "Empresa registrada con éxito.", Toast.LENGTH_SHORT).show();
-//            }
-//            else Toast.makeText(this, "Empresa error", Toast.LENGTH_SHORT).show();
-//        }
-//        else Toast.makeText(this, "user error.", Toast.LENGTH_SHORT).show();
+
         int idUsuario = ur.registrarUsuario(user);
         if (idUsuario != -1) {
             Toast.makeText(this, "Usuario registrado con éxito.", Toast.LENGTH_SHORT).show();

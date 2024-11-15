@@ -8,6 +8,11 @@ public class NivelEducativo {
     public NivelEducativo() {
     }
 
+    public NivelEducativo(int id_nivelEducativo, String descripcion) {
+        this.id_nivelEducativo = id_nivelEducativo;
+        this.descripcion = descripcion;
+    }
+
     public int getId_nivelEducativo() {
         return id_nivelEducativo;
     }
@@ -16,19 +21,16 @@ public class NivelEducativo {
         return descripcion;
     }
 
-    @Override
-    public String toString() {
-        return "NivelEducativo{" +
-                "id_nivelEducativo=" + id_nivelEducativo +
-                ", descripcion='" + descripcion + '\'' +
-                '}';
-    }
-
     public void setId_nivelEducativo(int idNivelEducativo) {
         this.id_nivelEducativo = idNivelEducativo;
     }
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    @Override
+    public String toString() {
+        return descripcion;
     }
 }
