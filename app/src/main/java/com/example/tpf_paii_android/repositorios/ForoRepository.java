@@ -200,9 +200,10 @@ public class ForoRepository {
                     try (ResultSet rs = stmt.executeQuery()) {
                         if (rs.next()) {
                             String nombre = rs.getString("nombre");
-                            String apellido = tipoUsuario.equals("empresa") ? rs.getString("sector") : rs.getString("apellido");
-                            String infoAdicional = rs.getString(tipoUsuario.equals("empresa") ? "descripcion" : "info_adicional");
-
+                            String apellido = tipoUsuario.equalsIgnoreCase("empresa") ? rs.getString("sector") : rs.getString("apellido");
+                            String infoAdicional = tipoUsuario.equalsIgnoreCase("empresa") ? rs.getString("descripcion") :
+                                    tipoUsuario.equalsIgnoreCase("estudiante") ? rs.getString("email") :
+                                            rs.getString("info_adicional");
                             UsuarioInfo usuarioInfo = new UsuarioInfo(
                                     tipoUsuario, nombre, apellido, infoAdicional, imagenResId
                             );
