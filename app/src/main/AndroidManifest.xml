@@ -109,6 +109,7 @@
         <activity android:name=".actividades.tutorias.CrearHiloActivity"
             android:label="Crear hilo">
         </activity>
+        <activity android:name=".actividades.menu_header.PerfilActivity" />
 <!--        <activity-->
 <!--            android:name=".actividades.tutorias.ForosActivity"-->
 <!--            android:exported="true"-->

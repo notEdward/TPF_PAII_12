@@ -72,6 +72,7 @@ public class Login extends AppCompatActivity {
                     // Redirigir según el tipo de usuario
                     switch (usuarioLogin.getTipoUsuario()) {
                         case 1:
+                        case 4:
                             startActivity(new Intent(Login.this, CursoActivity.class));
                             break;
                         case 2:
@@ -79,8 +80,9 @@ public class Login extends AppCompatActivity {
                             break;
                         case 3:
                             startActivity(new Intent(Login.this, ForosActivity.class));
-                        case 4:
-                            startActivity(new Intent(Login.this, CursoActivity.class));
+                            break;
+                        default:
+                            startActivity(new Intent(Login.this, Login.class));
                             break;
                     }
                     finish();

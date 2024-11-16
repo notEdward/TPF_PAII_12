@@ -138,7 +138,7 @@ public class OfertaActivity extends MenuHamburguesaActivity {
                 if (result) {
                     Toast.makeText(OfertaActivity.this, "Oferta dada de baja", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(OfertaActivity.this, "Error al dar de baja el curso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OfertaActivity.this, "Error al dar de baja la oferta", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -165,7 +165,7 @@ public class OfertaActivity extends MenuHamburguesaActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ofertaViewModel.loadOfertas();
+//        ofertaViewModel.loadOfertas();
     }
     public void darDeBajaOferta(int idOferta) {
         ofertaViewModel.actualizarEstadoOferta(idOferta, 0); // Cambiar el estado a 0

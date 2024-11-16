@@ -42,6 +42,11 @@ public class MenuHamburguesaActivity extends AppCompatActivity {
         textoUsuario.setText(nombreUsuario);
         textoTipoUsuario.setText(tipoUsuario);
 
+        ImageView iconoUsuario = headerView.findViewById(R.id.icono_usuario);
+        iconoUsuario.setOnClickListener(v -> {
+            Intent intent = new Intent(MenuHamburguesaActivity.this, PerfilActivity.class);
+            startActivity(intent);
+        });
         menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
