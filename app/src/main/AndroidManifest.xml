@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="true"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:required="true"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:required="true" />
+
     <application
         android:name=".MyApp"
         android:allowBackup="true"
@@ -16,17 +21,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TPF_PAII_Android"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <activity
+            android:name=".ModificarEmpleado"
+            android:exported="false" />
+        <activity
+            android:name=".ModificarEmpresa"
+            android:exported="false" />
+        <activity
+            android:name=".ModificarTutor"
+            android:exported="false" />
+        <activity
+            android:name=".ModificarUsuario"
+            android:exported="false" />
         <activity
             android:name=".actividades.registracion.RegistrarTutor"
-            android:exported="false" />
-        <!-- Actividades relacionadas con el chat -->
+            android:exported="false" /> <!-- Actividades relacionadas con el chat -->
         <activity
             android:name=".actividades.chat.ChatDialog"
             android:exported="false" /> <!-- Actividades relacionadas con tutorías -->
-        <!--        <activity-->
-        <!--            android:name=".actividades.tutorias.Tutorias"-->
-        <!--            android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".actividades.tutorias.Tutorias" -->
+        <!-- android:exported="false" /> -->
         <!-- Actividades relacionadas con el registro -->
         <activity
             android:name=".actividades.registracion.RegistrarEmpresa"
@@ -39,101 +55,88 @@
             android:exported="false" /> <!-- Actividad para iniciar registro -->
         <activity
             android:name=".actividades.autenticacion.IniciarRegistro"
-            android:exported="false" />
-
-        <!-- Actividad cursos -->
-
+            android:exported="false" /> <!-- Actividad cursos -->
         <activity
             android:name=".actividades.cursos.CursoActivity"
             android:exported="false"
-            android:launchMode="singleTop"/>
-
-        <activity android:name=".actividades.cursos.FiltroCursoActivity"
-            android:label="Filtro de Cursos">
-        </activity>
-
-        <activity android:name=".actividades.cursos.PreguntasActivity"
-            android:label="Preguntas de Cursos">
-        </activity>
-
-        <activity android:name=".actividades.cursos.CursoDetalleActivity"
-            android:label="Filtro de Cursos">
-        </activity>
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".actividades.cursos.FiltroCursoActivity"
+            android:label="Filtro de Cursos" />
+        <activity
+            android:name=".actividades.cursos.PreguntasActivity"
+            android:label="Preguntas de Cursos" />
+        <activity
+            android:name=".actividades.cursos.CursoDetalleActivity"
+            android:label="Filtro de Cursos" />
         <activity android:name=".actividades.cursos.CrearCursoActivity" />
-        <activity android:name=".actividades.cursos.ModificarCursoActivity" />
-        <!--                <activity-->
-        <!--                    android:name=".actividades.cursos.CursoActivity"-->
-        <!--                    android:exported="true">-->
-        <!--                    <intent-filter>-->
-        <!--                        <action android:name="android.intent.action.MAIN" />-->
-        <!--                        <category android:name="android.intent.category.LAUNCHER" />-->
-        <!--                    </intent-filter>-->
-        <!--                </activity>-->
-
+        <activity android:name=".actividades.cursos.ModificarCursoActivity" /> <!-- <activity -->
+        <!-- android:name=".actividades.cursos.CursoActivity" -->
+        <!-- android:exported="true"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <!-- Fin actividad cursos -->
         <!-- Mostrar Ofertas -->
-        <activity android:name=".actividades.ofertas.OfertaActivity"
-            android:label="Ofertas">
-        </activity>
-        <!--        <activity-->
-        <!--            android:name=".actividades.ofertas.OfertaActivity"-->
-        <!--            android:exported="true"-->
-        <!--            android:launchMode="singleTop">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.MAIN" />-->
-        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
-        <activity android:name=".actividades.ofertas.FiltroOfertaActivity"
-            android:label="Filtro de Ofertas">
-        </activity>
-        <activity android:name=".actividades.ofertas.OfertaDetalleActivity"
-            android:label="Detalle de Ofertas">
-        </activity>
-        <activity android:name=".actividades.ofertas.AltaOfertaActivity"
-            android:label="Alta de Ofertas">
-        </activity>
-        <activity android:name=".actividades.ofertas.ModificarOfertaActivity"
-            android:label="Modif de Ofertas">
-        </activity>
-        <!-- Foros/Tutorias -->
-                <activity android:name=".actividades.tutorias.ForosActivity"
-                    android:label="Foros">
-                </activity>
-        <activity android:name=".actividades.tutorias.ForoDetalleActivity"
-            android:label="Foro detalle">
-        </activity>
-        <activity android:name=".actividades.tutorias.ResponderActivity"
-            android:label="Responder Hilo">
-        </activity>
-        <activity android:name=".actividades.tutorias.CrearHiloActivity"
-            android:label="Crear hilo">
-        </activity>
-        <activity android:name=".actividades.menu_header.PerfilActivity" />
-<!--        <activity-->
-<!--            android:name=".actividades.tutorias.ForosActivity"-->
-<!--            android:exported="true"-->
-<!--            android:launchMode="singleTop">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
-
+        <activity
+            android:name=".actividades.ofertas.OfertaActivity"
+            android:label="Ofertas" /> <!-- <activity -->
+        <!-- android:name=".actividades.ofertas.OfertaActivity" -->
+        <!-- android:exported="true" -->
+        <!-- android:launchMode="singleTop"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
+        <activity
+            android:name=".actividades.ofertas.FiltroOfertaActivity"
+            android:label="Filtro de Ofertas" />
+        <activity
+            android:name=".actividades.ofertas.OfertaDetalleActivity"
+            android:label="Detalle de Ofertas" />
+        <activity
+            android:name=".actividades.ofertas.AltaOfertaActivity"
+            android:label="Alta de Ofertas" />
+        <activity
+            android:name=".actividades.ofertas.ModificarOfertaActivity"
+            android:label="Modif de Ofertas" /> <!-- Foros/Tutorias -->
+        <activity
+            android:name=".actividades.tutorias.ForosActivity"
+            android:label="Foros" />
+        <activity
+            android:name=".actividades.tutorias.ForoDetalleActivity"
+            android:label="Foro detalle" />
+        <activity
+            android:name=".actividades.tutorias.ResponderActivity"
+            android:label="Responder Hilo" />
+        <activity
+            android:name=".actividades.tutorias.CrearHiloActivity"
+            android:label="Crear hilo" />
+        <activity android:name=".actividades.menu_header.PerfilActivity" /> <!-- <activity -->
+        <!-- android:name=".actividades.tutorias.ForosActivity" -->
+        <!-- android:exported="true" -->
+        <!-- android:launchMode="singleTop"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <!-- Actividad principal -->
-                        <activity
-                            android:name=".MainActivity"
-                            android:exported="false" /> <!-- Actividad de Login, inicio de la app -->
-                        <activity
-                            android:name=".actividades.autenticacion.Login"
-                            android:exported="true" >
-                            <intent-filter>
-                                <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" /> <!-- Actividad de Login, inicio de la app -->
+        <activity
+            android:name=".actividades.autenticacion.Login"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                                <category android:name="android.intent.category.LAUNCHER" />
-                            </intent-filter>
-                        </activity>
-        <!-- Registros -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Registros -->
         <activity
             android:name=".actividades.tutores.TutorActivity"
             android:exported="false" />

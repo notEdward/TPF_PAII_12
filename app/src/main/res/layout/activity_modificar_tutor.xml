@@ -31,7 +31,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvDatosTutor"
+                android:id="@+id/tvDatosTutorMOD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -41,7 +41,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/txtNombreTutor"
+                android:id="@+id/txtNombreTutorMOD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -53,7 +53,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/txtApellidoTutor"
+                android:id="@+id/txtApellidoTutorMOD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -65,19 +65,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/txtDniTutor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="15dp"
-                android:ems="10"
-                android:hint="@string/txtDNI"
-                android:inputType="number"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/txtEdadTutor"
+                android:id="@+id/txtEdadTutorMOD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -113,52 +101,6 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tvUsuarioTutor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="25dp"
-                android:text="@string/tvUsuario"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/txtNombreUsuarioTutor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="15dp"
-                android:ems="10"
-                android:hint="@string/txtNombreUsuario"
-                android:inputType="text"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/txtContrasenaTutor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="15dp"
-                android:ems="10"
-                android:hint="@string/txtPass"
-                android:inputType="textPassword"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/txtRepetirContrasenaTutor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="15dp"
-                android:ems="10"
-                android:hint="@string/txtRepetirPass"
-                android:inputType="textPassword"
-                android:textSize="20sp" />
-
-            <TextView
                 android:id="@+id/tvInfoAdicionalTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -169,7 +111,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/txtOcupacionTutor"
+                android:id="@+id/txtOcupacionTutorMOD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -181,7 +123,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/txtPasaTiemposTutor"
+                android:id="@+id/txtPasaTiemposTutorMOD"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -206,24 +148,24 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/btnRegistrarseTutor"
+                android:id="@+id/btnModificarTutor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30sp"
                 android:layout_marginTop="8sp"
                 android:layout_marginEnd="30sp"
-                android:text="@string/btnRegistrar"
+                android:text="@string/btnModificar"
                 android:textSize="24sp" />
 
         </LinearLayout>
     </ScrollView>
 
     <TextView
-        android:id="@+id/tvRegistrarTutor"
+        android:id="@+id/tvModificarTutor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/tvRegistrarTutor"
+        android:text="Modificar Tutor"
         android:textColor="#FAF8F8"
         android:textSize="34sp"
         android:textStyle="bold"

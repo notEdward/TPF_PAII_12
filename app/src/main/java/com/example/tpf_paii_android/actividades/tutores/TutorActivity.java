@@ -45,7 +45,7 @@ public class TutorActivity extends AppCompatActivity {
 
 
         // Inicializa vistas
-        spinnerGenero = findViewById(R.id.spGeneroTutor);
+        spinnerGenero = findViewById(R.id.spGeneroTutorMOD);
         txtNombreTutor = findViewById(R.id.txtNombreTutor);
         txtApellidoTutor = findViewById(R.id.txtApellidoTutor);
         txtDniTutor = findViewById(R.id.txtDniTutor);
@@ -55,7 +55,7 @@ public class TutorActivity extends AppCompatActivity {
         txtRepetirContrasenaTutor = findViewById(R.id.txtRepetirContrasenaTutor);
         txtOcupacionTutor = findViewById(R.id.txtOcupacionTutor);
         txtPasaTiemposTutor = findViewById(R.id.txtPasaTiemposTutor);
-        txtMasSobreTutor = findViewById(R.id.txtMasSobreTutor);
+        txtMasSobreTutor = findViewById(R.id.txtMasSobreTutorMOD);
 
         Button btnRegistrarseTutor = findViewById(R.id.btnRegistrarseTutor);
 

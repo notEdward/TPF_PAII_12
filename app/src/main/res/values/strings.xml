@@ -55,7 +55,13 @@
     <string name="tvInfoAdicional">Info Adicional</string>
     <string name="btnRegistrar">Registrarse</string>
 
-<!--    estado crear curso-->
+    <string name="TvContraseñaActual">Contraseña Actual:</string>
+    <string name="TvNuevaContraseña">Nueva Contraseña: </string>
+    <string name="TvRepetirNuevaContraseña">Repetir nueva Contraseña: </string>
+    <string name="btnModificar">Modificar</string>
+    <string name="btnCancelar">Cancelar</string>
+
+    <!--    estado crear curso-->
     <string-array name="estado_array">
         <item>Activo</item>
         <item>Inactivo</item>
