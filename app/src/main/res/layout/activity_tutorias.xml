@@ -32,11 +32,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="FOROS"
+                android:text="TUTORÍAS"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
         </RelativeLayout>
-        <!-- Foto del tutor y presentación -->
+
+        <!-- Foto del usuario -->
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -57,7 +58,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginEnd="16dp"
-                android:contentDescription="Foto del tutor"
+                android:contentDescription="Foto del usuario"
                 android:scaleType="centerCrop"
                 android:src="@drawable/tutor" />
 
@@ -107,103 +108,10 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Título de la Actividad -->
-        <TextView
-            android:id="@+id/textViewTitulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Foros de Debate"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout2"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp" />
-
-        <!-- Título de la Actividad -->
-        <TextView
-            android:id="@+id/textViewIntro"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Este es un foro destinado a interactuar con tus compañeros/as y tutor/a. Recuerda ser respetuoso y seguir las reglas del foro"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/textViewTitulo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
-
-        <!-- Botón para añadir un nuevo foro -->
-        <Button
-            android:id="@+id/buttonAddHilo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Añadir nuevo debate"
-            app:layout_constraintTop_toBottomOf="@id/textViewIntro"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp" />
-
-        <!-- Cabecera de títulos de columnas -->
-        <LinearLayout
-            android:id="@+id/linearTemas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:background="#E0E0E0"
-            app:layout_constraintTop_toBottomOf="@id/buttonAddHilo"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Debate"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Comenzado por"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Último mensaje"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Réplicas"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- SwipeRefreshLayout para actualizar la lista -->
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/linearTemas"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <!-- RecyclerView para los foros -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewForos"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Menú lateral -->
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
@@ -214,4 +122,3 @@
         app:menu="@menu/drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
-

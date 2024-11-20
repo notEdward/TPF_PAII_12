@@ -10,6 +10,10 @@
         android:title="Ofertas de empleo" />
 
     <item
+        android:id="@+id/nav_foros"
+        android:title="Foros" />
+
+    <item
         android:id="@+id/nav_tutorias"
         android:title="Tutorías" />
 

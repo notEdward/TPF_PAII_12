@@ -18,6 +18,7 @@ import com.example.tpf_paii_android.actividades.autenticacion.Login;
 import com.example.tpf_paii_android.actividades.cursos.CursoActivity;
 import com.example.tpf_paii_android.actividades.ofertas.OfertaActivity;
 import com.example.tpf_paii_android.actividades.tutorias.ForosActivity;
+import com.example.tpf_paii_android.actividades.tutorias.TutoriasActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MenuHamburguesaActivity extends AppCompatActivity {
@@ -55,9 +56,12 @@ public class MenuHamburguesaActivity extends AppCompatActivity {
                 startActivity(new Intent(this, CursoActivity.class));
             } else if (itemId == R.id.nav_ofertas_empleo) {
                 startActivity(new Intent(this, OfertaActivity.class));
-            } else if (itemId == R.id.nav_tutorias) {
+            } else if (itemId == R.id.nav_foros) {
                 startActivity(new Intent(this, ForosActivity.class));
-                } else if (itemId == R.id.nav_salir) {
+            } else if (itemId == R.id.nav_tutorias) {
+                startActivity(new Intent(this, TutoriasActivity.class));
+
+            } else if (itemId == R.id.nav_salir) {
                 Toast.makeText(this, "Saliste exitosamente", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, Login.class));
                 finish();
