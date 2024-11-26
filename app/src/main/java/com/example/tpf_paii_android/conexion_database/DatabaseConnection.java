@@ -10,5 +10,4 @@ public class DatabaseConnection {
 
     public static String urlMySQL = "jdbc:mysql://" + host + ":" + port + "/"+nameBD;
     public static String driver = "com.mysql.jdbc.Driver";
-
 }

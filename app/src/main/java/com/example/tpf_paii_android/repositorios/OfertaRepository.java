@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.example.tpf_paii_android.conexion_database.DatabaseConnection;
 import com.example.tpf_paii_android.modelos.Curso;
+import com.example.tpf_paii_android.modelos.Estudiante;
 import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Modalidad;
 import com.example.tpf_paii_android.modelos.NivelEducativo;
@@ -21,8 +22,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class OfertaRepository {
 
@@ -546,3 +549,15 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
