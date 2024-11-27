@@ -6,10 +6,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.tpf_paii_android.MyApp;
 import com.example.tpf_paii_android.R;
-import com.example.tpf_paii_android.repositorios.ForoRepository;
+import com.example.tpf_paii_android.viewmodels.ForoViewModel;
 
 public class ResponderActivity extends AppCompatActivity {
 
@@ -17,6 +18,7 @@ public class ResponderActivity extends AppCompatActivity {
     private Button btnEnviarRespuesta;
     private int idHilo;
     private String nombreUsuario;
+    private ForoViewModel foroViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +27,13 @@ public class ResponderActivity extends AppCompatActivity {
 
         MyApp app = (MyApp) getApplication();
         int idUsuario = app.getIdUsuario();
-        String tipo_usuario = app.getTipoUsuario();
-         nombreUsuario = app.getNombreUsuario();
+        nombreUsuario = app.getNombreUsuario();
+
+        foroViewModel = new ViewModelProvider(this).get(ForoViewModel.class);
 
         editTextMensajeRespuesta = findViewById(R.id.editTextMensajeRespuesta);
         btnEnviarRespuesta = findViewById(R.id.btnEnviarRespuesta);
 
-        // Obtener el ID del hilo
         idHilo = getIntent().getIntExtra("idHilo", -1);
 
         btnEnviarRespuesta.setOnClickListener(v -> enviarRespuesta());
@@ -44,19 +46,14 @@ public class ResponderActivity extends AppCompatActivity {
             return;
         }
 
-        // Llamar al repositorio para guardar la respuesta
-        ForoRepository foroRepository = new ForoRepository();
-        foroRepository.agregarRespuesta(idHilo, nombreUsuario, mensaje, new ForoRepository.DataCallback<Void>() {
-            @Override
-            public void onSuccess(Void result) {
+        foroViewModel.enviarRespuesta(idHilo, nombreUsuario, mensaje).observe(this, success -> {
+            if (success) {
                 Toast.makeText(ResponderActivity.this, "Respuesta enviada", Toast.LENGTH_SHORT).show();
-                finish(); // Regresar a la actividad de foro
-            }
-
-            @Override
-            public void onFailure(Exception e) {
+           finish();
+            } else {
                 Toast.makeText(ResponderActivity.this, "Error al enviar respuesta", Toast.LENGTH_SHORT).show();
             }
         });
     }
 }
+

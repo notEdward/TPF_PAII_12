@@ -4,31 +4,23 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.tpf_paii_android.MyApp;
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.actividades.menu_header.MenuHamburguesaActivity;
-import com.example.tpf_paii_android.actividades.ofertas.OfertaActivity;
 import com.example.tpf_paii_android.adapters.CursoAdapter;
 import com.example.tpf_paii_android.viewmodels.CursoViewModel;
-import com.google.android.material.navigation.NavigationView;
-
 import android.text.TextWatcher;
 import java.util.ArrayList;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class CursoActivity extends MenuHamburguesaActivity {
 
@@ -39,8 +31,7 @@ public class CursoActivity extends MenuHamburguesaActivity {
     private Button btnCrear;
     private EditText editTextBuscar;
     private static final int REQUEST_FILTRO = 1;
-    private DrawerLayout drawerLayout;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
     private int idUsuario;
     private String nombreUsuario;
     private String tipo_usuario;
@@ -51,25 +42,14 @@ public class CursoActivity extends MenuHamburguesaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_curso);
 
-        //simulo recibir los datos del login
-        // Recuperar los datos del usuario
-        //Intent intent = getIntent();
-//        idUsuario = 1; // intent.getIntExtra("id_usuario", -1);
-//        nombreUsuario = "prueba";//intent.getStringExtra("nombre_usuario");
-//        tipo_usuario = "admin";
-        ///
-        // Trato de traer los valores de la actividad anterior, sino pongo por default
-//        Intent initIntent = getIntent();
-//        idUsuario = initIntent.hasExtra("idUsuario") ? initIntent.getIntExtra("idUsuario", 1) : 1;
-//        nombreUsuario = initIntent.hasExtra("nombreUsuario") ? initIntent.getStringExtra("nombreUsuario") : "admin";
-//        tipo_usuario = initIntent.hasExtra("tipo_usuario") ? initIntent.getStringExtra("tipo_usuario") : "admin";
-//        setupDrawer(nombreUsuario, tipo_usuario);
         MyApp app = (MyApp) getApplication();
         int idUsuario = app.getIdUsuario();
         tipo_usuario = app.getTipoUsuario();
         String nombreUsuario = app.getNombreUsuario();
 
         setupDrawer(nombreUsuario, tipo_usuario);
+
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
         //inicializaciones + configs
         cursoViewModel = new ViewModelProvider(this).get(CursoViewModel.class);
@@ -82,12 +62,11 @@ public class CursoActivity extends MenuHamburguesaActivity {
         cursoAdapter = new CursoAdapter(new ArrayList<>(), tipo_usuario);
         recyclerViewCursos.setAdapter(cursoAdapter);
 
+        swipeRefreshLayout.setOnRefreshListener(() -> cursoViewModel.cargarCursos());
+
         if ("ADMIN".equals(tipo_usuario.toUpperCase())) {
             btnCrear.setVisibility(View.VISIBLE);
         }
-        //menu hamburguesa
-//        setupDrawer(nombreUsuario, tipo_usuario);
-
         ////FILTROS POR LUPITA
         editTextBuscar = findViewById(R.id.editTextBuscar); // campo de busq
         cursoViewModel.getCursosFiltrados().observe(this, cursos -> {
@@ -123,6 +102,7 @@ public class CursoActivity extends MenuHamburguesaActivity {
             if (cursos != null) {
                 cursoAdapter.actualizarCursos(cursos);
             }
+            swipeRefreshLayout.setRefreshing(false);
         });
         btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +122,6 @@ public class CursoActivity extends MenuHamburguesaActivity {
                 }
             }
         });
-
         cursoViewModel.cargarCursos();
     }
 

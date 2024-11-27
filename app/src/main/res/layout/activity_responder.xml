@@ -1,8 +1,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@id/bannerSuperior"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#8A2BE2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RESPONDER HILO"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 
     <EditText
         android:id="@+id/editTextMensajeRespuesta"
@@ -12,7 +29,7 @@
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/bannerSuperior" />
 
     <Button
         android:id="@+id/btnEnviarRespuesta"

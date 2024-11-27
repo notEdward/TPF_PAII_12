@@ -5,34 +5,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.tpf_paii_android.MyApp;
 import com.example.tpf_paii_android.R;
-import com.example.tpf_paii_android.actividades.cursos.CursoActivity;
 import com.example.tpf_paii_android.actividades.menu_header.MenuHamburguesaActivity;
 import com.example.tpf_paii_android.adapters.OfertaAdapter;
 import com.example.tpf_paii_android.modelos.OfertaEmpleo;
 import com.example.tpf_paii_android.viewmodels.OfertaViewModel;
-import com.google.android.material.navigation.NavigationView;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class OfertaActivity extends MenuHamburguesaActivity {
 
@@ -42,11 +31,11 @@ public class OfertaActivity extends MenuHamburguesaActivity {
     private EditText editTextBuscar;
     private List<OfertaEmpleo> listaOfertasEmpleo = new ArrayList<>();
     private Button btnFiltrar;
-
     private int idUsuario;
     private String nombreUsuario;
     private DrawerLayout drawerLayout;
     private String tipo_usuario;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private static final int FILTER_REQUEST_CODE = 100;
 
@@ -60,6 +49,7 @@ public class OfertaActivity extends MenuHamburguesaActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
         recyclerView.setLayoutManager(gridLayoutManager);
         Button btnCrear = findViewById(R.id.btnCrear);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
         MyApp app = (MyApp) getApplication();
         idUsuario = app.getIdUsuario();
@@ -72,24 +62,14 @@ public class OfertaActivity extends MenuHamburguesaActivity {
 
         ofertaViewModel = new ViewModelProvider(this).get(OfertaViewModel.class);
 
-        //menu hamburguesa
-//        idUsuario = 1;
-//        nombreUsuario = "prueba";
-//        tipo_usuario = "Empresa";
-//        setupDrawer(nombreUsuario, tipo_usuario);
-        // Trato de traer los valores de la actividad anterior, sino pongo por default
-//        Intent initIntent = getIntent();
-//        idUsuario = initIntent.hasExtra("idUsuario") ? initIntent.getIntExtra("idUsuario", 1) : 4;
-//        nombreUsuario = initIntent.hasExtra("nombreUsuario") ? initIntent.getStringExtra("nombreUsuario") : "prueba";
-//        tipo_usuario = initIntent.hasExtra("tipo_usuario") ? initIntent.getStringExtra("tipo_usuario") : "Empresa";
-//        setupDrawer(nombreUsuario, tipo_usuario);
-
+        swipeRefreshLayout.setOnRefreshListener(() -> ofertaViewModel.loadOfertas());
 
         // Observa ofertas filtradas
         ofertaViewModel.getOfertasFiltradas().observe(this, ofertas -> {
             if (ofertas != null) {
                 adapter.setOfertas(ofertas);
             }
+            swipeRefreshLayout.setRefreshing(false);
         });
         ofertaViewModel.getErrorMessage().observe(this, error -> {
             if (error != null) {
@@ -165,7 +145,6 @@ public class OfertaActivity extends MenuHamburguesaActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        ofertaViewModel.loadOfertas();
     }
     public void darDeBajaOferta(int idOferta) {
         ofertaViewModel.actualizarEstadoOferta(idOferta, 0); // Cambiar el estado a 0
