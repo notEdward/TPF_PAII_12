@@ -71,9 +71,7 @@ public class EstudianteRepository {
                     }
 
                 } catch (Exception e) {
-                    Log.e("GeneroRepository", "Error al obtener generos", e);
-                    // Muestra un error en el Toast
-                    new Handler(Looper.getMainLooper()).post(() ->
+                     new Handler(Looper.getMainLooper()).post(() ->
                             Toast.makeText(context, "Error al obtener los géneros", Toast.LENGTH_SHORT).show()
                     );
                 } finally {
@@ -83,7 +81,7 @@ public class EstudianteRepository {
                             connection.close();
                         }
                     } catch (Exception e) {
-                        Log.e("GeneroRepository", "Error al cerrar la conexión", e);
+                        e.printStackTrace();
                     }
                 }
 
@@ -93,14 +91,12 @@ public class EstudianteRepository {
                 );
             }
         });
-
         return liveDataGeneros;
     }
 
 
 
 
-    // Metodo obtenerNivelEducativo() los nivelesEducativos de la bd ASYNC
     public LiveData<List<NivelEducativo>> obtenerNivelEducativo() {
         MutableLiveData<List<NivelEducativo>> liveDataNivelesEduc = new MutableLiveData<>();
 
@@ -129,8 +125,6 @@ public class EstudianteRepository {
                     }
 
                 } catch (Exception e) {
-                    Log.e("NivelesRepository", "Error al obtener niveles", e);
-                    // Muestra un error en el Toast
                     new Handler(Looper.getMainLooper()).post(() ->
                             Toast.makeText(context, "Error al obtener los Niveles Educ", Toast.LENGTH_SHORT).show()
                     );
@@ -141,7 +135,7 @@ public class EstudianteRepository {
                             connection.close();
                         }
                     } catch (Exception e) {
-                        Log.e("NivelesRepository", "Error al cerrar la conexión", e);
+                        e.printStackTrace();
                     }
                 }
 
@@ -151,17 +145,14 @@ public class EstudianteRepository {
                 );
             }
         });
-
         return liveDataNivelesEduc;
     }
 
 
 
-    // Metodo obtenerEstadoNivelEducativo() los EstadoNivelEducativo de la bd ASYNC
-    public LiveData<List<EstadoNivelEducativo>> obtenerEstadoNivelEducativo() {
+   public LiveData<List<EstadoNivelEducativo>> obtenerEstadoNivelEducativo() {
         MutableLiveData<List<EstadoNivelEducativo>> liveDataEstadoNivelesEduc = new MutableLiveData<>();
 
-        // Ejecuta la consulta en un hilo secundario
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -169,7 +160,6 @@ public class EstudianteRepository {
                 estadoNivelesEducativo.add(new EstadoNivelEducativo (0,"Seleccione estado"));
                 Connection connection = null;
                 try {
-                    // Conectar a la base de datos
                     connection = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
 
                     if (connection != null){
@@ -177,7 +167,6 @@ public class EstudianteRepository {
                         Statement statement = connection.createStatement();
                         ResultSet resultSet = statement.executeQuery(query);
 
-                        // Recorrer los resultados y agregarlos a la lista
                         while(resultSet.next()) {
                             int id = resultSet.getInt("id_estado_nivel");
                             String descripcion = resultSet.getString("descripcion");
@@ -186,33 +175,29 @@ public class EstudianteRepository {
                     }
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "Error al obtener los Estado educativo", Toast.LENGTH_SHORT).show()
+                    );
                 } finally {
                     try {
-                        // Cierra la conexión
                         if (connection != null && !connection.isClosed()) {
                             connection.close();
                         }
                     } catch (Exception e) {
-                        Log.e("NivelesRepository", "Error al cerrar la conexión", e);
+                        e.printStackTrace();
                     }
                 }
-
-                // Publica los géneros obtenidos en el LiveData
-                new Handler(Looper.getMainLooper()).post(() ->
+                    new Handler(Looper.getMainLooper()).post(() ->
                         liveDataEstadoNivelesEduc.setValue(estadoNivelesEducativo)
                 );
             }
         });
-
         return liveDataEstadoNivelesEduc;
     }
 
-    // Metodo obtenerProvincias() los Provincias de la bd ASYNC
     public LiveData<List<Provincia>> obtenerProvincias() {
         MutableLiveData<List<Provincia>> liveDataProvincias = new MutableLiveData<>();
 
-        // Ejecuta la consulta en un hilo secundario
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -220,7 +205,6 @@ public class EstudianteRepository {
                 provincias.add(new Provincia (0,"Seleccione provincia"));
                 Connection connection = null;
                 try {
-                    // Conectar a la base de datos
                     connection = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
 
                     if (connection != null){
@@ -228,7 +212,6 @@ public class EstudianteRepository {
                         Statement statement = connection.createStatement();
                         ResultSet resultSet = statement.executeQuery(query);
 
-                        // Recorrer los resultados y agregarlos a la lista
                         while(resultSet.next()) {
                             Provincia prov = new Provincia();
                             prov.setId_provincia(resultSet.getInt("id_provincia"));
@@ -236,42 +219,36 @@ public class EstudianteRepository {
                             provincias.add(prov);
                         }
                     }
-
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "Error al obtener los Provincias", Toast.LENGTH_SHORT).show()
+                    );
                 } finally {
                     try {
-                        // Cierra la conexión
                         if (connection != null && !connection.isClosed()) {
                             connection.close();
                         }
                     } catch (Exception e) {
-                        Log.e("provinciaRepository", "Error al cerrar la conexión", e);
+                        e.printStackTrace();
                     }
                 }
-
-                // Publica los géneros obtenidos en el LiveData
                 new Handler(Looper.getMainLooper()).post(() ->
                         liveDataProvincias.setValue(provincias)
                 );
             }
         });
-
         return liveDataProvincias;
     }
 
-    // Metodo LocalidadesPorProvincia() los obtenerLocalidadesPorProvincia de la bd ASYNC
     public LiveData<List<Localidad>> obtenerLocalidadesPorProvincia(int idProvincia) {
         MutableLiveData<List<Localidad>> liveDataLocalidades = new MutableLiveData<>();
 
-        // Ejecuta la consulta en un hilo secundario
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 List<Localidad> localidades = new ArrayList<>();
                 Connection connection = null;
                 try {
-                    // Conectar a la base de datos
                     connection = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
 
                     if (connection != null){
@@ -280,7 +257,6 @@ public class EstudianteRepository {
                         statement.setInt(1, idProvincia);
                         ResultSet resultSet = statement.executeQuery();
 
-                        // Recorrer los resultados y agregarlos a la lista
                         while(resultSet.next()) {
                             Localidad loc = new Localidad();
                             loc.setId_localidad(resultSet.getInt("id_localidad"));
@@ -291,7 +267,9 @@ public class EstudianteRepository {
                     }
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            Toast.makeText(context, "Error al obtener las Localidades", Toast.LENGTH_SHORT).show()
+                    );
                 } finally {
                     try {
                         // Cierra la conexión
@@ -309,19 +287,8 @@ public class EstudianteRepository {
                 );
             }
         });
-
         return liveDataLocalidades;
     }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -362,7 +329,6 @@ public class EstudianteRepository {
 
             resultLiveData.postValue(registrada);
         });
-
         executor.shutdown();
         return resultLiveData;
     }

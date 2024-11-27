@@ -204,83 +204,126 @@ public class RegistrarEstudiante extends AppCompatActivity {
     }
 
 
-    public void registrarEstudiante(){
 
-        String Dni = txtDni.getText().toString();
+    public void registrarEstudiante() {
+        if (!validarCampos()) {
+            return;
+        }
+
+        // Obtener datos del formulario
+        Estudiante estudiante = obtenerDatosEstudiante();
+        Usuario usuario = estudiante.getId_usuario();
+        ExperienciaLaboral experienciaLaboral = obtenerDatosExperiencia(usuario);
+
+        // Registrar usuario
+        int idUsuario = registrarUsuario(usuario);
+        if (idUsuario == 0) {
+            mostrarMensaje("El usuario ya existe!");
+            return;
+        } else if (idUsuario == -1) {
+            mostrarMensaje("Error al registrar el usuario.");
+            return;
+        }
+
+        // Registrar experiencia laboral
+        if (!registrarExperienciaLaboral(experienciaLaboral, idUsuario)) {
+            mostrarMensaje("Error al registrar la experiencia laboral.");
+            return;
+        }
+
+        // Registrar estudiante
+        registrarEstudianteEnViewModel(estudiante, idUsuario);
+    }
+
+    private boolean validarCampos() {
+        if (txtDni.getText().toString().isEmpty() || txtNombre.getText().toString().isEmpty() ||
+                txtApellido.getText().toString().isEmpty() || txtNombreUser.getText().toString().isEmpty() ||
+                txtContrasena.getText().toString().isEmpty() || txtRepetirContrasena.getText().toString().isEmpty() ||
+                txtEmail.getText().toString().isEmpty() || txtTelefono.getText().toString().isEmpty() ||
+                txtDireccion.getText().toString().isEmpty() || txtLugar.getText().toString().isEmpty() ||
+                txtCargo.getText().toString().isEmpty() || txtTareas.getText().toString().isEmpty() ||
+                txtDuracion.getText().toString().isEmpty() ||
+                spLocalidad.getSelectedItem() == null || spProvincia.getSelectedItemPosition() == 0 ||
+                spGenero.getSelectedItemPosition() == 0 || spNivelEducativo.getSelectedItemPosition() == 0 ||
+                spEstado.getSelectedItemPosition() == 0) {
+
+            mostrarMensaje("Por favor, complete todos los campos.");
+            return false;
+        }
+
+        if (!txtContrasena.getText().toString().equals(txtRepetirContrasena.getText().toString())) {
+            mostrarMensaje("Las contraseñas no coinciden.");
+            txtContrasena.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private Estudiante obtenerDatosEstudiante() {
+        String dni = txtDni.getText().toString();
         String nombre = txtNombre.getText().toString();
         String apellido = txtApellido.getText().toString();
-        String nombreUsuario = txtNombreUser.getText().toString();
-        String contrasena = txtContrasena.getText().toString();
-        String repetirContrasena = txtRepetirContrasena.getText().toString();
         String email = txtEmail.getText().toString();
         String telefono = txtTelefono.getText().toString();
         String direccion = txtDireccion.getText().toString();
 
+        Genero genero = (Genero) spGenero.getSelectedItem();
+        int idGenero = genero.getId_genero();
+
+        Localidad localidad = (Localidad) spLocalidad.getSelectedItem();
+        int idLocalidad = localidad.getId_localidad();
+
+        NivelEducativo nivelEducativo = (NivelEducativo) spNivelEducativo.getSelectedItem();
+        int idNivelEducativo = nivelEducativo.getId_nivelEducativo();
+
+        EstadoNivelEducativo estado = (EstadoNivelEducativo) spEstado.getSelectedItem();
+        int idEstadoNivel = estado.getId_estadoNivelEducativo();
+
+        String nombreUsuario = txtNombreUser.getText().toString();
+        String contrasena = txtContrasena.getText().toString();
+        Usuario usuario = new Usuario(nombreUsuario, contrasena, 1);
+
+        return new Estudiante(dni, usuario, nombre, apellido, idGenero, email, telefono, direccion, idLocalidad, idNivelEducativo, idEstadoNivel);
+    }
+
+    private ExperienciaLaboral obtenerDatosExperiencia(Usuario usuario) {
         String lugar = txtLugar.getText().toString();
         String cargo = txtCargo.getText().toString();
         String tarea = txtTareas.getText().toString();
         String duracion = txtDuracion.getText().toString();
 
-
-
-        if (nombre.isEmpty() || apellido.isEmpty() || Dni.isEmpty() || nombreUsuario.isEmpty() || contrasena.isEmpty() ||
-           repetirContrasena.isEmpty() || email.isEmpty() || telefono.isEmpty() || direccion.isEmpty() ||
-           lugar.isEmpty() || cargo.isEmpty() || tarea.isEmpty() || duracion.isEmpty() ||
-            (spLocalidad.getSelectedItem()==null) || (spProvincia.getSelectedItemPosition()==0) || (spGenero.getSelectedItemPosition()==0) ||
-            (spNivelEducativo.getSelectedItemPosition()==0) || (spEstado.getSelectedItemPosition()==0) ) {
-
-            Toast.makeText(RegistrarEstudiante.this, "Por favor, complete todos los campos.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (!contrasena.equals(repetirContrasena)) {
-            Toast.makeText(this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show();
-            txtContrasena.requestFocus();
-            return;
-        }
-
-        Genero genero = (Genero) spGenero.getSelectedItem();
-        int idGenero = genero.getId_genero();
-        Localidad Loc = (Localidad) spLocalidad.getSelectedItem();
-        int idLocalidad = Loc.getId_localidad();
-        NivelEducativo nivelEdu = (NivelEducativo) spNivelEducativo.getSelectedItem();
-        int idNivelEdu = nivelEdu.getId_nivelEducativo();
-        EstadoNivelEducativo estado = (EstadoNivelEducativo) spEstado.getSelectedItem();
-        int idEstadoEdu = estado.getId_estadoNivelEducativo();
-
-        Usuario user = new Usuario(nombreUsuario,contrasena,1);
-        Estudiante est = new Estudiante(Dni, user, nombre, apellido, idGenero, email, telefono,
-                                       direccion, idLocalidad, idNivelEdu, idEstadoEdu);
-
-        // Registrar el usuario primero
-        UsuarioRepository ur = new UsuarioRepository();
-        int idUsuario = ur.registrarUsuario(user);
-
-        if (idUsuario != -1) {
-            if (idUsuario == 0) {
-                Toast.makeText(this, "El usuario ya existe!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            ExperienciaLaboral expLaboral = new ExperienciaLaboral(user, lugar, cargo, tarea, duracion);
-            ExpLaboralRepository expLaboralRepository = new ExpLaboralRepository();
-
-            if (expLaboralRepository.registrarExpLaboral(expLaboral, idUsuario)) {
-                // Usar el ViewModel para registrar al estudiante
-                estudianteViewModel.registrarEstudiante(est, idUsuario).observe(this, registrado -> {
-                    if (registrado) {
-                        Toast.makeText(this, "Estudiante registrado con éxito.", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(this, Login.class));
-                        finish();
-                    } else {
-                        Toast.makeText(this, "Error al registrar el estudiante.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                Toast.makeText(this, "Error al registrar la experiencia laboral.", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(this, "Error al registrar el usuario.", Toast.LENGTH_SHORT).show();
-        }
+        return new ExperienciaLaboral(usuario, lugar, cargo, tarea, duracion);
     }
+
+    private int registrarUsuario(Usuario usuario) {
+        UsuarioRepository usuarioRepository = new UsuarioRepository();
+        return usuarioRepository.registrarUsuario(usuario);
+    }
+
+    private boolean registrarExperienciaLaboral(ExperienciaLaboral experienciaLaboral, int idUsuario) {
+        ExpLaboralRepository expLaboralRepository = new ExpLaboralRepository();
+        return expLaboralRepository.registrarExpLaboral(experienciaLaboral, idUsuario);
+    }
+
+    private void registrarEstudianteEnViewModel(Estudiante estudiante, int idUsuario) {
+        estudianteViewModel.registrarEstudiante(estudiante, idUsuario).observe(this, registrado -> {
+            if (registrado) {
+                mostrarMensaje("Estudiante registrado con éxito.");
+                irALogin();
+            } else {
+                mostrarMensaje("Error al registrar el estudiante.");
+            }
+        });
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
+    }
+
+    private void irALogin() {
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+        finish();
+    }
+
 }
