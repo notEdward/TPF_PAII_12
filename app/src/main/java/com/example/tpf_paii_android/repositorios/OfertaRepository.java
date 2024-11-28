@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.example.tpf_paii_android.conexion_database.DatabaseConnection;
 import com.example.tpf_paii_android.modelos.Curso;
-import com.example.tpf_paii_android.modelos.Estudiante;
 import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Modalidad;
 import com.example.tpf_paii_android.modelos.NivelEducativo;
@@ -18,16 +17,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class OfertaRepository {
+
+    private final ExecutorService executor = Executors.newFixedThreadPool(4);
 
     public interface DataCallback<T> {
         void onSuccess(T result);
@@ -36,10 +34,9 @@ public class OfertaRepository {
     }
 
     public void getAllOfertas(DataCallback<ArrayList<OfertaEmpleo>> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<OfertaEmpleo> ofertas = new ArrayList<>();
-            String query = "SELECT * FROM ofertas_empleos WHERE estado = 1";
+            String query = "SELECT oe.*, c.id_categoria FROM ofertas_empleos oe JOIN curso c ON oe.id_curso = c.id_curso WHERE oe.estado = 1";
 
             try {
                 Class.forName(DatabaseConnection.driver);
@@ -59,7 +56,8 @@ public class OfertaRepository {
                             resultSet.getInt("id_curso"),
                             resultSet.getString("otros_requisitos"),
                             resultSet.getString("direccion"),
-                            resultSet.getInt("id_localidad")
+                            resultSet.getInt("id_localidad"),
+                            resultSet.getInt("id_categoria")
                     );
                     ofertas.add(oferta);
                 }
@@ -79,7 +77,6 @@ public class OfertaRepository {
     //Filtros de las ofertas
     // obtener modalidades
     public void obtenerModalidades(DataCallback<List<Modalidad>> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<Modalidad> modalidades = new ArrayList<>();
             String query = "SELECT * FROM modalidad";
@@ -105,7 +102,6 @@ public class OfertaRepository {
 
     //  obtener tipos de empleo
     public void obtenerTiposEmpleo(DataCallback<List<TipoEmpleo>> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<TipoEmpleo> tiposEmpleo = new ArrayList<>();
             String query = "SELECT * FROM tipo_empleo";
@@ -131,7 +127,6 @@ public class OfertaRepository {
 
     // obtener cursos
     public void obtenerCursos(DataCallback<List<Curso>> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<Curso> cursos = new ArrayList<>();
             String query = "SELECT * FROM curso";
@@ -164,7 +159,6 @@ public class OfertaRepository {
                                          List<Integer> tiposEmpleoSeleccionados,
                                          List<Integer> cursosSeleccionados,
                                          DataCallback<List<OfertaEmpleo>> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<OfertaEmpleo> ofertas = new ArrayList<>();
 
@@ -224,7 +218,6 @@ public class OfertaRepository {
 
     //Comienzo de detalle Oferta
     public void obtenerDetallesOferta(int idOfertaEmpleo, DataCallback<OfertaDetalle> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             OfertaDetalle detalle = null;
             String query = "SELECT o.titulo, o.descripcion, o.direccion, o.otros_requisitos, " +
@@ -282,7 +275,6 @@ public class OfertaRepository {
 ////fin detalle oferta
 //postulaciones
 public void registrarPostulacion(int idOfertaEmpleo, int idUsuario, DataCallback<String> callback) {
-    ExecutorService executor = Executors.newSingleThreadExecutor();
     executor.execute(() -> {
         String mensaje;
         String consultaVerificarPostulacion = "SELECT * FROM postulaciones WHERE id_oferta_empleo = ? AND id_usuario = ?";
@@ -339,7 +331,6 @@ public void registrarPostulacion(int idOfertaEmpleo, int idUsuario, DataCallback
 }
 //empresa alta
 public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback) {
-    ExecutorService executor = Executors.newSingleThreadExecutor();
     executor.execute(() -> {
         List<NivelEducativo> nivelesEducativos = new ArrayList<>();
         String query = "SELECT * FROM nivel_educativo";
@@ -363,7 +354,6 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
     });
 }
     public void obtenerLocalidades(DataCallback<List<Localidad>> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<Localidad> localidades = new ArrayList<>();
             String query = "SELECT * FROM localidad";
@@ -389,7 +379,6 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
     }
 
     public void obtenerProvincias(DataCallback<List<Provincia>> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<Provincia> provincias = new ArrayList<>();
             String query = "SELECT * FROM provincia";
@@ -413,7 +402,6 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
         });
     }
     public void obtenerLocalidadesPorProvincia(int idProvincia, DataCallback<List<Localidad>> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<Localidad> localidades = new ArrayList<>();
             String query = "SELECT * FROM localidad WHERE id_provincia = ?";
@@ -442,7 +430,6 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
     }
 
     public void guardarOferta(OfertaEmpleo oferta, DataCallback<String> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             String query = "INSERT INTO ofertas_empleos (id_empresa, titulo, descripcion, id_tipo_empleo, id_tipo_modalidad, id_nivel_educativo, id_curso, otros_requisitos, direccion, id_localidad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
@@ -473,7 +460,6 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
 
     // Método para obtener el ID de la empresa por el ID de usuario
     public void obtenerIdEmpresaPorUsuario(int idUsuario, DataCallback<Integer> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             String query = "SELECT id_empresa FROM empresa WHERE id_usuario = ?";
             try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
@@ -495,8 +481,6 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
     }
 
     public void actualizarOferta(OfertaEmpleo oferta, DataCallback<Boolean> callback) {
-        // Ejecutar en un hilo secundario
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             try (Connection connection = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass)) {
                 // Código de conexión y actualización a la base de datos
@@ -522,7 +506,6 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
 
     //baja
     public void actualizarEstadoOferta(int idOferta, int nuevoEstado, OfertaRepository.DataCallback<Boolean> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             try {
                 Class.forName(DatabaseConnection.driver);
@@ -547,6 +530,9 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
         });
     }
 
+    public void shutdownExecutor() {
+        executor.shutdown();
+    }
 
 }
 

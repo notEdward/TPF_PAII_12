@@ -41,7 +41,7 @@ public class ModificarCursoActivity extends AppCompatActivity {
         idCurso = intent.getIntExtra("idCurso", -1);
         String nombreCurso = intent.getStringExtra("nombreCurso");
         String descripcionCurso = intent.getStringExtra("descripcionCurso");
-        int imagenCursoResId = intent.getIntExtra("imagenCursoResId", R.drawable.img1_tpf);  // ID de recurso de imagen
+        int imagenCursoResId = intent.getIntExtra("imageResId", R.drawable.img1_tpf);  // ID de recurso de imagen
 
         txtNombreCurso.setText(nombreCurso);
         txtDescripcionCurso.setText(descripcionCurso);

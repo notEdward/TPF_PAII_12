@@ -104,4 +104,10 @@ public class ForoViewModel extends AndroidViewModel {
     public LiveData<String> getErrorMessage() {
         return errorMessage;
     }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        foroRepository.shutdownExecutor();
+    }
 }

@@ -2,11 +2,12 @@ package com.example.tpf_paii_android.actividades.cursos;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -74,43 +75,42 @@ public class CrearCursoActivity extends AppCompatActivity {
             String estadoCurso = spinnerEstado.getSelectedItem().toString();
             String respuestasCorrectas = etRespuestasCorrectas.getText().toString();
 
-            // Convertir el estado de String a Integer
             int estadoCursoInt = estadoCurso.equals("Activo") ? 1 : 0;
 
-            // Crear el curso
             Curso curso = new Curso(nombreCurso, descripcionCurso, idCategoria, respuestasCorrectas, estadoCursoInt);
 
-            // Recoger las preguntas y respuestas
             List<Pregunta> preguntas = new ArrayList<>();
             List<Opcion> opciones = new ArrayList<>();
 
             for (int i = 0; i < contenedorPreguntas.getChildCount(); i++) {
                 LinearLayout preguntaLayout = (LinearLayout) contenedorPreguntas.getChildAt(i);
                 EditText etPregunta = (EditText) preguntaLayout.getChildAt(0);
-                String textoPregunta = etPregunta.getText().toString();
+                RadioGroup radioGroup = (RadioGroup) preguntaLayout.getChildAt(1);
 
-                // Guardar la pregunta
+                String textoPregunta = etPregunta.getText().toString();
                 Pregunta pregunta = new Pregunta(curso.getIdCurso(), textoPregunta, "radio");
                 preguntas.add(pregunta);
 
-                // Guardar las respuestas (suponiendo que se guardan 2 opciones por pregunta)
-                EditText etRespuesta1 = (EditText) preguntaLayout.getChildAt(1);
-                EditText etRespuesta2 = (EditText) preguntaLayout.getChildAt(2);
+                for (int j = 0; j < radioGroup.getChildCount(); j++) {
+                    LinearLayout opcionLayout = (LinearLayout) radioGroup.getChildAt(j);
+                    EditText etOpcion = (EditText) opcionLayout.getChildAt(0);
+                    RadioButton rbOpcion = (RadioButton) opcionLayout.getChildAt(1);
 
-                opciones.add(new Opcion(pregunta.getIdPregunta(), etRespuesta1.getText().toString(), true));
-                opciones.add(new Opcion(pregunta.getIdPregunta(), etRespuesta2.getText().toString(), false));
+                    boolean esCorrecta = rbOpcion.isChecked();
+                    opciones.add(new Opcion(pregunta.getIdPregunta(), etOpcion.getText().toString(), esCorrecta));
+                }
             }
 
-            // crear curso
             cursoViewModel.guardarCurso(curso, preguntas, opciones);
         });
+
 
         cursoViewModel.getCursoGuardadoLiveData().observe(this, guardadoExitoso -> {
             if (guardadoExitoso) {
                 Toast.makeText(this, "Curso guardado correctamente", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CrearCursoActivity.this, CursoActivity.class);
                 startActivity(intent);
-                finish(); // Opcional para cerrar la actividad actual
+                finish();
             } else {
                 Toast.makeText(this, "Error al guardar el curso", Toast.LENGTH_SHORT).show();
             }
@@ -128,15 +128,30 @@ public class CrearCursoActivity extends AppCompatActivity {
         etPregunta.setHint("Pregunta");
         preguntaLayout.addView(etPregunta);
 
+        RadioGroup radioGroup = new RadioGroup(this);
+        radioGroup.setOrientation(RadioGroup.VERTICAL);
+
+        LinearLayout opcion1Layout = new LinearLayout(this);
+        opcion1Layout.setOrientation(LinearLayout.HORIZONTAL);
         EditText etRespuesta1 = new EditText(this);
         etRespuesta1.setHint("Respuesta 1");
-        preguntaLayout.addView(etRespuesta1);
+        opcion1Layout.addView(etRespuesta1);
+        RadioButton rbOpcion1 = new RadioButton(this);
+        opcion1Layout.addView(rbOpcion1);
+        radioGroup.addView(opcion1Layout);
 
+        LinearLayout opcion2Layout = new LinearLayout(this);
+        opcion2Layout.setOrientation(LinearLayout.HORIZONTAL);
         EditText etRespuesta2 = new EditText(this);
         etRespuesta2.setHint("Respuesta 2");
-        preguntaLayout.addView(etRespuesta2);
+        opcion2Layout.addView(etRespuesta2);
+        RadioButton rbOpcion2 = new RadioButton(this);
+        opcion2Layout.addView(rbOpcion2);
+        radioGroup.addView(opcion2Layout);
 
+        preguntaLayout.addView(radioGroup);
         contenedorPreguntas.addView(preguntaLayout);
     }
+
 }
 

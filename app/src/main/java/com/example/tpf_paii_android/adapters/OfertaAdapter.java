@@ -70,6 +70,9 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
 
         Context context = holder.itemView.getContext();
 
+        int imageResId = obtenerImagenPorCategoria(oferta.getIdCategoria());
+        holder.imageOferta.setImageResource(imageResId);
+
         holder.itemView.setOnClickListener(v -> {
             if ("Empresa".equals(tipoUsuario)) {
                 // Crear el PopupMenu para opciones de "empresa"
@@ -83,6 +86,7 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
                         intentVer.putExtra("tituloOferta", oferta.getTitulo());
                         intentVer.putExtra("descripcionOferta", oferta.getDescripcion());
                         intentVer.putExtra("id_oferta_empleo", oferta.getId_ofertaEmpleo());
+                        intentVer.putExtra("imageResId", imageResId);
                         context.startActivity(intentVer);
                         return true;
 
@@ -99,6 +103,7 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
                         intentModificar.putExtra("id_nivel_educativo", oferta.getIdNivelEducativo());
                         intentModificar.putExtra("id_curso", oferta.getIdCurso());
                         intentModificar.putExtra("id_localidad", oferta.getIdLocalidad());
+                        intentModificar.putExtra("imageResId", imageResId);
                         context.startActivity(intentModificar);
                         return true;
 
@@ -128,6 +133,7 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
                 intent.putExtra("tituloOferta", oferta.getTitulo());
                 intent.putExtra("descripcionOferta", oferta.getDescripcion());
                 intent.putExtra("id_oferta_empleo", oferta.getId_ofertaEmpleo());
+                intent.putExtra("imageResId", imageResId);
                 context.startActivity(intent);
             }
         });
@@ -149,5 +155,21 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
             this.ofertas = nuevasOfertas != null ? nuevasOfertas : new ArrayList<>();
         }
         notifyDataSetChanged();
+    }
+    private int obtenerImagenPorCategoria(int idCategoria) {
+        switch (idCategoria) {
+            case 1:
+                return R.drawable.img_cat1;
+            case 2:
+                return R.drawable.img_cat2;
+            case 3:
+                return R.drawable.img_cat3;
+            case 4:
+                return R.drawable.img_cat4;
+            case 5:
+                return R.drawable.img_cat5;
+            default:
+                return R.drawable.img1_tpf;
+        }
     }
 }

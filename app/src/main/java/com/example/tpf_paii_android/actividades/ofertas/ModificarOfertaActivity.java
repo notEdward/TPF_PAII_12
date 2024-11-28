@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,7 +18,8 @@ public class ModificarOfertaActivity extends AppCompatActivity {
     private EditText etDescripcionOferta;
     private Button btnGuardarCambios;
     private OfertaRepository ofertaRepository;
-    private int idOfertaEmpleo;
+    private int idOfertaEmpleo,imageResId;
+    private ImageView imgOferta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class ModificarOfertaActivity extends AppCompatActivity {
         etTituloOferta = findViewById(R.id.etTituloOferta);
         etDescripcionOferta = findViewById(R.id.etDescripcionOferta);
         btnGuardarCambios = findViewById(R.id.btnGuardarCambios);
+        imgOferta= findViewById(R.id.imgOferta);
 
         // Inicializar el repositorio
         ofertaRepository = new OfertaRepository();
@@ -36,6 +39,7 @@ public class ModificarOfertaActivity extends AppCompatActivity {
         idOfertaEmpleo = getIntent().getIntExtra("id_oferta_empleo", -1);
         String titulo = getIntent().getStringExtra("titulo");
         String descripcion = getIntent().getStringExtra("descripcion");
+        imageResId = getIntent().getIntExtra("imageResId", R.drawable.img1_tpf);
 
         // Verificar que se recibió un id de oferta válido
         if (idOfertaEmpleo == -1) {
@@ -47,6 +51,7 @@ public class ModificarOfertaActivity extends AppCompatActivity {
         // Rellenar los campos con los datos de la oferta
         etTituloOferta.setText(titulo);
         etDescripcionOferta.setText(descripcion);
+        imgOferta.setImageResource(imageResId);
 
         // Configurar botón para guardar los cambios
         btnGuardarCambios.setOnClickListener(v -> guardarCambios());

@@ -52,6 +52,9 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
 
         Context context = holder.itemView.getContext();
 
+        int imageResId = obtenerImagenPorCategoria(curso.getIdCategoria());
+        holder.imageCurso.setImageResource(imageResId);
+
         holder.itemView.setOnClickListener(v -> {
             if ("ADMIN".equals(tipoUsuario.toUpperCase())) {
                 // Crear el PopupMenu para opciones de administrador
@@ -65,6 +68,7 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
                         intentVer.putExtra("nombreCurso", curso.getNombreCurso());
                         intentVer.putExtra("descripcionCurso", curso.getDescripcion());
                         intentVer.putExtra("idCurso", curso.getIdCurso());
+                        intentVer.putExtra("imageResId", imageResId);
                         context.startActivity(intentVer);
                         return true;
 
@@ -74,7 +78,7 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
                         intentModificar.putExtra("idCurso", curso.getIdCurso());
                         intentModificar.putExtra("nombreCurso", curso.getNombreCurso());
                         intentModificar.putExtra("descripcionCurso", curso.getDescripcion());
-//                        intentModificar.putExtra("imagenCursoResId", curso.getImagenResId()); // ID de recurso de imagen
+                        intentModificar.putExtra("imageResId", imageResId);
                         context.startActivity(intentModificar);
                         return true;
 
@@ -105,6 +109,7 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
                 intent.putExtra("nombreCurso", curso.getNombreCurso());
                 intent.putExtra("descripcionCurso", curso.getDescripcion());
                 intent.putExtra("idCurso", curso.getIdCurso());
+                intent.putExtra("imageResId", imageResId);
                 context.startActivity(intent);
             }
         });
@@ -126,6 +131,23 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
             tvNombreCurso = itemView.findViewById(R.id.tvNombreCurso);
             tvDescripcionCurso = itemView.findViewById(R.id.tvDescripcionCurso);
             imageCurso = itemView.findViewById(R.id.imageCurso);
+        }
+    }
+
+    private int obtenerImagenPorCategoria(int idCategoria) {
+        switch (idCategoria) {
+            case 1:
+                return R.drawable.img_cat1;
+            case 2:
+                return R.drawable.img_cat2;
+            case 3:
+                return R.drawable.img_cat3;
+            case 4:
+                return R.drawable.img_cat4;
+            case 5:
+                return R.drawable.img_cat5;
+            default:
+                return R.drawable.img1_tpf;
         }
     }
 }

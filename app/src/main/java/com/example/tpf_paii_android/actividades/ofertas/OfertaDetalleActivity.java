@@ -16,7 +16,7 @@ import com.example.tpf_paii_android.viewmodels.OfertaViewModel;
 
 public class OfertaDetalleActivity extends AppCompatActivity {
 
-    private int idOfertaEmpleo; // ID de la oferta a consultar
+    private int idOfertaEmpleo, imageResId; // ID de la oferta a consultar
     private TextView tvTitulo, tvDescripcion, tvDireccion, tvCurso, tvLocalidad, tvModalidad, tvTipoEmpleo, tvOtrosRequisitos;
     private ImageView ivImagenOferta;
     private OfertaViewModel ofertaViewModel;
@@ -29,15 +29,14 @@ public class OfertaDetalleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_oferta);
 
-        //simulo recibir el usuario
-//        idUsuario = 1; // Para pruebas
-//        nombreUsuario = "prueba";
         MyApp app = (MyApp) getApplication();
         idUsuario = app.getIdUsuario();
 //        tipo_usuario = app.getTipoUsuario();
         nombreUsuario = app.getNombreUsuario();
 
         idOfertaEmpleo = getIntent().getIntExtra("id_oferta_empleo", -1);
+        imageResId = getIntent().getIntExtra("imageResId", R.drawable.img1_tpf);
+
         //vinculo
         tvTitulo = findViewById(R.id.tvTitulo);
         ivImagenOferta = findViewById(R.id.ivImagenOferta);
@@ -64,10 +63,7 @@ public class OfertaDetalleActivity extends AppCompatActivity {
                 tvModalidad.setText("Modalidad: " + ofertaDetalle.getModalidad());
                 tvTipoEmpleo.setText("Tipo de empleo: " + ofertaDetalle.getTipoEmpleo());
                 tvOtrosRequisitos.setText("Otros requisitos: " + ofertaDetalle.getOtrosRequisitos());
-                // Puedes cargar la imagen de la oferta, por ejemplo, usando una librería como Glide
-//                Glide.with(this)
-//                        .load(ofertaDetalle.getImagenOfertaUrl()) // Suponiendo que tienes la URL de la imagen
-//                        .into(ivImagenOferta);
+                ivImagenOferta.setImageResource(imageResId);
             }
         });
 

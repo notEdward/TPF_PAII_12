@@ -38,8 +38,9 @@ public class CursoDetalleActivity extends AppCompatActivity {
 
     private int idUsuario;
     private String nombreUsuario;
-    private int idCurso;
+    private int idCurso, imageResId;
     private CursoViewModel cursoViewModel;
+    private String tipo_usuario;
 
     private RecyclerView recyclerViewPreguntas;
     private PreguntasAdapter preguntasAdapter;
@@ -62,36 +63,34 @@ public class CursoDetalleActivity extends AppCompatActivity {
         ProgressBar progressBarLoading = findViewById(R.id.progressBarLoading);
         progressBarLoading.setVisibility(View.VISIBLE);
 
-        // Configurar RecyclerView para las preguntas
-        recyclerViewPreguntas = findViewById(R.id.recyclerViewPreguntas);
-        recyclerViewPreguntas.setLayoutManager(new LinearLayoutManager(this));
-        preguntasAdapter = new PreguntasAdapter();
-        recyclerViewPreguntas.setAdapter(preguntasAdapter);
-
-        // Obtener los datos enviados desde la actividad anterior
+        // datos enviados de la actividad anterior
         Intent intent = getIntent();
         String nombreCurso = intent.getStringExtra("nombreCurso");
         String descripcionCurso = intent.getStringExtra("descripcionCurso");
         idCurso = intent.getIntExtra("idCurso", 0);
-
-        // Simulación de datos del usuario
-//        idUsuario = 1; // Para pruebas
-//        nombreUsuario = "prueba";
+        imageResId = intent.getIntExtra("imageResId", R.drawable.img1_tpf);
 
         MyApp app = (MyApp) getApplication();
         idUsuario = app.getIdUsuario();
-//        tipo_usuario = app.getTipoUsuario();
+        tipo_usuario = app.getTipoUsuario();
         nombreUsuario = app.getNombreUsuario();
+
+        //si no es estudiante se van los botones
+        if (!"Estudiante".equalsIgnoreCase(tipo_usuario)) {
+            btnIniciarCapacitacion.setVisibility(View.GONE);
+            btnIniciarCurso.setVisibility(View.GONE);
+            btnDescargarCertificado.setVisibility(View.GONE);
+        }
 
         // Asignar datos a las vistas
         txtNombreCurso.setText(nombreCurso);
         txtDescripcionCurso.setText(descripcionCurso);
+        imgCurso.setImageResource(imageResId);
 
         cursoViewModel.verificarInscripcionEstado(idCurso, idUsuario);
         cursoViewModel.getInscripcionEstado().observe(this, inscripcionEstado -> {
             progressBarLoading.setVisibility(View.GONE);
             if (inscripcionEstado != null) {
-                // Aquí obtienes el idInscripcion y el estado
                 int idInscripcion = inscripcionEstado.getIdInscripcion();
                 String estadoInscripcion = inscripcionEstado.getEstadoInscripcion();
 
@@ -177,5 +176,4 @@ public class CursoDetalleActivity extends AppCompatActivity {
         PDFGenerator pdfGenerator = new PDFGenerator(this);
         pdfGenerator.crearCertificadoPDF(nombreCurso, nombreUsuario, fechaFinalizacion);
     }
-
 }

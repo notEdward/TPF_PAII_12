@@ -298,4 +298,9 @@ private MutableLiveData<Boolean> bajaOfertaLiveData = new MutableLiveData<>();
         });
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        ofertaRepository.shutdownExecutor();
+    }
 }

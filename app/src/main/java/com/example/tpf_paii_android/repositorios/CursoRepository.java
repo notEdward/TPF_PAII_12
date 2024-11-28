@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 
 public class CursoRepository {
 
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newFixedThreadPool(4);
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     public interface DataCallback<T> {
@@ -29,7 +29,6 @@ public class CursoRepository {
 
     // todos los cursos async
     public void getAllCursos(DataCallback<ArrayList<Curso>> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<Curso> cursos = new ArrayList<>();
             String query = "SELECT * FROM curso WHERE estado = 1";
@@ -65,7 +64,6 @@ public class CursoRepository {
     }
 
     public void obtenerCategorias(DataCallback<List<CategoriaCurso>> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             List<CategoriaCurso> categorias = new ArrayList<>();
             String query = "SELECT * FROM categoria_curso";
@@ -242,34 +240,8 @@ public void registrarEvaluacion(Evaluacion evaluacion, DataCallback<Boolean> cal
         }
     });
 }
-//ADMIN crear
-//    public void obtenerCategorias(OfertaRepository.DataCallback<List<CategoriaCurso>> callback) {
-//        ExecutorService executor = Executors.newSingleThreadExecutor();
-//        executor.execute(() -> {
-//            List<CategoriaCurso> categorias = new ArrayList<>();
-//            String query = "SELECT * FROM categorias";
-//
-//            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
-//                 Statement statement = con.createStatement();
-//                 ResultSet resultSet = statement.executeQuery(query)) {
-//
-//                while (resultSet.next()) {
-//                    CategoriaCurso categoria = new CategoriaCurso(
-//                            resultSet.getInt("id_categoria"),
-//                            resultSet.getString("descripcion")
-//                    );
-//                    categorias.add(categoria);
-//                }
-//
-//                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(categorias));
-//
-//            } catch (Exception e) {
-//                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
-//            }
-//        });
-//    }
+
     public void guardarCurso(Curso curso, List<Pregunta> preguntas, List<Opcion> opciones, DataCallback<Boolean> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass)) {
                 // Guardar el curso
@@ -340,7 +312,6 @@ public void registrarEvaluacion(Evaluacion evaluacion, DataCallback<Boolean> cal
     }
 
     public void modificarDescripcionCurso(int idCurso, String nuevaDescripcion, DataCallback<Boolean> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             try {
                 Class.forName(DatabaseConnection.driver);
@@ -365,7 +336,6 @@ public void registrarEvaluacion(Evaluacion evaluacion, DataCallback<Boolean> cal
 
 //baja
 public void actualizarEstadoCurso(int idCurso, int nuevoEstado, DataCallback<Boolean> callback) {
-    ExecutorService executor = Executors.newSingleThreadExecutor();
     executor.execute(() -> {
         try {
             Class.forName(DatabaseConnection.driver);
@@ -389,6 +359,9 @@ public void actualizarEstadoCurso(int idCurso, int nuevoEstado, DataCallback<Boo
         }
     });
 }
-
+//optimizacin de recursos
+    public void shutdownExecutor() {
+        executor.shutdown();
+    }
 
 }

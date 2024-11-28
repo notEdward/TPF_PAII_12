@@ -8,8 +8,7 @@
     <ImageView
         android:id="@+id/imageOferta"
         android:layout_width="150dp"
-        android:layout_height="100dp"
-        android:src="@drawable/img3_tpf"/>
+        android:layout_height="100dp"/>
 
     <TextView
         android:id="@+id/tvTituloOferta"

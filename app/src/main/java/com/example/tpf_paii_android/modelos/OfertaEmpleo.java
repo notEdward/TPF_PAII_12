@@ -22,6 +22,7 @@ public class OfertaEmpleo {
     private int idNivelEducativo;
     private int idCurso;
     private int idLocalidad;
+    private int idCategoria;
 
     public OfertaEmpleo() {
     }
@@ -72,6 +73,32 @@ public class OfertaEmpleo {
         this.direccion = direccion;
         this.idLocalidad = idLocalidad;
     }
+
+    // Constructor para traer ademas imagenes por cat
+    public OfertaEmpleo(int id_ofertaEmpleo, int idEmpresa, String titulo, String descripcion, int idTipoEmpleo,
+                        int idTipoModalidad, int idNivelEducativo, int idCurso, String otrosRequisitos,
+                        String direccion, int idLocalidad, int idCategoria) {
+        this.id_ofertaEmpleo = id_ofertaEmpleo;
+        this.idEmpresa = idEmpresa;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.idTipoEmpleo = idTipoEmpleo;
+        this.idTipoModalidad = idTipoModalidad;
+        this.idNivelEducativo = idNivelEducativo;
+        this.idCurso = idCurso;
+        this.otrosRequisitos = otrosRequisitos;
+        this.direccion = direccion;
+        this.idLocalidad = idLocalidad;
+        this.idCategoria = idCategoria;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
     public int getIdEmpresa() {
         return idEmpresa;
     }

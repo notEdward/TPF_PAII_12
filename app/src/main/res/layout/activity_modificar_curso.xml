@@ -45,8 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:contentDescription="Imagen del Curso"
-            android:scaleType="centerCrop"
-            android:src="@drawable/img1_tpf" />
+            android:scaleType="centerCrop" />
 
         <!-- Descripción actual del curso (solo lectura) -->
         <TextView

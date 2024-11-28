@@ -227,5 +227,9 @@ public class ForoRepository {
         return usuarioInfoLiveData;
     }
 
+    public void shutdownExecutor() {
+        executor.shutdown();
+    }
+
 }
 

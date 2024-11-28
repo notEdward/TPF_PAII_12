@@ -238,4 +238,9 @@ public void verificarInscripcionEstado(int idCurso, int idUsuario) {
         });
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        cursoRepository.shutdownExecutor();
+    }
 }

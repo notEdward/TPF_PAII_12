@@ -16,7 +16,15 @@
         android:id="@+id/etTituloOferta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Título"/>
+        android:hint="Título"
+        android:minHeight="48dp" />
+
+    <ImageView
+        android:id="@+id/imgOferta"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:contentDescription="Imagen oferta"
+        android:scaleType="centerCrop" />
 
     <EditText
         android:id="@+id/etDescripcionOferta"
