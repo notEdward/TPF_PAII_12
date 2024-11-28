@@ -17,32 +17,36 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.actividades.autenticacion.Login;
 import com.example.tpf_paii_android.modelos.Empresa;
+import com.example.tpf_paii_android.modelos.Estudiante;
 import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Provincia;
 import com.example.tpf_paii_android.modelos.Usuario;
 import com.example.tpf_paii_android.repositorios.EmpresaRepository;
+import com.example.tpf_paii_android.repositorios.EstudianteRepository;
 import com.example.tpf_paii_android.repositorios.LocalidadRepository;
 import com.example.tpf_paii_android.repositorios.ProvinciaRepository;
 import com.example.tpf_paii_android.repositorios.UsuarioRepository;
+import com.example.tpf_paii_android.viewmodels.EmpresaViewModel;
+import com.example.tpf_paii_android.viewmodels.EstudianteViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RegistrarEmpresa extends AppCompatActivity {
 
-    private EditText txtNombre, txtDescripcion, txtSector, txtNidentificacion,
-            txtNombreUser, txtContrasena, txtRepetirContrasena,
-            txtEmail, txtTelefono, txtDireccion;
+    private EmpresaViewModel empresaViewModel;
+    private EditText txtNombre, txtDescripcion, txtSector, txtNidentificacion, txtNombreUser, txtContrasena,
+            txtRepetirContrasena, txtEmail, txtTelefono, txtDireccion;
     private Spinner spProvincia, spLocalidad;
     private Button btnRegistrarse;
-
-    private ArrayAdapter<Provincia> provinciaAdapter;
-    private ArrayAdapter<Localidad> localidadAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,129 +73,138 @@ public class RegistrarEmpresa extends AppCompatActivity {
         spLocalidad = findViewById(R.id.spLocalidadEmp);
         btnRegistrarse = findViewById(R.id.btnRegistrarseEmp);
 
+        // Configurar el ViewModel
+        EmpresaRepository empresaRepository = new EmpresaRepository(this);
+        EmpresaViewModel.Factory factory = new EmpresaViewModel.Factory(empresaRepository);
+        empresaViewModel = new ViewModelProvider(this, factory).get(EmpresaViewModel.class);
 
-        btnRegistrarse.setOnClickListener(new View.OnClickListener() {
+        // Observar los datos de los getProvincias
+        empresaViewModel.getProvincias().observe(this, new Observer<List<Provincia>>() {
             @Override
-            public void onClick(View v) {
-                registrarEmpresa();
+            public void onChanged(List<Provincia> provincias) {
+                if (provincias != null) cargarSpinnerProvincia(provincias);
             }
         });
 
-        fetchProvincias();
+        // Observar las localidades basadas en la provincia seleccionada
+        empresaViewModel.getLocalidades().observe(this, new Observer<List<Localidad>>() {
+            @Override
+            public void onChanged(List<Localidad> localidades) {
+                if (localidades != null) {
+                    cargarSpinnerLocalidad(localidades);
+                }
+            }
+        });
 
         // Listener para el spinner de provincias
         spProvincia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (position > 0) { // Verifica que no sea el primer ítem
-                    Provincia provinciaSeleccionada = (Provincia) spProvincia.getSelectedItem();
-                    if (provinciaSeleccionada != null) {
-                        fetchLocalidadesByProvincia(provinciaSeleccionada.getId_provincia());
-                    }
-                } else {
-                    spLocalidad.setAdapter(null); // Limpiar localidades si no se selecciona una provincia válida
-                }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Provincia provinciaSeleccionada = (Provincia) parent.getItemAtPosition(position);
+                empresaViewModel.setProvinciaSeleccionada(provinciaSeleccionada.getId_provincia());
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // No hacer nada si no se selecciona nada
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
+
+        btnRegistrarse.setOnClickListener(v -> registrarEmpresa());
     }
 
-    public void fetchProvincias() {
-        // Ejecutar la consulta en un hilo secundario
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            ProvinciaRepository provinciaRepository = new ProvinciaRepository();
-            ArrayList<Provincia> listaProvincias = provinciaRepository.fetchProvincias();
-
-            // Agregar el ítem inicial
-            Provincia placeholder = new Provincia(0, "Seleccione Provincia");
-            listaProvincias.add(0, placeholder);
-
-            // Actualizar la UI en el hilo principal
-            new Handler(Looper.getMainLooper()).post(() -> {
-                provinciaAdapter = new ArrayAdapter<>(RegistrarEmpresa.this, android.R.layout.simple_spinner_item, listaProvincias);
-                provinciaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spProvincia.setAdapter(provinciaAdapter);
-                spProvincia.setSelection(0); // "Elegí provincia" seleccionado por defecto
-            });
-        });
+    private void cargarSpinnerProvincia(List<Provincia> provincias) {
+        ArrayAdapter<Provincia> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, provincias);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spProvincia.setAdapter(adapter);
     }
 
-    public void fetchLocalidadesByProvincia(int provinciaId) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            LocalidadRepository localidadRepository = new LocalidadRepository();
-            ArrayList<Localidad> listaLocalidades = localidadRepository.fetchLocalidadesByProvincia(provinciaId);
-
-            // Actualizar la UI en el hilo principal
-            new Handler(Looper.getMainLooper()).post(() -> {
-                localidadAdapter = new ArrayAdapter<>(RegistrarEmpresa.this, android.R.layout.simple_spinner_item, listaLocalidades);
-                localidadAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spLocalidad.setAdapter(localidadAdapter);
-            });
-        });
+    private void cargarSpinnerLocalidad(List<Localidad> localidades) {
+        ArrayAdapter<Localidad> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localidades);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spLocalidad.setAdapter(adapter);
     }
 
+    public void registrarEmpresa() {
 
-    public void registrarEmpresa(){
+        if (!validarCampos()) return;
 
+        // Crear los objetos necesarios
+        Empresa empresa = crearEmpresa();
+        Usuario usuario = empresa.getId_usuario();
+
+        int idUsuario = registrarUsuario(usuario);
+        if (idUsuario == 0) {
+            mostrarMensaje("El usuario ya existe!");
+            return;
+        } else if (idUsuario == -1) {
+            mostrarMensaje("Error al registrar el usuario.");
+            return;
+        }
+
+        registrarEmpresaEnViewModel(empresa, idUsuario);
+    }
+
+    private boolean validarCampos() {
+        if (txtNombre.getText().toString().isEmpty() || txtDescripcion.getText().toString().isEmpty() ||
+            txtSector.getText().toString().isEmpty() || txtNidentificacion.getText().toString().isEmpty() ||
+            txtNombreUser.getText().toString().isEmpty() || txtContrasena.getText().toString().isEmpty() ||
+            txtRepetirContrasena.getText().toString().isEmpty() || txtEmail.getText().toString().isEmpty() ||
+            txtTelefono.getText().toString().isEmpty() || txtDireccion.getText().toString().isEmpty() ||
+            spProvincia.getSelectedItemPosition() == 0) {
+
+            mostrarMensaje("Por favor, complete todos los campos.");
+            return false;
+        }
+
+        if (!txtContrasena.getText().toString().equals(txtRepetirContrasena.getText().toString())) {
+            mostrarMensaje("Las contraseñas no coinciden.");
+            txtContrasena.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private Empresa crearEmpresa() {
         String nombreEmpresa = txtNombre.getText().toString();
         String descripcion = txtDescripcion.getText().toString();
         String sector = txtSector.getText().toString();
         String nIdentificacionFiscal = txtNidentificacion.getText().toString();
-        String nombreUsuario = txtNombreUser.getText().toString();
-        String contrasena = txtContrasena.getText().toString();
-        String repetirContrasena = txtRepetirContrasena.getText().toString();
         String email = txtEmail.getText().toString();
         String telefono = txtTelefono.getText().toString();
         String direccion = txtDireccion.getText().toString();
 
-        if(nombreEmpresa.isEmpty() || descripcion.isEmpty() || sector.isEmpty() || nIdentificacionFiscal.isEmpty() ||
-        nombreUsuario.isEmpty() || contrasena.isEmpty() || repetirContrasena.isEmpty() || email.isEmpty() ||
-        telefono.isEmpty() || direccion.isEmpty() || (spProvincia.getSelectedItemPosition()==0) ){
-            Toast.makeText(RegistrarEmpresa.this, "Por favor, complete todos los campos.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        Localidad localidad = (Localidad) spLocalidad.getSelectedItem();
+        int idLocalidadSeleccionada = localidad.getId_localidad();
 
-        if (!contrasena.equals(repetirContrasena)) {
-            Toast.makeText(this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show();
-            txtContrasena.requestFocus();
-            return;
-        }
+        String nombreUsuario = txtNombreUser.getText().toString();
+        String contrasena = txtContrasena.getText().toString();
+        Usuario usuario = new Usuario(nombreUsuario, contrasena, 2);
 
-        Localidad Loc = (Localidad) spLocalidad.getSelectedItem();
-        int idLocSelec = Loc.getId_localidad();
+        return new Empresa(nombreEmpresa, descripcion, sector, nIdentificacionFiscal, email, telefono, direccion, idLocalidadSeleccionada, usuario);
+    }
 
-        Usuario user = new Usuario(nombreUsuario,contrasena,2);
-        Empresa emp = new Empresa(nombreEmpresa, descripcion,sector, nIdentificacionFiscal, email, telefono, direccion, idLocSelec,user);
+    private int registrarUsuario(Usuario usuario) {
+        UsuarioRepository usuarioRepository = new UsuarioRepository();
+        return usuarioRepository.registrarUsuario(usuario);
+    }
 
-        EmpresaRepository er = new EmpresaRepository();
-        UsuarioRepository ur = new UsuarioRepository();
-
-        int idUsuario = ur.registrarUsuario(user);
-        if (idUsuario != -1) {
-            //Toast.makeText(this, "Usuario registrado con éxito.", Toast.LENGTH_SHORT).show();
-            if(idUsuario ==0){
-                Toast.makeText(this, "El usuario ya existe!", Toast.LENGTH_SHORT).show();
-                txtNombreUser.requestFocus();
-                return;
-            }
-            if (er.registrarEmpresa(emp,idUsuario)) {
-                Toast.makeText(this, "Empresa registrada con éxito.", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(this, Login.class);
-                startActivity(intent);
-                finish();
-
+    private void registrarEmpresaEnViewModel(Empresa empresa, int idUsuario) {
+        empresaViewModel.registrarEmpresa(empresa, idUsuario).observe(this, registrado -> {
+            if (registrado) {
+                mostrarMensaje("Estudiante registrado con éxito.");
+                irALogin();
             } else {
-                Toast.makeText(this, "Error al registrar la empresa", Toast.LENGTH_SHORT).show();
+                mostrarMensaje("Error al registrar el estudiante.");
             }
-        } else {
-            Toast.makeText(this, "Error al registrar el usuario.", Toast.LENGTH_SHORT).show();
-        }
+        });
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
+    }
+
+    private void irALogin() {
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+        finish();
     }
 }

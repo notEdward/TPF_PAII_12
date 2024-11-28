@@ -41,7 +41,6 @@ public class EstudianteRepository {
         this.executor = Executors.newSingleThreadExecutor();
     }
 
-
     // Metodo obtenerGeneros() los generos de la bd ASYNC
     public LiveData<List<Genero>> obtenerGeneros() {
         MutableLiveData<List<Genero>> liveDataGeneros = new MutableLiveData<>();
@@ -56,7 +55,6 @@ public class EstudianteRepository {
                 try {
                     // Conectar a la base de datos
                     connection = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
-
                     if (connection != null){
                         String query = "SELECT * FROM genero";
                         Statement statement = connection.createStatement();
@@ -84,7 +82,6 @@ public class EstudianteRepository {
                         e.printStackTrace();
                     }
                 }
-
                 // Publica los géneros obtenidos en el LiveData
                 new Handler(Looper.getMainLooper()).post(() ->
                         liveDataGeneros.setValue(generos)
@@ -294,17 +291,14 @@ public class EstudianteRepository {
 
     public LiveData<Boolean> registrarEstudiante(Estudiante estudiante, int idUsuario) {
         MutableLiveData<Boolean> resultLiveData = new MutableLiveData<>();
-
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
             boolean registrada = false;
-            String query = "INSERT INTO estudiante (dni, id_usuario, nombre, apellido, " +
-                    "id_genero, email, telefono, direccion, id_localidad, id_nivel_educativo, id_estado_nivel) " +
+            String query = "INSERT INTO estudiante (dni, id_usuario, nombre, apellido, id_genero, email, telefono, direccion, id_localidad, id_nivel_educativo, id_estado_nivel) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
                  PreparedStatement ps = con.prepareStatement(query)) {
-
                 ps.setString(1, estudiante.getDni());
                 ps.setInt(2, idUsuario);
                 ps.setString(3, estudiante.getNombre());

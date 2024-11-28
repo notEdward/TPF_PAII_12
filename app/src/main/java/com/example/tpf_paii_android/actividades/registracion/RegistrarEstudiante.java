@@ -151,16 +151,11 @@ public class RegistrarEstudiante extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Opcional: manejar si no se selecciona nada
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
-
 
         btnRegistrarse.setOnClickListener(v -> registrarEstudiante());
     }
-
-
 
 
     // Método para cargar los géneros en el Spinner
@@ -171,44 +166,34 @@ public class RegistrarEstudiante extends AppCompatActivity {
         spGenero.setAdapter(adapter);
     }
 
-    // Método para cargar los nivelesEducativos en el Spinner
     private void cargarSpinnerNivelesEduc(List<NivelEducativo> nivelEducativos) {
-        // Crear un adaptador para el Spinner
         ArrayAdapter<NivelEducativo> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, nivelEducativos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spNivelEducativo.setAdapter(adapter);
     }
 
-    // Método para cargar los nivelesEducativos en el Spinner
     private void cargarSpinnerEstadoNivelesEduc(List<EstadoNivelEducativo> estadoNivelEducativos) {
-        // Crear un adaptador para el Spinner
         ArrayAdapter<EstadoNivelEducativo> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, estadoNivelEducativos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spEstado.setAdapter(adapter);
     }
 
-    // Método para cargar los nivelesEducativos en el Spinner
     private void cargarSpinnerProvincia(List<Provincia> provincias) {
-        // Crear un adaptador para el Spinner
         ArrayAdapter<Provincia> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, provincias);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spProvincia.setAdapter(adapter);
     }
 
-    // Método para cargar los nivelesEducativos en el Spinner
     private void cargarSpinnerLocalidad(List<Localidad> localidades) {
-        // Crear un adaptador para el Spinner
         ArrayAdapter<Localidad> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localidades);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spLocalidad.setAdapter(adapter);
     }
 
 
-
     public void registrarEstudiante() {
-        if (!validarCampos()) {
-            return;
-        }
+
+        if (!validarCampos()) return;
 
         // Obtener datos del formulario
         Estudiante estudiante = obtenerDatosEstudiante();

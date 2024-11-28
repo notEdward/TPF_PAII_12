@@ -20,30 +20,25 @@ import java.util.List;
 public class EstudianteViewModel extends ViewModel {
 
     private final EstudianteRepository estudianteRepository;
-
     private LiveData<List<Genero>> generosLiveData;
     private LiveData<List<NivelEducativo>> nivelesEducLiveData;
     private LiveData<List<EstadoNivelEducativo>> estadoNivelesEducLiveData;
     private LiveData<List<Provincia>> ProvinciasLiveData;
     private LiveData<List<Localidad>> LocalidadesLiveData;
-
     private MutableLiveData<Integer> provinciaIdLiveData = new MutableLiveData<>();
 
     // Constructor del ViewModel que recibe el repositorio
     public EstudianteViewModel(EstudianteRepository estudianteRepository) {
         this.estudianteRepository = estudianteRepository;
-
         LocalidadesLiveData = Transformations.switchMap(provinciaIdLiveData, idProvincia ->
                 estudianteRepository.obtenerLocalidadesPorProvincia(idProvincia)
         );
     }
 
-    // Método para registrar el estudiante
     public LiveData<Boolean> registrarEstudiante(Estudiante estudiante, int idUsuario) {
         return estudianteRepository.registrarEstudiante(estudiante, idUsuario);
     }
 
-    // Método para obtener los géneros
     public LiveData<List<Genero>> getGeneros() {
         if (generosLiveData == null) {
             generosLiveData = estudianteRepository.obtenerGeneros();
@@ -51,7 +46,6 @@ public class EstudianteViewModel extends ViewModel {
         return generosLiveData;
     }
 
-    // Método para obtener los NivelesEducativos
     public LiveData<List<NivelEducativo>> getNivelesEducativos() {
         if (nivelesEducLiveData == null) {
             nivelesEducLiveData = estudianteRepository.obtenerNivelEducativo();
@@ -59,7 +53,6 @@ public class EstudianteViewModel extends ViewModel {
         return nivelesEducLiveData;
     }
 
-    // Método para obtener los EstadoNivelesEducativos
     public LiveData<List<EstadoNivelEducativo>> getEstadoNivelesEducativos() {
         if (estadoNivelesEducLiveData == null) {
             estadoNivelesEducLiveData = estudianteRepository.obtenerEstadoNivelEducativo();
@@ -67,16 +60,14 @@ public class EstudianteViewModel extends ViewModel {
         return estadoNivelesEducLiveData;
     }
 
-    // Método para obtener los Provincias
-    public LiveData<List<Provincia>> getProvincias() {
+   public LiveData<List<Provincia>> getProvincias() {
         if (ProvinciasLiveData == null) {
             ProvinciasLiveData = estudianteRepository.obtenerProvincias();
         }
         return ProvinciasLiveData;
     }
 
-    // Métodos para gestionar localidades
-    public LiveData<List<Localidad>> getLocalidades() {
+   public LiveData<List<Localidad>> getLocalidades() {
         return LocalidadesLiveData;
     }
 

@@ -115,60 +115,6 @@ public class UsuarioRepository {
         }
     }
 
-
-
-    // Metodo para REGISTRAR un usuario ASYNC
-//    public void registrarUsuario(Usuario usuario, int tipoUsuario, DataCallback<Integer> callback) { // Recibe el tipo de usuario por parametro
-//        executor.execute(() -> {
-//
-//          // Verifica si el usuario ya existe
-//            boolean existe = existeUsuario(usuario.getNombreUsuario());
-//
-//            if (existe) {
-//                mainHandler.post(() -> {
-//                    callback.onFailure(new SQLException("El nombre de usuario ya existe."));
-//                    Toast.makeText(context, "El nombre de usuario ya existe.", Toast.LENGTH_SHORT).show();
-//                });
-//                return;
-//            }
-//
-//            String query = "INSERT INTO usuario (nombre_usuario, contrasena, id_tipo_usuario) VALUES (?, ?, ?)";
-//
-//            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass) ;
-//                 PreparedStatement preparedStatement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-//
-//                // Parametros para insertar
-//                preparedStatement.setString(1, usuario.getNombreUsuario());
-//                preparedStatement.setString(2, usuario.getContrasenia());
-//                preparedStatement.setInt(3, tipoUsuario);
-//
-//                // Ejecuto consulta de INSERT
-//                int filasAfectadas = preparedStatement.executeUpdate();
-//                if (filasAfectadas > 0) {
-//                    // Si se inserta correctamente, obtenemos el id_usuario generado automaticamente
-//                    try (ResultSet generateKeys = preparedStatement.getGeneratedKeys()) {
-//                        if(generateKeys.next()) {
-//                            int id_usuario = generateKeys.getInt(1);
-//                            mainHandler.post(() -> {
-//                                callback.onSuccess(id_usuario); // Retorna ID generado
-//                                Toast.makeText(context, "Usuario registrado exitosamente", Toast.LENGTH_SHORT).show();
-//                            });
-//                        }
-//                    }
-//                } else {
-//                    mainHandler.post(() -> {
-//                        callback.onFailure(new SQLException("Error al registrar usuario"));
-//                        Toast.makeText(context, "Error al registrar usuario", Toast.LENGTH_SHORT).show();
-//                    });
-//                }
-//            } catch (SQLException e) {
-//                mainHandler.post(() -> {
-//                    callback.onFailure(e);
-//                    Toast.makeText(context, "Error en la conexion con la base de datos", Toast.LENGTH_SHORT).show();
-//                });
-//            }
-//        });
-//    }
     public void registrarUsuario(Usuario usuario, int tipoUsuario, Connection con, DataCallback<Integer> callback) {
         executor.execute(() -> {
             String query = "INSERT INTO usuario (nombre_usuario, contrasena, id_tipo_usuario) VALUES (?, ?, ?)";
