@@ -165,7 +165,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Modificar Tutor"
+        android:text="Modificar datos Tutor"
         android:textColor="#FAF8F8"
         android:textSize="34sp"
         android:textStyle="bold"

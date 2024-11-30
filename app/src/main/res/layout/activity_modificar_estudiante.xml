@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".actividades.registracion.RegistrarEstudiante">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar4"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="5dp">
+
+            <TextView
+                android:id="@+id/tvDatosEst"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginTop="15sp"
+                android:paddingStart="5dp"
+                android:text="@string/tvDatos"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtNombreEstMOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:ems="10"
+                android:hint="@string/txtNombre"
+                android:inputType="text"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/txtApellidoEstMOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:ems="10"
+                android:hint="@string/txtApellido"
+                android:inputType="text"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvGeneroEst"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="25dp"
+                    android:text="@string/txtGenero"
+                    android:textSize="20sp" />
+
+                <Spinner
+                    android:id="@+id/spGeneroEstMOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8sp"
+                    android:layout_marginEnd="15sp"
+                    android:layout_marginBottom="25sp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="25dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvContactoEst"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:paddingStart="5dp"
+                android:text="@string/tvContacto"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtEmailEstMOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:ems="10"
+                android:hint="@string/txtEmail"
+                android:inputType="textEmailAddress"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/txtTelefonoEstMOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:ems="10"
+                android:hint="@string/txtTelefono"
+                android:inputType="phone"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvUbicacionEst"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:paddingStart="5dp"
+                android:text="@string/tvUbicacion"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtDireccionEstMOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:ems="10"
+                android:hint="@string/txtDireccion"
+                android:inputType="text"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvProvinciaEst"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginTop="8sp"
+                    android:text="@string/tvProvincia"
+                    android:textSize="20sp" />
+
+                <Spinner
+                    android:id="@+id/spProvinciaEstMOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvLocalidadEst"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginTop="8sp"
+                    android:text="@string/tvLocalidad"
+                    android:textSize="20sp" />
+
+                <Spinner
+                    android:id="@+id/spLocalidadEstMOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="20dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvEducacionEst"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:text="@string/tvEducacion"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtNivelEducativoEst"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/txtNivelEducativo"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spNivelEducativoEstMOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtEstadoEducativoEst"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="@string/txtEstado"
+                    android:textSize="20sp" />
+
+                <Spinner
+                    android:id="@+id/spEstadoEducativoEstMOD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="8dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvExperienciaLaboralEst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginTop="8sp"
+                android:paddingStart="5dp"
+                android:text="@string/tvExperienciaLaboral"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtLugarTabajoEstMOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15sp"
+                android:layout_marginTop="8sp"
+                android:layout_marginEnd="15sp"
+                android:ems="10"
+                android:hint="@string/txtLugar"
+                android:inputType="text"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/txtCargoEstMOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15sp"
+                android:layout_marginTop="8sp"
+                android:layout_marginEnd="15sp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/txtCargo"
+                android:inputType="textMultiLine"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/txtTareasEstMOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15sp"
+                android:layout_marginTop="8sp"
+                android:layout_marginEnd="15sp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/txtTareas"
+                android:inputType="textMultiLine"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/txtDuracionEstMOD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15sp"
+                android:layout_marginTop="8sp"
+                android:layout_marginEnd="15sp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/txtDuracion"
+                android:inputType="textMultiLine"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/btnModificarEst"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30sp"
+                android:layout_marginEnd="30sp"
+                android:text="@string/btnModificar"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tvRegistrarEstudiante"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Modificar datos Estudiante"
+        android:textColor="#FFFCFC"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.386"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar4" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

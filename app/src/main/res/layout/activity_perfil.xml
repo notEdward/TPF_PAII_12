@@ -26,14 +26,17 @@
         android:padding="8dp" />
 
     <!-- Caja de texto para el nombre -->
-    <EditText
-        android:id="@+id/et_nombre_usuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nombre de usuario"
-        android:inputType="text" />
 
     <!-- Caja de texto para el correo -->
+
+    <TextView
+        android:id="@+id/tvNombreUserMOD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Usuario: "
+        android:textSize="20sp"
+        android:textStyle="bold|italic" />
 
     <Button
         android:id="@+id/btnCambiarContrasena"
