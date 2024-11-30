@@ -61,7 +61,4 @@ public class IniciarRegistro extends AppCompatActivity {
             }
         });
     }
-
-
-
 }

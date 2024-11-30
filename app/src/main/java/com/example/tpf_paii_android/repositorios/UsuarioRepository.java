@@ -38,6 +38,76 @@ public class UsuarioRepository {
         void onFailure(Exception e);
     }
 
+    public boolean modificarContrasena(String nombreUsuario, String nuevaContrasena) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> futureResult = executor.submit(() -> {
+            String query = "UPDATE usuario SET contrasena = ? WHERE nombre_usuario = ?";
+            boolean actualizado = false;
+
+            try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = cn.prepareStatement(query)) {
+
+                ps.setString(1, nuevaContrasena);
+                ps.setString(2, nombreUsuario);
+
+                int filasAfectadas = ps.executeUpdate();
+                actualizado = filasAfectadas > 0; // Si se afectó al menos una fila, la contraseña se actualizó correctamente.
+
+            } catch (SQLException e) {
+                System.err.println("Error al modificar la contraseña: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            return actualizado;
+        });
+
+        try {
+            return futureResult.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false; // Error al intentar modificar la contraseña
+        } finally {
+            executor.shutdown();
+        }
+    }
+
+
+    public boolean verificarContrasenaActual(String nombreUsuario, String contrasenaActual) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> futureResult = executor.submit(() -> {
+            String query = "SELECT contrasena FROM usuario WHERE nombre_usuario = ?";
+            boolean coincide = false;
+
+            try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = cn.prepareStatement(query)) {
+
+                ps.setString(1, nombreUsuario);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String contrasenaAlmacenada = rs.getString("contrasena");
+                        coincide = contrasenaAlmacenada.equals(contrasenaActual); // Comparación de contraseñas
+                    }
+                }
+            } catch (SQLException e) {
+                System.err.println("Error al verificar la contraseña actual: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            return coincide;
+        });
+
+        try {
+            return futureResult.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false; // En caso de error, asumimos que no coincide
+        } finally {
+            executor.shutdown();
+        }
+    }
+
+
     //Simulacion Asincronica
    public Integer registrarUsuario(Usuario user) {
         ExecutorService executor = Executors.newSingleThreadExecutor();

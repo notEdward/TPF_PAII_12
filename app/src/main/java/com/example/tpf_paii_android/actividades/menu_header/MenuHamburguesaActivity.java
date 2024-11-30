@@ -60,6 +60,8 @@ public class MenuHamburguesaActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ForosActivity.class));
             } else if (itemId == R.id.nav_tutorias) {
                 startActivity(new Intent(this, TutoriasActivity.class));
+            } else if (itemId == R.id.nav_perfil) {
+                startActivity(new Intent(this, PerfilActivity.class));
 
             } else if (itemId == R.id.nav_salir) {
                 Toast.makeText(this, "Saliste exitosamente", Toast.LENGTH_SHORT).show();

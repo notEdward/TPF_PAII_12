@@ -34,11 +34,24 @@
         android:inputType="text" />
 
     <!-- Caja de texto para el correo -->
-    <EditText
-        android:id="@+id/et_correo_usuario"
+
+    <Button
+        android:id="@+id/btnCambiarContrasena"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Correo electrónico"
-        android:inputType="textEmailAddress" />
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:text="Cambiar contraseña"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textStyle="italic" />
+
+    <Button
+        android:id="@+id/btnGestionarPerfil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gestionar perfil"
+        android:textSize="20sp"
+        android:textStyle="italic" />
 
 </LinearLayout>
