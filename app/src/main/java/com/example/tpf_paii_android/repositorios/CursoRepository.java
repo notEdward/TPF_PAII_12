@@ -8,12 +8,15 @@ import com.example.tpf_paii_android.modelos.Curso;
 import com.example.tpf_paii_android.modelos.Evaluacion;
 import com.example.tpf_paii_android.modelos.Inscripcion;
 import com.example.tpf_paii_android.modelos.InscripcionEstado;
+import com.example.tpf_paii_android.modelos.MisCursoItem;
 import com.example.tpf_paii_android.modelos.Opcion;
 import com.example.tpf_paii_android.modelos.Pregunta;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -359,7 +362,54 @@ public void actualizarEstadoCurso(int idCurso, int nuevoEstado, DataCallback<Boo
         }
     });
 }
-//optimizacin de recursos
+    public void obtenerMisCursos(int idUsuario, DataCallback<List<MisCursoItem>> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            List<MisCursoItem> misCursoItems = new ArrayList<>();
+
+            String queryInscripciones = "SELECT c.nombre_curso, i.estado_inscripcion " +
+                    "FROM curso c " +
+                    "JOIN inscripciones i ON c.id_curso = i.id_curso " +
+                    "WHERE i.id_usuario = ?";
+
+            String queryEvaluaciones = "SELECT c.nombre_curso, i.estado_inscripcion, e.nota_obtenida, e.fecha_finalizacion " +
+                    "FROM curso c " +
+                    "JOIN inscripciones i ON c.id_curso = i.id_curso " +
+                    "JOIN evaluaciones e ON i.id_inscripcion = e.id_inscripcion " +
+                    "WHERE i.id_usuario = ?";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement stmtEvaluaciones = con.prepareStatement(queryEvaluaciones);
+                 PreparedStatement stmtInscripciones = con.prepareStatement(queryInscripciones)) {
+
+                stmtInscripciones.setInt(1, idUsuario);
+                ResultSet rsInscripciones = stmtInscripciones.executeQuery();
+                while (rsInscripciones.next()) {
+                    misCursoItems.add(new MisCursoItem(
+                            rsInscripciones.getString("nombre_curso"),
+                            rsInscripciones.getString("estado_inscripcion"),
+                            false)); // para ver que tipo ds
+                }
+
+                stmtEvaluaciones.setInt(1, idUsuario);
+                ResultSet rsEvaluaciones = stmtEvaluaciones.executeQuery();
+                while (rsEvaluaciones.next()) {
+                    misCursoItems.add(new MisCursoItem(
+                            rsEvaluaciones.getString("nombre_curso"),
+                            rsEvaluaciones.getString("estado_inscripcion"),
+                            rsEvaluaciones.getDouble("nota_obtenida"),
+                            rsEvaluaciones.getDate("fecha_finalizacion"))); // si es eval
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(misCursoItems));
+
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
+    //optimizacin de recursos
     public void shutdownExecutor() {
         executor.shutdown();
     }

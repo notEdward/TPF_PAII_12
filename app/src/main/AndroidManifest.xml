@@ -76,7 +76,11 @@
             android:name=".actividades.cursos.CursoDetalleActivity"
             android:label="Filtro de Cursos" />
         <activity android:name=".actividades.cursos.CrearCursoActivity" />
-        <activity android:name=".actividades.cursos.ModificarCursoActivity" /> <!-- <activity -->
+        <activity android:name=".actividades.cursos.ModificarCursoActivity" />
+        <activity
+            android:name=".actividades.cursos.MisCursosActivity"
+            android:label="Mis Cursos" />
+        <!-- <activity -->
         <!-- android:name=".actividades.cursos.CursoActivity" -->
         <!-- android:exported="true"> -->
         <!-- <intent-filter> -->

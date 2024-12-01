@@ -53,6 +53,13 @@
                 android:textColor="#000000"
                 android:layout_weight="1" />
             <Button
+                android:id="@+id/btnMisCursos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FF474C"
+                android:text="Mis Cursos" />
+
+            <Button
                 android:id="@+id/btnCrear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

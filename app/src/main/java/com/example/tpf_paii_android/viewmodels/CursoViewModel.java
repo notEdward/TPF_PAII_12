@@ -9,12 +9,15 @@ import com.example.tpf_paii_android.modelos.Curso;
 import com.example.tpf_paii_android.modelos.Evaluacion;
 import com.example.tpf_paii_android.modelos.Inscripcion;
 import com.example.tpf_paii_android.modelos.InscripcionEstado;
+import com.example.tpf_paii_android.modelos.MisCursoItem;
 import com.example.tpf_paii_android.modelos.Opcion;
 import com.example.tpf_paii_android.modelos.Pregunta;
 import com.example.tpf_paii_android.repositorios.CursoRepository;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CursoViewModel extends ViewModel {
     private CursoRepository cursoRepository;
@@ -28,14 +31,16 @@ private MutableLiveData<InscripcionEstado> inscripcionActiva = new MutableLiveDa
     private final MutableLiveData<List<CategoriaCurso>> categoriasLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> cursoGuardadoLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> bajaCursoLiveData = new MutableLiveData<>();
-
-
+//    private final MutableLiveData<MisCursosData> misCursosData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private MutableLiveData<List<MisCursoItem>> misCursosData;
 
     public CursoViewModel() {
         cursoRepository = new CursoRepository();
         cursosLiveData = new MutableLiveData<>();
         cursosFiltradosLiveData = new MutableLiveData<>();
         errorLiveData = new MutableLiveData<>();
+        misCursosData = new MutableLiveData<>();
     }
     public LiveData<List<Curso>> getCursosFiltrados() {
         return cursosFiltradosLiveData;
@@ -67,6 +72,16 @@ private MutableLiveData<InscripcionEstado> inscripcionActiva = new MutableLiveDa
     public LiveData<Boolean> getBajaCursoLiveData() {
         return bajaCursoLiveData;
     }
+//    public LiveData<MisCursosData> getMisCursosData() {
+//        return misCursosData;
+//    }
+public LiveData<List<MisCursoItem>> getMisCursos() {
+    return misCursosData;
+}
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
+
     public void cargarCursos() {
         cursoRepository.getAllCursos(new CursoRepository.DataCallback<ArrayList<Curso>>() {
             @Override
@@ -235,6 +250,62 @@ public void verificarInscripcionEstado(int idCurso, int idUsuario) {
             public void onFailure(Exception e) {
                 bajaCursoLiveData.setValue(false);
                  }
+        });
+    }
+
+//    public void cargarDatos(int idUsuario) {
+////        cursoRepository.obtenerEvaluacionesYInscripciones(idUsuario, new CursoRepository.DataCallback<MisCursosData>() {
+////            @Override
+////            public void onSuccess(MisCursosData data) {
+////                misCursosData.postValue(data);
+////            }
+////
+////            @Override
+////            public void onFailure(Exception e) {
+////                errorMessage.postValue(e.getMessage());
+////            }
+////        });
+////    }
+
+//public void cargarDatos(int idUsuario) {
+//    cursoRepository.obtenerMisCursos(idUsuario, new CursoRepository.DataCallback<List<MisCursoItem>>() {
+//        @Override
+//        public void onSuccess(List<MisCursoItem> data) {
+//            misCursosData.postValue(data);
+//        }
+//
+//        @Override
+//        public void onFailure(Exception e) {
+//            errorMessage.postValue(e.getMessage());
+//        }
+//    });
+//}
+
+    public void cargarDatos(int idUsuario) {
+        cursoRepository.obtenerMisCursos(idUsuario, new CursoRepository.DataCallback<List<MisCursoItem>>() {
+            @Override
+            public void onSuccess(List<MisCursoItem> data) {
+
+                //uso un hash para no duplicar cursos por las inscrpicones y eval
+                Map<String, MisCursoItem> cursosUnicos = new HashMap<>();
+                for (MisCursoItem item : data) {
+                    // si hay evaluacion no ponemos la inscrpcion sola
+                    if (item.getNotaObtenida() != null) {
+                        cursosUnicos.put(item.getNombreCurso(), item);
+                    } else {
+                        //se pone la inscripcion si no hay eval
+                        cursosUnicos.putIfAbsent(item.getNombreCurso(), item);
+                    }
+                }
+                //pasamos a una lista simple
+                List<MisCursoItem> listaSinDuplicados = new ArrayList<>(cursosUnicos.values());
+                misCursosData.postValue(listaSinDuplicados);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.postValue(e.getMessage());
+            }
         });
     }
 

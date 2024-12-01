@@ -3,9 +3,17 @@ package com.example.tpf_paii_android;
 import android.app.Application;
 
 public class MyApp extends Application {
-    private int idUsuario = 4; // Valor predeterminado, puedes cambiarlo
-    private String tipoUsuario = "Admin"; // Valor predeterminado, puedes cambiarlo
+    private int idUsuario = 4; //predet admin
+    private String tipoUsuario = "Admin";
     private String nombreUsuario = "pepito";
+    private int idEspecifico;
+
+
+    //para obeter el id del usuario ya sea tutor/estudiante/mempresa
+    //esto lo validamos en el repo al hacer login
+    public int getidEspecifico() { return idEspecifico; }
+    public void setidEspecifico(int idEspecifico) { this.idEspecifico = idEspecifico; }
+
 
     public int getIdUsuario() {
         return idUsuario;

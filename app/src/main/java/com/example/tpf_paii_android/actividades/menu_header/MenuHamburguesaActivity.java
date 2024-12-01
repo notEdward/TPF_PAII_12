@@ -65,7 +65,12 @@ public class MenuHamburguesaActivity extends AppCompatActivity {
 
             } else if (itemId == R.id.nav_salir) {
                 Toast.makeText(this, "Saliste exitosamente", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, Login.class));
+//                startActivity(new Intent(this, Login.class));
+
+                Intent intent = new Intent(this, Login.class);
+                // Limpiar el stack de actividades
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 finish();
             }
             drawerLayout.closeDrawer(Gravity.START);

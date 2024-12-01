@@ -1,10 +1,9 @@
 package com.example.tpf_paii_android.actividades.ofertas;
 
-import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +22,7 @@ public class OfertaDetalleActivity extends AppCompatActivity {
     private int idUsuario;
     private String nombreUsuario;
     private Button btnPostularse;
+    private String tipoUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class OfertaDetalleActivity extends AppCompatActivity {
 
         MyApp app = (MyApp) getApplication();
         idUsuario = app.getIdUsuario();
-//        tipo_usuario = app.getTipoUsuario();
+        tipoUsuario = app.getTipoUsuario();
         nombreUsuario = app.getNombreUsuario();
 
         idOfertaEmpleo = getIntent().getIntExtra("id_oferta_empleo", -1);
@@ -75,11 +75,14 @@ public class OfertaDetalleActivity extends AppCompatActivity {
 
         // Configura el botón de postulación
         btnPostularse = findViewById(R.id.btnPostularse);
-        btnPostularse.setOnClickListener(v -> {
-            ofertaViewModel.postularUsuario(idOfertaEmpleo, idUsuario);
-        });
-        //
 
+        if (!"Estudiante".equals(tipoUsuario)) {
+            btnPostularse.setVisibility(View.GONE);
+        } else {
+            btnPostularse.setOnClickListener(v -> {
+                ofertaViewModel.postularUsuario(idOfertaEmpleo, idUsuario);
+            });
+        }
 
         // Observar mensajes de error
         ofertaViewModel.getErrorMessage().observe(this, errorMessage -> {

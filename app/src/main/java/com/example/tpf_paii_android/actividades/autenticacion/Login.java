@@ -68,6 +68,7 @@ public class Login extends AppCompatActivity {
                     //auxiliar para converir
                     String tipoUsuarioString = TipoUsuarioUtils.getTipoUsuario(usuarioLogin.getTipoUsuario());
                     app.setTipoUsuario(tipoUsuarioString);
+                    app.setidEspecifico(usuarioLogin.getIdEspecifico());
 
                     // Redirigir según el tipo de usuario
                     switch (usuarioLogin.getTipoUsuario()) {

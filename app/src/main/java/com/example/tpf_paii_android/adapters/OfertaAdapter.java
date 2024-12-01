@@ -26,11 +26,13 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
     private List<OfertaEmpleo> ofertas;
     private Context context;
     private String tipoUsuario; // Nuevo campo para el tipo de usuario
+    private int idEspecifico;
 
-    public OfertaAdapter(Context context, List<OfertaEmpleo> ofertas, String tipoUsuario) {
+    public OfertaAdapter(Context context, List<OfertaEmpleo> ofertas, String tipoUsuario, int idEspecifico) {
         this.context = context;
         this.ofertas = ofertas != null ? ofertas : new ArrayList<>();
         this.tipoUsuario = tipoUsuario;
+        this.idEspecifico = idEspecifico;
     }
 
     public static class OfertaViewHolder extends RecyclerView.ViewHolder {
@@ -74,57 +76,57 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
         holder.imageOferta.setImageResource(imageResId);
 
         holder.itemView.setOnClickListener(v -> {
-            if ("Empresa".equals(tipoUsuario)) {
-                // Crear el PopupMenu para opciones de "empresa"
+            if ("Empresa".equals(tipoUsuario) && (oferta.getIdEmpresa() == idEspecifico) ) {
+                // desplegable de opciones
                 PopupMenu popupMenu = new PopupMenu(context, holder.itemView);
-                popupMenu.inflate(R.menu.menu_oferta_opciones); // Usamos el menú de opciones que has proporcionado
+                popupMenu.inflate(R.menu.menu_oferta_opciones);
 
-                popupMenu.setOnMenuItemClickListener(item -> {
-                    if (item.getItemId() == R.id.action_ver) {
-                        // Acción para "Ver" oferta
-                        Intent intentVer = new Intent(context, OfertaDetalleActivity.class);
-                        intentVer.putExtra("tituloOferta", oferta.getTitulo());
-                        intentVer.putExtra("descripcionOferta", oferta.getDescripcion());
-                        intentVer.putExtra("id_oferta_empleo", oferta.getId_ofertaEmpleo());
-                        intentVer.putExtra("imageResId", imageResId);
-                        context.startActivity(intentVer);
-                        return true;
+                    popupMenu.setOnMenuItemClickListener(item -> {
+                        if (item.getItemId() == R.id.action_ver) {
+                            // Acción para "Ver" oferta
+                            Intent intentVer = new Intent(context, OfertaDetalleActivity.class);
+                            intentVer.putExtra("tituloOferta", oferta.getTitulo());
+                            intentVer.putExtra("descripcionOferta", oferta.getDescripcion());
+                            intentVer.putExtra("id_oferta_empleo", oferta.getId_ofertaEmpleo());
+                            intentVer.putExtra("imageResId", imageResId);
+                            context.startActivity(intentVer);
+                            return true;
 
-                    } else if (item.getItemId() == R.id.action_modificar) {
-                        // Acción para "Modificar" oferta
-                        Intent intentModificar = new Intent(context, ModificarOfertaActivity.class);
-                        intentModificar.putExtra("id_oferta_empleo", oferta.getId_ofertaEmpleo());
-                        intentModificar.putExtra("titulo", oferta.getTitulo());
-                        intentModificar.putExtra("descripcion", oferta.getDescripcion());
-                        intentModificar.putExtra("direccion", oferta.getDireccion());
-                        intentModificar.putExtra("otrosRequisitos", oferta.getOtrosRequisitos());
-                        intentModificar.putExtra("id_tipo_empleo", oferta.getIdTipoEmpleo());
-                        intentModificar.putExtra("id_modalidad", oferta.getIdModalidad());
-                        intentModificar.putExtra("id_nivel_educativo", oferta.getIdNivelEducativo());
-                        intentModificar.putExtra("id_curso", oferta.getIdCurso());
-                        intentModificar.putExtra("id_localidad", oferta.getIdLocalidad());
-                        intentModificar.putExtra("imageResId", imageResId);
-                        context.startActivity(intentModificar);
-                        return true;
+                        } else if (item.getItemId() == R.id.action_modificar) {
+                            // Acción para "Modificar" oferta
+                            Intent intentModificar = new Intent(context, ModificarOfertaActivity.class);
+                            intentModificar.putExtra("id_oferta_empleo", oferta.getId_ofertaEmpleo());
+                            intentModificar.putExtra("titulo", oferta.getTitulo());
+                            intentModificar.putExtra("descripcion", oferta.getDescripcion());
+                            intentModificar.putExtra("direccion", oferta.getDireccion());
+                            intentModificar.putExtra("otrosRequisitos", oferta.getOtrosRequisitos());
+                            intentModificar.putExtra("id_tipo_empleo", oferta.getIdTipoEmpleo());
+                            intentModificar.putExtra("id_modalidad", oferta.getIdModalidad());
+                            intentModificar.putExtra("id_nivel_educativo", oferta.getIdNivelEducativo());
+                            intentModificar.putExtra("id_curso", oferta.getIdCurso());
+                            intentModificar.putExtra("id_localidad", oferta.getIdLocalidad());
+                            intentModificar.putExtra("imageResId", imageResId);
+                            context.startActivity(intentModificar);
+                            return true;
 
-                    } else if (item.getItemId() == R.id.action_baja) {
-                        // Acción para "Baja" oferta, mostrar un dialogo de confirmación
-                        new AlertDialog.Builder(context)
-                                .setTitle("Confirmación")
-                                .setMessage("¿Está seguro que desea dar de baja esta oferta?")
-                                .setPositiveButton("Sí", (dialog, which) -> {
-                                    // Notificar a la actividad para dar de baja la oferta
-                                    if (context instanceof OfertaActivity) {
-                                        ((OfertaActivity) context).darDeBajaOferta(oferta.getId_ofertaEmpleo());
-                                    }
-                                })
-                                .setNegativeButton("No", null)
-                                .show();
-                        return true;
-                    }
+                        } else if (item.getItemId() == R.id.action_baja) {
+                            // Acción para "Baja" oferta, mostrar un dialogo de confirmación
+                            new AlertDialog.Builder(context)
+                                    .setTitle("Confirmación")
+                                    .setMessage("¿Está seguro que desea dar de baja esta oferta?")
+                                    .setPositiveButton("Sí", (dialog, which) -> {
+                                        // Notificar a la actividad para dar de baja la oferta
+                                        if (context instanceof OfertaActivity) {
+                                            ((OfertaActivity) context).darDeBajaOferta(oferta.getId_ofertaEmpleo());
+                                        }
+                                    })
+                                    .setNegativeButton("No", null)
+                                    .show();
+                            return true;
+                        }
 
-                    return false;
-                });
+                        return false;
+                    });
 
                 popupMenu.show();
             } else {

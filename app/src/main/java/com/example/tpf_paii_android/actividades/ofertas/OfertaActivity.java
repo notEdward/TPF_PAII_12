@@ -31,7 +31,7 @@ public class OfertaActivity extends MenuHamburguesaActivity {
     private EditText editTextBuscar;
     private List<OfertaEmpleo> listaOfertasEmpleo = new ArrayList<>();
     private Button btnFiltrar;
-    private int idUsuario;
+    private int idUsuario, idEspecifico;
     private String nombreUsuario;
     private DrawerLayout drawerLayout;
     private String tipo_usuario;
@@ -55,9 +55,10 @@ public class OfertaActivity extends MenuHamburguesaActivity {
         idUsuario = app.getIdUsuario();
         tipo_usuario = app.getTipoUsuario();
         nombreUsuario = app.getNombreUsuario();
+        idEspecifico = app.getidEspecifico();
         setupDrawer(nombreUsuario, tipo_usuario);
 
-        adapter = new OfertaAdapter(this,null, tipo_usuario);
+        adapter = new OfertaAdapter(this,null, tipo_usuario, idEspecifico);
         recyclerView.setAdapter(adapter);
 
         ofertaViewModel = new ViewModelProvider(this).get(OfertaViewModel.class);

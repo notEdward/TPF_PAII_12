@@ -28,7 +28,7 @@ public class CursoActivity extends MenuHamburguesaActivity {
     private CursoAdapter cursoAdapter;
     private CursoViewModel cursoViewModel;
     private Button btnFiltrar;
-    private Button btnCrear;
+    private Button btnCrear, btnMisCursos;
     private EditText editTextBuscar;
     private static final int REQUEST_FILTRO = 1;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -56,6 +56,7 @@ public class CursoActivity extends MenuHamburguesaActivity {
         recyclerViewCursos = findViewById(R.id.recyclerViewCursos);
         btnFiltrar = findViewById(R.id.btnFiltrar);
         btnCrear = findViewById(R.id.btnCrear); // admin
+        btnMisCursos = findViewById(R.id.btnMisCursos);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
         recyclerViewCursos.setLayoutManager(gridLayoutManager);
         recyclerViewCursos.setHasFixedSize(true);
@@ -66,6 +67,9 @@ public class CursoActivity extends MenuHamburguesaActivity {
 
         if ("ADMIN".equals(tipo_usuario.toUpperCase())) {
             btnCrear.setVisibility(View.VISIBLE);
+        }
+        if (!"Estudiante".equalsIgnoreCase(tipo_usuario)) {
+            btnMisCursos.setVisibility(View.GONE);
         }
         ////FILTROS POR LUPITA
         editTextBuscar = findViewById(R.id.editTextBuscar); // campo de busq
@@ -90,6 +94,11 @@ public class CursoActivity extends MenuHamburguesaActivity {
             }
             @Override
             public void afterTextChanged(Editable s) {}
+        });
+        ////
+        btnMisCursos.setOnClickListener(v -> {
+            Intent intent = new Intent(CursoActivity.this, MisCursosActivity.class);
+            startActivity(intent);
         });
         ////////
         // ver filtros disponibles listeners
