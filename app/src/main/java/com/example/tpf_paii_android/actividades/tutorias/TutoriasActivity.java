@@ -1,26 +1,88 @@
 package com.example.tpf_paii_android.actividades.tutorias;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.tpf_paii_android.MyApp;
 import com.example.tpf_paii_android.R;
+import com.example.tpf_paii_android.actividades.menu_header.MenuHamburguesaActivity;
+import com.example.tpf_paii_android.adapters.TutoriasAdapter;
+import com.example.tpf_paii_android.modelos.Curso;
+import com.example.tpf_paii_android.viewmodels.TutoriasViewModel;
 
-public class TutoriasActivity extends AppCompatActivity {
+import java.util.List;
 
+public class TutoriasActivity extends MenuHamburguesaActivity {
+
+    private RecyclerView recyclerViewTutorias;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private TutoriasViewModel tutoriasViewModel;
+    private TutoriasAdapter tutoriasAdapter;
+
+    private String nombreUsuario;
+    private String tipo_usuario;
+
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_tutorias);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        // Accede a MyApp
+        MyApp app = (MyApp) getApplication();
+
+        // Obtengo ID de usuario
+        int idUsuario = app.getIdUsuario();
+        tipo_usuario = app.getTipoUsuario();
+        nombreUsuario = app.getNombreUsuario();
+
+        setupDrawer(nombreUsuario, tipo_usuario);
+
+        // Inicializa las vistas
+        recyclerViewTutorias = findViewById(R.id.recyclerViewTutorias);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayoutTutorias);
+
+        recyclerViewTutorias.setLayoutManager(new LinearLayoutManager(this));
+
+        // Config ViewModel
+        tutoriasViewModel = new ViewModelProvider(this).get(TutoriasViewModel.class);
+
+        // Crea el adaptador
+        tutoriasAdapter = new TutoriasAdapter();
+        recyclerViewTutorias.setAdapter(tutoriasAdapter);
+
+        // Observa LiveData de cursos
+        tutoriasViewModel.getCursosLiveData().observe(this, this::mostrarCursos);
+
+        // Observa errores
+        tutoriasViewModel.getErrorLiveData().observe(this, error -> {
+            swipeRefreshLayout.setRefreshing(false);
+            Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show();
         });
+
+        // SwipeRefresh Listener
+        swipeRefreshLayout.setOnRefreshListener(() -> tutoriasViewModel.cargarCursosPorEstudiante(idUsuario));
+
+        // Carga inicial
+        swipeRefreshLayout.setRefreshing(true);
+        tutoriasViewModel.cargarCursosPorEstudiante(idUsuario);
     }
+
+    private void mostrarCursos(List<Curso> cursos) {
+        swipeRefreshLayout.setRefreshing(false);
+        if (cursos == null || cursos.isEmpty()) {
+            Toast.makeText(this, "No estás registrado a ningun curso.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Actualiza adaptador con la lista de cursos
+        tutoriasAdapter.setCursos(cursos);
+    }
+
 }

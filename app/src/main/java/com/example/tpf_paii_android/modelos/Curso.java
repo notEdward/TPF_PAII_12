@@ -27,6 +27,17 @@ public class Curso {
         this.estado = estado;
     }
 
+    // Compara objetos Curso
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Curso curso = (Curso) obj;
+        return idCurso == curso.idCurso && nombreCurso.equals(curso.nombreCurso) &&
+                descripcion.equals(curso.descripcion) && idCategoria == curso.idCategoria &&
+                respuestasCorrectas.equals(curso.respuestasCorrectas) && estado == curso.estado;
+    }
+
     // Getters y Setters
     public int getIdCurso() { return idCurso; }
     public void setIdCurso(int idCurso) { this.idCurso = idCurso; }
