@@ -26,5 +26,13 @@
             android:text="Nombre del curso"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnSolicitarTutoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#8A2BE2"
+            android:text="Solicitar Tutoría"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
