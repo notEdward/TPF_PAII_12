@@ -2,6 +2,7 @@ package com.example.tpf_paii_android.actividades.tutorias;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -26,7 +27,7 @@ public class TutoriasActivity extends MenuHamburguesaActivity {
     private TutoriasAdapter tutoriasAdapter;
 
     private String nombreUsuario;
-    private String tipo_usuario;
+    private String nombreTipoUsuario;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -34,15 +35,22 @@ public class TutoriasActivity extends MenuHamburguesaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorias);
 
+        TextView txtNombre = findViewById(R.id.txtNombre);
+        TextView txtTipoUsuario = findViewById(R.id.txtTipoUsuario);
+
         // Accede a MyApp
         MyApp app = (MyApp) getApplication();
 
-        // Obtengo ID de usuario
+        // Obtengo datos desde MyApp
         int idUsuario = app.getIdUsuario();
-        tipo_usuario = app.getTipoUsuario();
         nombreUsuario = app.getNombreUsuario();
+        nombreTipoUsuario = app.getNombreTipoUsuario();
 
-        setupDrawer(nombreUsuario, tipo_usuario);
+        // Config TextView
+        txtNombre.setText(nombreUsuario);
+        txtTipoUsuario.setText(nombreTipoUsuario);
+
+        setupDrawer(nombreUsuario, nombreTipoUsuario);
 
         // Inicializa las vistas
         recyclerViewTutorias = findViewById(R.id.recyclerViewTutorias);
