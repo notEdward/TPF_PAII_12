@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -49,6 +50,13 @@ public class MenuHamburguesaActivity extends AppCompatActivity {
             startActivity(intent);
         });
         menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+
+        // Oculta la opción 'TUTORIAS' del menu si el tipo de usuario es 'Empresa'
+        if ("Empresa".equals(tipoUsuario)) {
+            MenuItem tutoriasOpcion = navigationView.getMenu().findItem(R.id.nav_tutorias);
+            tutoriasOpcion.setVisible(false);
+        }
+
 
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             int itemId = menuItem.getItemId();
