@@ -36,18 +36,14 @@ public class TutorRepository {
         void onFailure(Exception e);
     }
 
-
-
     public Tutor obtenerTutor(int idTutor) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Tutor> futureResult = executor.submit(() -> {
-            String query = "SELECT nombre, apellido, edad, id_genero, ocupacion, pasatiempos, info_adicional " +
-                    "FROM tutor WHERE id_tutor = ?";
+            String query = "SELECT nombre, apellido, edad, id_genero, ocupacion, pasatiempos, info_adicional FROM tutor WHERE id_tutor = ?";
             Tutor tutor = null;
 
             try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
                  PreparedStatement ps = cn.prepareStatement(query)) {
-
                 ps.setInt(1, idTutor);
 
                 try (ResultSet rs = ps.executeQuery()) {
@@ -63,27 +59,56 @@ public class TutorRepository {
                         );
                     }
                 }
-
             } catch (SQLException e) {
                 System.err.println("Error al obtener el tutor: " + e.getMessage());
                 e.printStackTrace();
             }
-
             return tutor;
         });
-
         try {
-            return futureResult.get(); // Espera el resultado del hilo secundario
+            return futureResult.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            return null; // Error al obtener el tutor
+            return null;
         } finally {
             executor.shutdown();
         }
     }
 
+    public boolean actualizarTutor(Tutor tutor) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> futureResult = executor.submit(() -> {
+            String query = "UPDATE tutor SET nombre = ?, apellido = ?, edad = ?, id_genero = ?, ocupacion = ?, pasatiempos = ?, " +
+                    "info_adicional = ? WHERE id_tutor = ?";
 
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setString(1, tutor.getNombre());
+                ps.setString(2, tutor.getApellido());
+                ps.setInt(3, tutor.getEdad());
+                ps.setInt(4, tutor.getIdGenero());
+                ps.setString(5, tutor.getOcupacion());
+                ps.setString(6, tutor.getPasatiempos());
+                ps.setString(7, tutor.getInfoAdicional());
+                ps.setInt(8, tutor.getIdTutor());
 
+                int filasAfectadas = ps.executeUpdate();
+                return filasAfectadas > 0;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
+        try {
+            return futureResult.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            executor.shutdown();
+        }
+    }
 
 
 
@@ -156,9 +181,6 @@ public class TutorRepository {
             }
         });
     }
-
-
-
     // Método para mostrar un Toast
     private void showToast(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
