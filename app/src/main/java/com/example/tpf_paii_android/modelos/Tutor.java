@@ -32,6 +32,17 @@ public class Tutor extends Usuario{
         this.infoAdicional = infoAdicional;
     }
 
+    public Tutor(String nombre, String apellido, int edad, int idGenero, String ocupacion, String pasatiempos, String infoAdicional) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.edad = edad;
+        this.idGenero = idGenero;
+        this.ocupacion = ocupacion;
+        this.pasatiempos = pasatiempos;
+        this.infoAdicional = infoAdicional;
+
+    }
+
 
     // Getters y setters
 

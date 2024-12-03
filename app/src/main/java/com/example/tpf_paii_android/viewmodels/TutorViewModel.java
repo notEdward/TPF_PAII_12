@@ -27,6 +27,9 @@ public class TutorViewModel extends ViewModel {
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> registroExitosoLiveData = new MutableLiveData<>();
 
+    private final MutableLiveData<Tutor> tutorLiveData = new MutableLiveData<>();
+
+
     // Ejecutor
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -68,6 +71,31 @@ public class TutorViewModel extends ViewModel {
     public LiveData<Boolean> getRegistroExitoso() {
         return registroExitosoLiveData;
     }
+
+
+    // Método para cargar los datos del tutor
+    public void cargarTutor(int idTutor) {
+        // Ejecutar en un hilo en segundo plano para evitar bloquear el hilo principal
+        new Thread(() -> {
+            Tutor tutor = tutorRepository.obtenerTutor(idTutor);  // Llamada al método de TutorRepository
+            if (tutor != null) {
+                tutorLiveData.postValue(tutor);  // Actualiza el LiveData con los datos del tutor
+            } else {
+                errorLiveData.postValue("No se pudo obtener los datos del tutor");  // Error al obtener el tutor
+            }
+        }).start();
+    }
+
+    // Getter para el LiveData del tutor
+    public LiveData<Tutor> getTutorLiveData() {
+        return tutorLiveData;
+    }
+
+    // Getter para el LiveData de errores
+    public LiveData<String> getErrorLiveData() {
+        return errorLiveData;
+    }
+
 
 
     // Metodo para agregar un tutor

@@ -10,8 +10,10 @@ import com.example.tpf_paii_android.modelos.Tutor;
 
 
 import java.sql.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class TutorRepository {
@@ -35,63 +37,54 @@ public class TutorRepository {
     }
 
 
-    // Registrar un nuevo Tutor
-//    public void registrarTutor(Tutor tutor, DataCallBack<Boolean> callback) {
-//        executor.execute(() -> {
-//            String query = "INSERT INTO tutor (dni, nombre, apellido, edad, id_genero, ocupacion, pasatiempos, info_adicional, id_usuario) " +
-//                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//
-//            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass)) {
-//                // Inicio transaccion para asegurar consistencia de datos
-//                con.setAutoCommit(false);
-//
-//                // Primero registramos el usuario
-//                usuarioRepository.registrarUsuario(tutor, 3, new UsuarioRepository.DataCallBack<Integer>() {
-//                    @Override
-//                    public void onSuccess(Integer idUsuario) {
-//                        try (PreparedStatement tutorStatement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-//                            tutorStatement.setString(1, tutor.getDni());
-//                            tutorStatement.setString(2, tutor.getNombre());
-//                            tutorStatement.setString(3, tutor.getApellido());
-//                            tutorStatement.setInt(4, tutor.getEdad());
-//                            tutorStatement.setInt(5, tutor.getIdGenero());
-//                            tutorStatement.setString(6, tutor.getOcupacion());
-//                            tutorStatement.setString(7, tutor.getPasatiempos());
-//                            tutorStatement.setString(8, tutor.getInfoAdicional());
-//                            tutorStatement.setInt(9, idUsuario); // Relaciona el tutor con el ID del usuario
-//
-//                            int filasAfectadas = tutorStatement.executeUpdate();
-//                            if (filasAfectadas > 0) {
-//                                con.commit(); // Confirma transaccion
-//                                mainHandler.post(() -> callback.onSuccess(true));
-//                            } else {
-//                                con.rollback();
-//                                mainHandler.post(() -> callback.onFailure(new SQLException("Error al registrar tutor")));
-//                                showToast("Error al registrar tutor");  // Usando context para mostrar Toast
-//                            }
-//                        } catch (SQLException e) {
-//                            try {
-//                                con.rollback();
-//                            } catch (SQLException rollbackEx) {
-//                                e.addSuppressed(rollbackEx);
-//                            }
-//                            mainHandler.post(() -> callback.onFailure(e));
-//                            showToast("Error al registrar tutor en la base de datos");
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Exception e) {
-//                        mainHandler.post(() -> callback.onFailure(e));
-//                        showToast("Error al registrar usuario");
-//                    }
-//                });
-//            } catch (SQLException e) {
-//                mainHandler.post(() -> callback.onFailure(e));
-//                showToast("Error al conectar con la base de datos");
-//            }
-//        });
-//    }
+
+    public Tutor obtenerTutor(int idTutor) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Tutor> futureResult = executor.submit(() -> {
+            String query = "SELECT nombre, apellido, edad, id_genero, ocupacion, pasatiempos, info_adicional " +
+                    "FROM tutor WHERE id_tutor = ?";
+            Tutor tutor = null;
+
+            try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = cn.prepareStatement(query)) {
+
+                ps.setInt(1, idTutor);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        tutor = new Tutor(
+                                rs.getString("nombre"),
+                                rs.getString("apellido"),
+                                rs.getInt("edad"),
+                                rs.getInt("id_genero"),
+                                rs.getString("ocupacion"),
+                                rs.getString("pasatiempos"),
+                                rs.getString("info_adicional")
+                        );
+                    }
+                }
+
+            } catch (SQLException e) {
+                System.err.println("Error al obtener el tutor: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            return tutor;
+        });
+
+        try {
+            return futureResult.get(); // Espera el resultado del hilo secundario
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null; // Error al obtener el tutor
+        } finally {
+            executor.shutdown();
+        }
+    }
+
+
+
+
 
 
     // Registrar un nuevo Tutor
