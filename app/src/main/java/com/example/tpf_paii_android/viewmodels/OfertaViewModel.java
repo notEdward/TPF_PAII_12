@@ -7,17 +7,20 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.tpf_paii_android.actividades.ofertas.AltaOfertaActivity;
 import com.example.tpf_paii_android.modelos.Curso;
+import com.example.tpf_paii_android.modelos.Estudiante;
 import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Modalidad;
 import com.example.tpf_paii_android.modelos.NivelEducativo;
 import com.example.tpf_paii_android.modelos.OfertaDetalle;
 import com.example.tpf_paii_android.modelos.OfertaEmpleo;
+import com.example.tpf_paii_android.modelos.PostulacionItem;
 import com.example.tpf_paii_android.modelos.Provincia;
 import com.example.tpf_paii_android.modelos.TipoEmpleo;
 import com.example.tpf_paii_android.repositorios.CursoRepository;
 import com.example.tpf_paii_android.repositorios.OfertaRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class OfertaViewModel extends ViewModel {
@@ -36,8 +39,13 @@ private MutableLiveData<List<TipoEmpleo>> tiposEmpleoLiveData = new MutableLiveD
     private MutableLiveData<Boolean> ofertaCreadaExitosamente = new MutableLiveData<>();
 //baja
 private MutableLiveData<Boolean> bajaOfertaLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<PostulacionItem>> postulaciones = new MutableLiveData<>();
 
     ////
+    public LiveData<List<PostulacionItem>> getPostulaciones() {
+        return postulaciones;
+    }
+    private MutableLiveData<Estudiante> estudianteLiveData = new MutableLiveData<>();
 
     public LiveData<String> getPostularMensaje() {
         return postularMensaje;
@@ -80,6 +88,10 @@ private MutableLiveData<Boolean> bajaOfertaLiveData = new MutableLiveData<>();
         return bajaOfertaLiveData;
     }
     ////
+    //detalle postuliacion est
+    public LiveData<Estudiante> getEstudianteLiveData() {
+        return estudianteLiveData;
+    }
     public void loadOfertas() {
         ofertaRepository.getAllOfertas(new OfertaRepository.DataCallback<ArrayList<OfertaEmpleo>>() {
             @Override
@@ -296,6 +308,52 @@ private MutableLiveData<Boolean> bajaOfertaLiveData = new MutableLiveData<>();
                 bajaOfertaLiveData.setValue(false);
             }
         });
+    }
+//postulaciones
+public void cargarPostulacionesEstudiante(int idUsuario) {
+    ofertaRepository.obtenerPostulacionesEstudiante(idUsuario, new OfertaRepository.DataCallback<List<PostulacionItem>>() {
+        @Override
+        public void onSuccess(List<PostulacionItem> result) {
+            postulaciones.postValue(result);
+        }
+
+        @Override
+        public void onFailure(Exception e) {
+            postulaciones.postValue(Collections.emptyList());
+        }
+    });
+}
+
+    public void cargarPostulacionesEmpresa(int idUsuario) {
+        ofertaRepository.obtenerPostulacionesEmpresa(idUsuario, new OfertaRepository.DataCallback<List<PostulacionItem>>() {
+            @Override
+            public void onSuccess(List<PostulacionItem> result) {
+                postulaciones.postValue(result);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                postulaciones.postValue(Collections.emptyList());
+            }
+        });
+    }
+
+    public void obtenerDetalleEstudiante(int idUsuario) {
+        ofertaRepository.obtenerDetalleEstudiante(idUsuario, new OfertaRepository.DataCallback<Estudiante>() {
+            @Override
+            public void onSuccess(Estudiante result) {
+                estudianteLiveData.postValue(result);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+    }
+
+    public void actualizarEstadoPostulacion(int idPostulacion, String estado, OfertaRepository.DataCallback<Boolean> callback) {
+        ofertaRepository.actualizarEstadoPostulacion(idPostulacion, estado, callback);
     }
 
     @Override

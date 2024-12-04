@@ -76,7 +76,7 @@ public class OfertaDetalleActivity extends AppCompatActivity {
         // Configura el botón de postulación
         btnPostularse = findViewById(R.id.btnPostularse);
 
-        if (!"Estudiante".equals(tipoUsuario)) {
+        if (!"Estudiante".equalsIgnoreCase(tipoUsuario)) {
             btnPostularse.setVisibility(View.GONE);
         } else {
             btnPostularse.setOnClickListener(v -> {

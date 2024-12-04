@@ -30,7 +30,7 @@ public class OfertaActivity extends MenuHamburguesaActivity {
     private OfertaViewModel ofertaViewModel;
     private EditText editTextBuscar;
     private List<OfertaEmpleo> listaOfertasEmpleo = new ArrayList<>();
-    private Button btnFiltrar;
+    private Button btnFiltrar, btnPostulaciones;
     private int idUsuario, idEspecifico;
     private String nombreUsuario;
     private DrawerLayout drawerLayout;
@@ -44,6 +44,7 @@ public class OfertaActivity extends MenuHamburguesaActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_oferta);
+        btnPostulaciones = findViewById(R.id.btnPostulaciones);
         btnFiltrar = findViewById(R.id.btnFiltrar);
         recyclerView = findViewById(R.id.recyclerViewOfertas);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2); // 2 columnas
@@ -105,6 +106,11 @@ public class OfertaActivity extends MenuHamburguesaActivity {
         } else {
             btnCrear.setVisibility(View.GONE);
         }
+        //btn postulaciones
+        btnPostulaciones.setOnClickListener(v -> {
+            Intent intentPost = new Intent(OfertaActivity.this, PostulacionesActivity.class);
+            startActivity(intentPost);
+        });
 
         // btn filtrar
         btnFiltrar.setOnClickListener(v -> {

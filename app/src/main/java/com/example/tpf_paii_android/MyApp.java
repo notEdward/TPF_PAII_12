@@ -1,6 +1,10 @@
 package com.example.tpf_paii_android;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
+
+import com.example.tpf_paii_android.utilidades.CustomExceptionHandler;
 
 
 public class MyApp extends Application {
@@ -43,4 +47,12 @@ public class MyApp extends Application {
                 return "Desconocido";
         }
     }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        //para manejo de exepciones globales
+        Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(this));
+    }
+
 }

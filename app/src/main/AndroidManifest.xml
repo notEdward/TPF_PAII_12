@@ -150,6 +150,15 @@
         <activity
             android:name=".actividades.tutores.TutorActivity"
             android:exported="false" />
+        <activity
+            android:name=".utilidades.ErrorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".actividades.ofertas.PostulacionesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".actividades.ofertas.DetalleEstudianteActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

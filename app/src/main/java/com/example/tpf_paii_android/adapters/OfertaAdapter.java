@@ -76,7 +76,7 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
         holder.imageOferta.setImageResource(imageResId);
 
         holder.itemView.setOnClickListener(v -> {
-            if ("Empresa".equals(tipoUsuario) && (oferta.getIdEmpresa() == idEspecifico) ) {
+            if ("Empresa".equalsIgnoreCase(tipoUsuario) && (oferta.getIdEmpresa() == idEspecifico) ) {
                 // desplegable de opciones
                 PopupMenu popupMenu = new PopupMenu(context, holder.itemView);
                 popupMenu.inflate(R.menu.menu_oferta_opciones);

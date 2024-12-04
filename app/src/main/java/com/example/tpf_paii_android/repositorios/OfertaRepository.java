@@ -5,11 +5,13 @@ import android.text.TextUtils;
 
 import com.example.tpf_paii_android.conexion_database.DatabaseConnection;
 import com.example.tpf_paii_android.modelos.Curso;
+import com.example.tpf_paii_android.modelos.Estudiante;
 import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Modalidad;
 import com.example.tpf_paii_android.modelos.NivelEducativo;
 import com.example.tpf_paii_android.modelos.OfertaDetalle;
 import com.example.tpf_paii_android.modelos.OfertaEmpleo;
+import com.example.tpf_paii_android.modelos.PostulacionItem;
 import com.example.tpf_paii_android.modelos.Provincia;
 import com.example.tpf_paii_android.modelos.TipoEmpleo;
 
@@ -529,6 +531,152 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
             }
         });
     }
+
+    //Seccion postulaciones
+    public void obtenerPostulacionesEstudiante(int idUsuario, OfertaRepository.DataCallback<List<PostulacionItem>> callback) {
+        executor.execute(() -> {
+            List<PostulacionItem> postulaciones = new ArrayList<>();
+            String query = "SELECT oe.titulo, p.fecha_postulacion, p.estado_postulacion " +
+                    "FROM postulaciones p " +
+                    "INNER JOIN ofertas_empleos oe ON p.id_oferta_empleo = oe.id_oferta_empleo " +
+                    "WHERE p.id_usuario = ?";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setInt(1, idUsuario);
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    PostulacionItem item = new PostulacionItem();
+                    item.setTitulo(rs.getString("titulo"));
+                    item.setFechaPostulacion(rs.getDate("fecha_postulacion"));
+                    item.setEstadoPostulacion(rs.getString("estado_postulacion"));
+                    postulaciones.add(item);
+                }
+                callback.onSuccess(postulaciones);
+            } catch (Exception e) {
+                callback.onFailure(e);
+            }
+        });
+    }
+
+//    public void obtenerPostulacionesEmpresa(int idEmpresa, OfertaRepository.DataCallback<List<PostulacionItem>> callback) {
+//        executor.execute(() -> {
+//            List<PostulacionItem> postulaciones = new ArrayList<>();
+//            String query = "SELECT oe.titulo, u.nombre_usuario, p.fecha_postulacion " +
+//                    "FROM postulaciones p " +
+//                    "INNER JOIN ofertas_empleos oe ON p.id_oferta_empleo = oe.id_oferta_empleo " +
+//                    "INNER JOIN usuario u ON p.id_usuario = u.id_usuario " +
+//                    "WHERE oe.id_empresa = ?";
+//
+//            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+//                 PreparedStatement ps = con.prepareStatement(query)) {
+//                ps.setInt(1, idEmpresa);
+//                ResultSet rs = ps.executeQuery();
+//
+//                while (rs.next()) {
+//                    PostulacionItem item = new PostulacionItem();
+//                    item.setTitulo(rs.getString("titulo"));
+//                    item.setNombreUsuario(rs.getString("nombre_usuario"));
+//                    item.setFechaPostulacion(rs.getDate("fecha_postulacion"));
+//                    postulaciones.add(item);
+//                }
+//                callback.onSuccess(postulaciones);
+//            } catch (Exception e) {
+//                callback.onFailure(e);
+//            }
+//        });
+//    }
+
+    public void obtenerPostulacionesEmpresa(int idEmpresa, OfertaRepository.DataCallback<List<PostulacionItem>> callback) {
+        executor.execute(() -> {
+            List<PostulacionItem> postulaciones = new ArrayList<>();
+            String query = "SELECT p.id_postulacion, oe.titulo, u.nombre_usuario, p.fecha_postulacion, p.estado_postulacion, p.id_usuario " +
+                    "FROM postulaciones p " +
+                    "INNER JOIN ofertas_empleos oe ON p.id_oferta_empleo = oe.id_oferta_empleo " +
+                    "INNER JOIN usuario u ON p.id_usuario = u.id_usuario " +
+                    "WHERE oe.id_empresa = ?";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setInt(1, idEmpresa);
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    PostulacionItem item = new PostulacionItem();
+                    item.setIdPostulacion(rs.getInt("id_postulacion"));
+                    item.setTitulo(rs.getString("titulo"));
+                    item.setNombreUsuario(rs.getString("nombre_usuario"));
+                    item.setFechaPostulacion(rs.getDate("fecha_postulacion"));
+                    item.setEstadoPostulacion(rs.getString("estado_postulacion"));
+                    item.setIdUsuario(rs.getInt("id_usuario"));
+                    postulaciones.add(item);
+                }
+                callback.onSuccess(postulaciones);
+            } catch (Exception e) {
+                callback.onFailure(e);
+            }
+        });
+    }
+
+
+    public void obtenerDetalleEstudiante(int idUsuario, DataCallback<Estudiante> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            String query = "SELECT e.*, n.descripcion AS nivelEducativo " +
+                    "FROM estudiante e " +
+                    "JOIN nivel_educativo n ON e.id_nivel_educativo = n.id_nivel_educativo " +
+                    "WHERE e.id_usuario = ?";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setInt(1, idUsuario);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    Estudiante estudiante = new Estudiante();
+                    estudiante.setNombre(rs.getString("nombre"));
+                    estudiante.setApellido(rs.getString("apellido"));
+                    estudiante.setDni(rs.getString("dni"));
+                    estudiante.setEmail(rs.getString("email"));
+                    estudiante.setTelefono(rs.getString("telefono"));
+                    estudiante.setDireccion(rs.getString("direccion"));
+//                    estudiante.setNivelEducativoDescripcion(rs.getString("nivelEducativo"));
+                    callback.onSuccess(estudiante);
+                } else {
+                    callback.onSuccess(null);
+                }
+            } catch (Exception e) {
+                callback.onFailure(e);
+            }
+        });
+    }
+
+
+    public void actualizarEstadoPostulacion(int idPostulacion, String estado, DataCallback<Boolean> callback) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            String query = "UPDATE postulaciones SET estado_postulacion = ? WHERE id_postulacion = ?";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = con.prepareStatement(query)) {
+
+                ps.setString(1, estado);
+                ps.setInt(2, idPostulacion);
+                int rowsUpdated = ps.executeUpdate();
+
+                // Si se actualizó al menos una fila, es exitoso
+                if (rowsUpdated > 0) {
+                    callback.onSuccess(true);
+                } else {
+                    callback.onSuccess(false);
+                }
+            } catch (Exception e) {
+                callback.onFailure(e);
+            }
+        });
+    }
+
 
     public void shutdownExecutor() {
         executor.shutdown();
