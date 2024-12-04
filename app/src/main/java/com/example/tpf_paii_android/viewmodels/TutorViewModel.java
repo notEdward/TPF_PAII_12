@@ -42,6 +42,7 @@ public class TutorViewModel extends ViewModel {
         cargarGenerosDesdeRepositorio(); // Carga los generos al inicializar el ViewModel
     }
 
+
     // Obtener lista de generos
     public LiveData<List<Genero>> getGeneros() {
         return generosLiveData;

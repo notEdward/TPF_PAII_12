@@ -29,6 +29,16 @@ public class Empresa {
         this.id_usuario = id_usuario;
     }
 
+    public Empresa(String nombre, String descripcion, String sector, String email, String telefono, String direccion, int idLoc ){
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.sector = sector;
+        this.email = email;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.id_localidad = idLoc;
+    }
+
     public int getId_empresa() {
         return id_empresa;
     }

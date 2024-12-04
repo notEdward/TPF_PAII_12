@@ -22,6 +22,7 @@ public class EmpresaViewModel extends ViewModel {
     private LiveData<List<Provincia>> ProvinciasLiveData;
     private LiveData<List<Localidad>> LocalidadesLiveData;
     private MutableLiveData<Integer> provinciaIdLiveData = new MutableLiveData<>();
+    private MutableLiveData<Empresa> empresaLiveData = new MutableLiveData<>();
 
     // Constructor del ViewModel que recibe el repositorio
     public EmpresaViewModel(EmpresaRepository empresaRepository) {
@@ -49,6 +50,31 @@ public class EmpresaViewModel extends ViewModel {
     public void setProvinciaSeleccionada(int idProvincia) {
         provinciaIdLiveData.setValue(idProvincia);
     }
+
+
+
+    public LiveData<Empresa> obtenerEmpresa(int idEmpresa) {
+        // Usamos un nuevo hilo para obtener la empresa
+        new Thread(() -> {
+            Empresa empresa = empresaRepository.obtenerEmpresa(idEmpresa);
+            empresaLiveData.postValue(empresa); // Postear los datos en el LiveData
+        }).start();
+        return empresaLiveData;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Factory para crear el ViewModel con un repositorio
     public static class Factory implements ViewModelProvider.Factory {

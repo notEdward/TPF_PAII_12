@@ -164,4 +164,139 @@ public LiveData<Boolean> registrarEmpresa(Empresa empresa, int idUsuario) {
     executor.shutdown();
     return resultLiveData;
   }
+
+    public Empresa obtenerEmpresa(int idEmpresa) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Empresa> futureResult = executor.submit(() -> {
+            String query = "SELECT nombre, descripcion, sector, n_identificacion_fiscal, direccion, id_localidad, email, telefono FROM empresa WHERE id_empresa = ?";
+            Empresa empresa = null;
+
+            try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = cn.prepareStatement(query)) {
+                ps.setInt(1, idEmpresa);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        empresa = new Empresa(
+                                rs.getString("nombre"),
+                                rs.getString("descripcion"),
+                                rs.getString("sector"),
+                                rs.getString("email"),
+                                rs.getString("telefono"),
+                                rs.getString("direccion"),
+                                rs.getInt("id_localidad")
+                        );
+                    }
+                }
+            } catch (SQLException e) {
+                System.err.println("Error al obtener la empresa: " + e.getMessage());
+                e.printStackTrace();
+            }
+            return empresa;
+        });
+        try {
+            return futureResult.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            executor.shutdown();
+        }
+    }
+
+
+    public boolean modificarEmpresa(Empresa empresa) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> futureResult = executor.submit(() -> {
+            String query = "UPDATE empresa SET nombre = ?, descripcion = ?, sector = ?, email = ?, telefono = ?, direccion = ?, id_localidad = ? WHERE id_empresa = ?";
+
+
+            try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = cn.prepareStatement(query)) {
+
+                ps.setString(1, empresa.getNombre());
+                ps.setString(2, empresa.getDescripcion());
+                ps.setString(3, empresa.getSector());
+                ps.setString(4, empresa.getEmail());
+                ps.setString(5, empresa.getTelefono());
+                ps.setString(6, empresa.getDireccion());
+                ps.setInt(8, empresa.getId_localidad());
+                ps.setInt(9, empresa.getId_empresa());
+
+                // Ejecutar la actualización
+                int filasAfectadas = ps.executeUpdate();
+                return filasAfectadas > 0;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
+        try {
+            return futureResult.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            executor.shutdown();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public Integer obtenerIdProvinciaPorLocalidad(int idLocalidad) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Integer> futureResult = executor.submit(() -> {
+            String query = "SELECT prov.id_provincia FROM provincia prov " +
+                            "INNER JOIN localidad loc ON loc.id_provincia = prov.id_provincia" +
+                            "WHERE loc.id_localidad = ?";
+            Integer idProvincia = null;
+
+            try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = cn.prepareStatement(query)) {
+                ps.setInt(1, idLocalidad);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        idProvincia = rs.getInt("id_provincia");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return idProvincia;
+        });
+
+        try {
+            return futureResult.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            executor.shutdown();
+        }
+    }
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
