@@ -208,7 +208,8 @@ public LiveData<Boolean> registrarEmpresa(Empresa empresa, int idUsuario) {
     public boolean modificarEmpresa(Empresa empresa) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Boolean> futureResult = executor.submit(() -> {
-            String query = "UPDATE empresa SET nombre = ?, descripcion = ?, sector = ?, email = ?, telefono = ?, direccion = ?, id_localidad = ? WHERE id_empresa = ?";
+            String query = "UPDATE empresa SET nombre = ?, descripcion = ?, sector = ?, email = ?, telefono = ?," +
+                            " direccion = ?, id_localidad = ? WHERE id_empresa = ?";
 
 
             try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
@@ -220,8 +221,8 @@ public LiveData<Boolean> registrarEmpresa(Empresa empresa, int idUsuario) {
                 ps.setString(4, empresa.getEmail());
                 ps.setString(5, empresa.getTelefono());
                 ps.setString(6, empresa.getDireccion());
-                ps.setInt(8, empresa.getId_localidad());
-                ps.setInt(9, empresa.getId_empresa());
+                ps.setInt(7, empresa.getId_localidad());
+                ps.setInt(8, empresa.getId_empresa());
 
                 // Ejecutar la actualización
                 int filasAfectadas = ps.executeUpdate();

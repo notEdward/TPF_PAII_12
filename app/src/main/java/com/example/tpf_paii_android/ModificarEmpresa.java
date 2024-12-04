@@ -1,5 +1,6 @@
 package com.example.tpf_paii_android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -7,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +18,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.tpf_paii_android.actividades.autenticacion.Login;
+import com.example.tpf_paii_android.modelos.Empresa;
 import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Provincia;
+import com.example.tpf_paii_android.modelos.Tutor;
 import com.example.tpf_paii_android.repositorios.EmpresaRepository;
 import com.example.tpf_paii_android.viewmodels.EmpresaViewModel;
 
@@ -60,9 +65,8 @@ public class ModificarEmpresa extends AppCompatActivity {
         EmpresaViewModel.Factory factory = new EmpresaViewModel.Factory(empresaRepository);
         empresaViewModel = new ViewModelProvider(this, factory).get(EmpresaViewModel.class);
 
-
 // Observar el LiveData de la empresa para obtener los datos
-        empresaViewModel.obtenerEmpresa(idEmpresa).observe(this, empresa -> {
+        empresaViewModel.cargarEmpresa(idEmpresa).observe(this, empresa -> {
             if (empresa != null) {
                 // Rellenar los campos con los datos de la empresa
                 txtNombre.setText(empresa.getNombre());
@@ -104,6 +108,45 @@ public class ModificarEmpresa extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
+
+        empresaViewModel.getActualizacionExitosaLiveData().observe(this, isSuccessful -> {
+            if (isSuccessful) {
+                Toast.makeText(this, "Empresa actualizado exitosamente", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, "Error al actualizar el Empresa", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        empresaViewModel.getError().observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        empresaViewModel.cargarEmpresa(idEmpresa);
+
+        btnModificar.setOnClickListener(view -> {
+            String nombre = txtNombre.getText().toString();
+            String descripcion = txtDescripcion.getText().toString();
+            String sector = txtSector.getText().toString();
+            String email = txtEmail.getText().toString();
+            String telefono = txtTelefono.getText().toString();
+            String direccion = txtDireccion.getText().toString();
+
+            int idLocalidad = ((Localidad) spLocalidad.getSelectedItem()).getId_localidad();
+
+            if(nombre.isEmpty() || descripcion.isEmpty() || sector.isEmpty() ||
+                email.isEmpty() || telefono.isEmpty() || direccion.isEmpty()){
+                Toast.makeText(ModificarEmpresa.this, "Todos los campos deben ser completados.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            Empresa empresaModificada = new Empresa( nombre, descripcion, sector, email, telefono, direccion, idLocalidad);
+            empresaModificada.setId_empresa(idEmpresa);
+            empresaViewModel.actualizarEmpresa(empresaModificada);
+        });
     }
 
     private void cargarSpinnerProvincia(List<Provincia> provincias) {

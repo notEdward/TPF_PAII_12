@@ -10,6 +10,7 @@ import com.example.tpf_paii_android.modelos.Empresa;
 import com.example.tpf_paii_android.modelos.Estudiante;
 import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Provincia;
+import com.example.tpf_paii_android.modelos.Tutor;
 import com.example.tpf_paii_android.repositorios.EmpresaRepository;
 import com.example.tpf_paii_android.repositorios.EstudianteRepository;
 
@@ -19,10 +20,16 @@ import java.util.List;
 public class EmpresaViewModel extends ViewModel {
 
     private final EmpresaRepository empresaRepository;
+
     private LiveData<List<Provincia>> ProvinciasLiveData;
     private LiveData<List<Localidad>> LocalidadesLiveData;
     private MutableLiveData<Integer> provinciaIdLiveData = new MutableLiveData<>();
+
     private MutableLiveData<Empresa> empresaLiveData = new MutableLiveData<>();
+
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> registroExitosoLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> actualizacionExitosaLiveData = new MutableLiveData<>();
 
     // Constructor del ViewModel que recibe el repositorio
     public EmpresaViewModel(EmpresaRepository empresaRepository) {
@@ -53,7 +60,25 @@ public class EmpresaViewModel extends ViewModel {
 
 
 
-    public LiveData<Empresa> obtenerEmpresa(int idEmpresa) {
+
+    // Getter para el LiveData de errores
+    public LiveData<String> getError() {
+        return errorLiveData;
+    }
+
+    // Obtener la respuesta de si el registro fue exitoso
+    public LiveData<Boolean> getRegistroExitoso() {
+        return registroExitosoLiveData;
+    }
+
+    // Observador del estado de la actualización
+    public LiveData<Boolean> getActualizacionExitosaLiveData() {
+        return actualizacionExitosaLiveData;
+    }
+
+
+
+    public LiveData<Empresa> cargarEmpresa(int idEmpresa) {
         // Usamos un nuevo hilo para obtener la empresa
         new Thread(() -> {
             Empresa empresa = empresaRepository.obtenerEmpresa(idEmpresa);
@@ -62,7 +87,18 @@ public class EmpresaViewModel extends ViewModel {
         return empresaLiveData;
     }
 
-
+    // Método para actualizar un tutor
+    public void actualizarEmpresa(Empresa empresa) {
+        new Thread(() -> {
+            boolean resultado = empresaRepository.modificarEmpresa(empresa);
+            if (resultado) {
+                actualizacionExitosaLiveData.postValue(true);
+            } else {
+                actualizacionExitosaLiveData.postValue(false);
+                errorLiveData.postValue("Error al actualizar los datos de la empresa.");
+            }
+        }).start();
+    }
 
 
 
