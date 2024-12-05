@@ -31,7 +31,7 @@ public class CrearCursoActivity extends AppCompatActivity {
     private LinearLayout contenedorPreguntas;
     private Button btnGuardarCurso, btnAñadirPregunta;
     private CursoViewModel cursoViewModel;
-
+    private int cantidadPreguntas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +45,7 @@ public class CrearCursoActivity extends AppCompatActivity {
         btnGuardarCurso = findViewById(R.id.btnGuardarCurso);
         btnAñadirPregunta = findViewById(R.id.btnAñadirPregunta);
         spinnerEstado = findViewById(R.id.spinnerEstado);
+
 
         cursoViewModel = new ViewModelProvider(this).get(CursoViewModel.class);
 
@@ -69,18 +70,21 @@ public class CrearCursoActivity extends AppCompatActivity {
 
         //crear curso
         btnGuardarCurso.setOnClickListener(v -> {
+            if (!validarDatos()) return;
             String nombreCurso = etNombreCurso.getText().toString();
             String descripcionCurso = etDescripcion.getText().toString();
             int idCategoria = ((CategoriaCurso) spinnerCategoria.getSelectedItem()).getIdCategoria();
             String estadoCurso = spinnerEstado.getSelectedItem().toString();
-            String respuestasCorrectas = etRespuestasCorrectas.getText().toString();
+            String respuestasCorrectas = etRespuestasCorrectas.getText().toString().trim();
 
-            int estadoCursoInt = estadoCurso.equals("Activo") ? 1 : 0;
+
+            int estadoCursoInt = estadoCurso.equalsIgnoreCase("Activo") ? 1 : 0;
 
             Curso curso = new Curso(nombreCurso, descripcionCurso, idCategoria, respuestasCorrectas, estadoCursoInt);
 
             List<Pregunta> preguntas = new ArrayList<>();
             List<Opcion> opciones = new ArrayList<>();
+            boolean tieneRespuestaCorrecta = false;
 
             for (int i = 0; i < contenedorPreguntas.getChildCount(); i++) {
                 LinearLayout preguntaLayout = (LinearLayout) contenedorPreguntas.getChildAt(i);
@@ -88,19 +92,42 @@ public class CrearCursoActivity extends AppCompatActivity {
                 RadioGroup radioGroup = (RadioGroup) preguntaLayout.getChildAt(1);
 
                 String textoPregunta = etPregunta.getText().toString();
+                if (textoPregunta.isEmpty()) {
+                    Toast.makeText(this, "Cada pregunta debe tener texto", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Pregunta pregunta = new Pregunta(curso.getIdCurso(), textoPregunta, "radio");
                 preguntas.add(pregunta);
+
+                boolean preguntaTieneRespuesta = false;
 
                 for (int j = 0; j < radioGroup.getChildCount(); j++) {
                     LinearLayout opcionLayout = (LinearLayout) radioGroup.getChildAt(j);
                     EditText etOpcion = (EditText) opcionLayout.getChildAt(0);
                     RadioButton rbOpcion = (RadioButton) opcionLayout.getChildAt(1);
 
+                    String textoOpcion = etOpcion.getText().toString().trim();
+                    if (textoOpcion.isEmpty()) {
+                        Toast.makeText(this, "Cada opción debe tener texto", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     boolean esCorrecta = rbOpcion.isChecked();
+                    if (esCorrecta) {
+                        preguntaTieneRespuesta = true;
+                        tieneRespuestaCorrecta = true;
+                    }
                     opciones.add(new Opcion(pregunta.getIdPregunta(), etOpcion.getText().toString(), esCorrecta));
                 }
+                if (!preguntaTieneRespuesta) {
+                    Toast.makeText(this, "Cada pregunta debe tener al menos una opción correcta", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
-
+            if (!tieneRespuestaCorrecta) {
+                Toast.makeText(this, "Debe haber al menos una respuesta correcta en todo el curso", Toast.LENGTH_SHORT).show();
+                return;
+            }
             cursoViewModel.guardarCurso(curso, preguntas, opciones);
         });
 
@@ -151,6 +178,58 @@ public class CrearCursoActivity extends AppCompatActivity {
 
         preguntaLayout.addView(radioGroup);
         contenedorPreguntas.addView(preguntaLayout);
+    }
+
+    private boolean validarDatos() {
+        String nombreCurso = etNombreCurso.getText().toString();
+        String descripcionCurso = etDescripcion.getText().toString();
+        String respuestasCorrectas = etRespuestasCorrectas.getText().toString().trim();
+
+        if (nombreCurso.isEmpty()) {
+            Toast.makeText(this, "El nombre del curso es obligatorio", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (descripcionCurso.isEmpty()) {
+            Toast.makeText(this, "La descripción del curso es obligatoria", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (spinnerCategoria.getSelectedItem() == null) {
+            Toast.makeText(this, "Debe seleccionar una categoría", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (respuestasCorrectas.isEmpty()) {
+            etRespuestasCorrectas.setError("Este campo es obligatorio");
+            Toast.makeText(this, "Debe ingresar la cantidad de respuestas correctas", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        try {
+            int respuestasCorrectasInt = Integer.parseInt(respuestasCorrectas);
+            if (respuestasCorrectasInt <= 0) {
+                Toast.makeText(this, "La cantidad de respuestas correctas debe ser mayor a cero", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            cantidadPreguntas = contenedorPreguntas.getChildCount();
+            if (respuestasCorrectasInt > cantidadPreguntas) {
+                etRespuestasCorrectas.setError("Las respuestas correctas no pueden ser mayores que la cantidad de preguntas");
+                Toast.makeText(this, "Las respuestas correctas no pueden ser mayores que la cantidad de preguntas", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Ingrese un número válido", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (contenedorPreguntas.getChildCount() == 0) {
+            Toast.makeText(this, "Debe añadir al menos una pregunta", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
 }

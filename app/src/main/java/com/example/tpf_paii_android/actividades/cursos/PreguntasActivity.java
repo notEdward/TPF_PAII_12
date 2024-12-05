@@ -24,7 +24,7 @@ public class PreguntasActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private PreguntasAdapter preguntasAdapter;
     private Button btnEnviar;
-    private int idInscripcion;
+    private int idInscripcion,idCurso, puntosObtenidos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class PreguntasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_preguntas);
 
         idInscripcion = getIntent().getIntExtra("idInscripcion", -1);
-        int idCurso = getIntent().getIntExtra("idCurso", -1);
+        idCurso = getIntent().getIntExtra("idCurso", -1);
 
         recyclerView = findViewById(R.id.recyclerViewPreguntas);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -67,12 +67,11 @@ public class PreguntasActivity extends AppCompatActivity {
             }
         });
     }
-
     private void validarYRegistrarEvaluacion() {
         List<Pregunta> preguntas = preguntasAdapter.getPreguntas();
 
         boolean todasRespondidas = true;
-        int puntosObtenidos = 0;
+        puntosObtenidos = 0;
 
         for (Pregunta pregunta : preguntas) {
             if (pregunta.getRespuestaSeleccionada() == null) {
@@ -82,26 +81,79 @@ public class PreguntasActivity extends AppCompatActivity {
                 puntosObtenidos += 1;
             }
         }
-        if (todasRespondidas) {
-            // Calculo de nota obtenid
-            int cantidadDePreguntas = preguntas.size();
-            double porcentaje = (cantidadDePreguntas > 0) ? (puntosObtenidos * 100.0 / cantidadDePreguntas) : 0.0;
-            int nota = (int) Math.round(porcentaje / 10.0);
-            if (nota < 1) {
-                nota = 1;
-            } else if (nota > 10) {
-                nota = 10;
-            }
-            Date fechaFinalizacion = new Date(); // Fecha de finalización actual
-            cursoViewModel.registrarEvaluacion(idInscripcion, nota, fechaFinalizacion);
-
-            // Aviso que finalice con exito
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("cuestionarioFinalizado", true);
-            setResult(RESULT_OK, resultIntent);
-            finish();
-        } else {
+        if (!todasRespondidas) {
             Toast.makeText(this, "Debe responder todas las preguntas antes de enviar", Toast.LENGTH_SHORT).show();
+            return;
         }
+        cursoViewModel.obtenerRespuestasCorrectas(idCurso);
+        cursoViewModel.getRespuestasCorrectasLiveData().observe(this, respuestasCorrectas -> {
+            if (respuestasCorrectas == null) {
+                Toast.makeText(this, "Error al validar respuestas requeridas", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Validar si las respuestas correctas obtenidas son suficientes
+            if (puntosObtenidos >= respuestasCorrectas) {
+                int cantidadDePreguntas = preguntas.size();
+                double porcentaje = (cantidadDePreguntas > 0) ? (puntosObtenidos * 100.0 / cantidadDePreguntas) : 0.0;
+                int nota = (int) Math.round(porcentaje / 10.0);
+
+                // Si aprobó pero las preguntas son pocas y da menos de 6 entonces ponemos
+                // la nota por defecto.
+                if (nota < 6) {
+                    nota = 6;
+                }
+                Date fechaFinalizacion = new Date(); // Fecha de finalización actual
+                cursoViewModel.registrarEvaluacion(idInscripcion, nota, fechaFinalizacion);
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("cuestionarioFinalizado", true);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            } else {
+                Toast.makeText(this, "No alcanzó las respuestas correctas requeridas. Intente nuevamente.", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
     }
+
+//    private void validarYRegistrarEvaluacion() {
+//        List<Pregunta> preguntas = preguntasAdapter.getPreguntas();
+//
+//        boolean todasRespondidas = true;
+//        int puntosObtenidos = 0;
+//
+//        for (Pregunta pregunta : preguntas) {
+//            if (pregunta.getRespuestaSeleccionada() == null) {
+//                todasRespondidas = false;
+//                break;
+//            } else if (pregunta.getRespuestaSeleccionada().isEsCorrecta()) {
+//                puntosObtenidos += 1;
+//            }
+//        }
+//        if (todasRespondidas) {
+//
+//            cursoViewModel.obtenerRespuestasCorrectas(idCurso);
+//
+//            // Calculo de nota obtenid
+//            int cantidadDePreguntas = preguntas.size();
+//            double porcentaje = (cantidadDePreguntas > 0) ? (puntosObtenidos * 100.0 / cantidadDePreguntas) : 0.0;
+//            int nota = (int) Math.round(porcentaje / 10.0);
+//            if (nota < 1) {
+//                nota = 1;
+//            } else if (nota > 10) {
+//                nota = 10;
+//            }
+//            Date fechaFinalizacion = new Date(); // Fecha de finalización actual
+//            cursoViewModel.registrarEvaluacion(idInscripcion, nota, fechaFinalizacion);
+//
+//            // Aviso que finalice con exito
+//            Intent resultIntent = new Intent();
+//            resultIntent.putExtra("cuestionarioFinalizado", true);
+//            setResult(RESULT_OK, resultIntent);
+//            finish();
+//        } else {
+//            Toast.makeText(this, "Debe responder todas las preguntas antes de enviar", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 }

@@ -66,15 +66,10 @@ public class AltaOfertaActivity extends AppCompatActivity {
         spinnerProvincia = findViewById(R.id.spinnerProvincia);
         btnCrearOferta = findViewById(R.id.btnCrearOferta);
 
-//        idUsuario = 4;
-//        nombreUsuario = "prueba";
-//        tipo_usuario = "Empresa";
         MyApp app = (MyApp) getApplication();
         idUsuario = app.getIdUsuario();
         tipo_usuario = app.getTipoUsuario();
         nombreUsuario = app.getNombreUsuario();
-        // Cargar datos en los spinners
-        cargarDatosSpinners();
 
         configurarObservadores();
         cargarDatos();
@@ -122,14 +117,18 @@ public class AltaOfertaActivity extends AppCompatActivity {
             Localidad localidadSeleccionada = (Localidad) spinnerLocalidad.getSelectedItem();
             Provincia provinciaSeleccionada = (Provincia) spinnerProvincia.getSelectedItem();
 
-            // Verificar si los campos obligatorios no están vacíos
             if (titulo.isEmpty() || descripcion.isEmpty() || direccion.isEmpty() ||
-                    tipoEmpleoSeleccionado == null || modalidadSeleccionada == null || nivelEducativoSeleccionado == null ||
-                    cursoSeleccionado == null || localidadSeleccionada == null || provinciaSeleccionada == null) {
-
+                    tipoEmpleoSeleccionado == null || modalidadSeleccionada == null ||
+                    nivelEducativoSeleccionado == null || cursoSeleccionado == null ||
+                    localidadSeleccionada == null || provinciaSeleccionada == null) {
                 Toast.makeText(AltaOfertaActivity.this, "Por favor complete todos los campos", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            if (!validarCampos(titulo, descripcion, direccion, otro_requisito)) {
+                return;
+            }
+
             // Obtener el id_empresa a partir del id_usuario
             ofertaViewModel.obtenerIdEmpresaPorUsuario(idUsuario, new DataCallback<Integer>() {
                 @Override
@@ -159,10 +158,6 @@ public class AltaOfertaActivity extends AppCompatActivity {
             });
         });
 
-    }
-
-    private void cargarDatosSpinners() {
-        // Llamadas al repositorio para cargar los datos en cada Spinner
     }
 
     private void configurarObservadores() {
@@ -200,6 +195,42 @@ public class AltaOfertaActivity extends AppCompatActivity {
             }
         });
     }
+
+    private boolean validarCampos(String titulo, String descripcion, String direccion, String otroRequisito) {
+        boolean isValid = true;
+
+        if (titulo.isEmpty()) {
+            etTitulo.setError("El titúlo no puede estar vacío");
+            isValid = false;
+        } else if (titulo.length() > 100) {
+            etTitulo.setError("El título no puede exceder los 100 caracteres");
+            isValid = false;
+        }
+
+        if (descripcion.isEmpty()) {
+            etDescripcion.setError("La descripción no puede estar vacía");
+            isValid = false;
+        } else if (descripcion.length() > 150) {
+            etDescripcion.setError("La descripción no puede exceder los 150 caracteres");
+            isValid = false;
+        }
+
+        if (direccion.isEmpty()) {
+            etDireccion.setError("La dirección no puede estar vacía");
+            isValid = false;
+        } else if (direccion.length() > 100) {
+            etDireccion.setError("La dirección no puede exceder los 100 caracteres");
+            isValid = false;
+        }
+
+        if (!otroRequisito.isEmpty() && otroRequisito.length() > 100) {
+            etOtroRequisito.setError("Los otros requisitos no pueden exceder los 100 caracteres");
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
 
     private void cargarDatos() {
         ofertaViewModel.cargarTiposEmpleo();

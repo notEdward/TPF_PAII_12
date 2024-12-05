@@ -165,8 +165,15 @@ public class CursoDetalleActivity extends AppCompatActivity {
                 btnIniciarCurso.setEnabled(false);
                 btnDescargarCertificado.setEnabled(true);
                 cursoViewModel.verificarInscripcionEstado(idCurso, idUsuario);
+
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cursoViewModel.verificarInscripcionEstado(idCurso, idUsuario);
     }
 
     // Función para generar el certificado

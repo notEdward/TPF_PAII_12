@@ -34,6 +34,7 @@ private MutableLiveData<InscripcionEstado> inscripcionActiva = new MutableLiveDa
 //    private final MutableLiveData<MisCursosData> misCursosData = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private MutableLiveData<List<MisCursoItem>> misCursosData;
+    private MutableLiveData<Integer> respuestasCorrectasLiveData = new MutableLiveData<>();
 
     public CursoViewModel() {
         cursoRepository = new CursoRepository();
@@ -80,6 +81,9 @@ public LiveData<List<MisCursoItem>> getMisCursos() {
 }
     public LiveData<String> getErrorMessage() {
         return errorMessage;
+    }
+    public LiveData<Integer> getRespuestasCorrectasLiveData() {
+        return respuestasCorrectasLiveData;
     }
 
     public void cargarCursos() {
@@ -180,6 +184,19 @@ public void verificarInscripcionEstado(int idCurso, int idUsuario) {
             }
         });
     }
+    public void obtenerRespuestasCorrectas(int idCurso) {
+        cursoRepository.obtenerRespuestasCorrectas(idCurso, new CursoRepository.DataCallback<Integer>() {
+            @Override
+            public void onSuccess(Integer respuestasCorrectas) {
+                respuestasCorrectasLiveData.postValue(respuestasCorrectas);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                respuestasCorrectasLiveData.postValue(null);
+            }
+        });
+    }
     public void registrarEvaluacion(int idInscripcion, int notaObtenida, Date fechaFinalizacion) {
         Evaluacion evaluacion = new Evaluacion(idInscripcion, notaObtenida, fechaFinalizacion);
 
@@ -253,34 +270,7 @@ public void verificarInscripcionEstado(int idCurso, int idUsuario) {
         });
     }
 
-//    public void cargarDatos(int idUsuario) {
-////        cursoRepository.obtenerEvaluacionesYInscripciones(idUsuario, new CursoRepository.DataCallback<MisCursosData>() {
-////            @Override
-////            public void onSuccess(MisCursosData data) {
-////                misCursosData.postValue(data);
-////            }
-////
-////            @Override
-////            public void onFailure(Exception e) {
-////                errorMessage.postValue(e.getMessage());
-////            }
-////        });
-////    }
-
-//public void cargarDatos(int idUsuario) {
-//    cursoRepository.obtenerMisCursos(idUsuario, new CursoRepository.DataCallback<List<MisCursoItem>>() {
-//        @Override
-//        public void onSuccess(List<MisCursoItem> data) {
-//            misCursosData.postValue(data);
-//        }
-//
-//        @Override
-//        public void onFailure(Exception e) {
-//            errorMessage.postValue(e.getMessage());
-//        }
-//    });
-//}
-
+//datos de mis cursos
     public void cargarDatos(int idUsuario) {
         cursoRepository.obtenerMisCursos(idUsuario, new CursoRepository.DataCallback<List<MisCursoItem>>() {
             @Override

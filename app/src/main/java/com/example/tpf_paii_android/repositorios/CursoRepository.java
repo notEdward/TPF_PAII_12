@@ -203,6 +203,26 @@ public void verificarInscripcionEstado(int idCurso, int idUsuario, DataCallback<
         });
     }
 
+    public void obtenerRespuestasCorrectas(int idCurso, DataCallback<Integer> callback) {
+        executor.execute(() -> {
+            String query = "SELECT respuestas_correctas FROM curso WHERE id_curso = ?";
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setInt(1, idCurso);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        int respuestasCorrectas = rs.getInt("respuestas_correctas");
+                        new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(respuestasCorrectas));
+                    } else {
+                        new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(new Exception("Curso no encontrado")));
+                    }
+                }
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
 public void registrarEvaluacion(Evaluacion evaluacion, DataCallback<Boolean> callback) {
     executor.execute(() -> {
         String queryEvaluacion = "INSERT INTO evaluaciones (id_inscripcion, nota_obtenida, fecha_finalizacion) VALUES (?, ?, ?)";
