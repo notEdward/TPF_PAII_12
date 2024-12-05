@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Contenido Principal -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Banner Superior con icono de menú hamburguesa y título -->
+        <RelativeLayout
+            android:id="@+id/bannerSuperior"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8A2BE2"
+            android:padding="16dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Icono menú hamburguesa -->
+            <ImageView
+                android:id="@+id/menu_hamburguesa"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/burger_menu"
+                android:contentDescription="Menu"
+                android:layout_alignParentStart="true" />
+
+            <!-- Título banner -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="SOLICITUD TUTORÍA"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <!-- Formulario de Solicitud -->
+        <LinearLayout
+            android:id="@+id/formularioSolicitud"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/bannerSuperior"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Campo Tema -->
+            <EditText
+                android:id="@+id/etTema"
+                android:layout_width="match_parent"
+                android:layout_height="81dp"
+                android:hint="Tema"
+                android:inputType="text" />
+
+            <!-- Campo Comentarios -->
+            <EditText
+                android:id="@+id/etComentarios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Comentarios"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top" />
+
+            <!-- Botón Solicitar -->
+            <Button
+                android:id="@+id/btnSolicitarTutoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Solicitar Tutoría"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- NavigationView -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#FFFFFF"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/drawer_menu" />
+</androidx.drawerlayout.widget.DrawerLayout>

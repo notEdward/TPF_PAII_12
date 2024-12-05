@@ -1,6 +1,7 @@
 package com.example.tpf_paii_android.modelos;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Tutoria {
 
@@ -20,6 +21,16 @@ public class Tutoria {
     public Tutoria(int id_tutoria, Tutor id_tutor, String id_estudiante, Curso id_curso, Date fecha, String tema, String comentarios) {
         this.id_tutoria = id_tutoria;
         this.id_tutor = id_tutor;
+        this.id_estudiante = id_estudiante;
+        this.id_curso = id_curso;
+        this.fecha = fecha;
+        this.tema = tema;
+        this.comentarios = comentarios;
+    }
+
+    // Constructor sin Tutor Completado
+    public Tutoria(int id_tutoria, String id_estudiante, Curso id_curso, Date fecha, String tema, String comentarios) {
+        this.id_tutoria = id_tutoria;
         this.id_estudiante = id_estudiante;
         this.id_curso = id_curso;
         this.fecha = fecha;
@@ -97,4 +108,18 @@ public class Tutoria {
                 ", comentarios='" + comentarios + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tutoria tutoria = (Tutoria) o;
+        return id_tutoria == tutoria.id_tutoria;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id_tutoria);
+    }
+
 }

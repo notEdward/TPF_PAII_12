@@ -1,8 +1,11 @@
 package com.example.tpf_paii_android.adapters;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,59 +14,143 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tpf_paii_android.R;
+import com.example.tpf_paii_android.actividades.tutorias.SolicitarTutoriaActivity;
 import com.example.tpf_paii_android.modelos.Curso;
+import com.example.tpf_paii_android.modelos.Tutoria;
 
 import java.util.List;
+import java.util.Map;
 
-public class TutoriasAdapter extends ListAdapter<Curso, TutoriasAdapter.TutoriasViewHolder> {
+public class TutoriasAdapter extends ListAdapter<Object, RecyclerView.ViewHolder> {
 
-    public TutoriasAdapter() {
-        super(new DiffUtil.ItemCallback<Curso>() {
+    private static final int VIEW_TYPE_CURSO = 0;
+    private static final int VIEW_TYPE_TUTORIA = 1;
+
+    private final Map<String, String> estudianteMap;
+
+    public TutoriasAdapter(Map<String, String> estudianteMap) {
+        super(new DiffUtil.ItemCallback<Object>() {
             // Compara si dos cursos son el mismo por ID
             @Override
-            public boolean areItemsTheSame(@NonNull Curso oldItem, @NonNull Curso newItem) {
-                return oldItem.getIdCurso() == newItem.getIdCurso();
+            public boolean areItemsTheSame(@NonNull Object oldItem, @NonNull Object newItem) {
+                if (oldItem instanceof Curso && newItem instanceof Curso) {
+                    return ((Curso) oldItem).getIdCurso() == ((Curso) newItem).getIdCurso();
+                } else if (oldItem instanceof Tutoria && newItem instanceof Tutoria) {
+                    return ((Tutoria) oldItem).getId_tutoria() == ((Tutoria) newItem).getId_tutoria();
+                }
+                return false;
             }
             // Compara contenido de los cursos
+
+            @SuppressLint("DiffUtilEquals")
             @Override
-            public boolean areContentsTheSame(@NonNull Curso oldItem, @NonNull Curso newItem) {
+            public boolean areContentsTheSame(@NonNull Object oldItem, @NonNull Object newItem) {
                 return oldItem.equals(newItem);
             }
         });
+        this.estudianteMap = estudianteMap;
     }
+
 
     @NonNull
     @Override
-    public TutoriasViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Crea la vista de cada elemento en el RecyclerVIEW, inflando item_tutoria.xml
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tutoria, parent, false);
-        return new TutoriasViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_CURSO) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tutoria, parent, false);
+            return new CursoViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tutoria_asignada, parent, false);
+            return new TutoriaViewHolder(view);
+        }
+    }
+
+
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Object item = getItem(position);
+        if (holder.getItemViewType() == VIEW_TYPE_CURSO) {
+            ((CursoViewHolder) holder).bind((Curso) item);
+        } else {
+            ((TutoriaViewHolder) holder).bind((Tutoria) item);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TutoriasViewHolder holder, int position) {
-        // Asocia los datos de un curso especifico con la vista correspondiente a esa posicion
-        Curso curso = getItem(position);
-        holder.bind(curso);
+    public int getItemViewType(int position) {
+        Object item = getItem(position);
+        if (item instanceof Curso) {
+            return VIEW_TYPE_CURSO;
+        } else {
+            return VIEW_TYPE_TUTORIA;
+        }
     }
+
 
     // Método para actualizar la lista de cursos
     public void setCursos(List<Curso> cursos) {
-        submitList(cursos);
+        submitList((List<Object>) (List<?>) cursos);
     }
 
-    // Vista individual de cada curso en el RecyclerVIEW
-    public class TutoriasViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtNombreCurso;
+    // Método para actualizar la lista de tutorias
+    public void setTutorias(List<Tutoria> tutorias) {
+        submitList((List<Object>) (List<?>) tutorias);
+    }
 
-        public TutoriasViewHolder(View itemView) {
+    // ViewHolder para cursos
+    public class CursoViewHolder extends RecyclerView.ViewHolder {
+        private final TextView txtNombreCurso;
+        private final Button btnSolicitarTutoria;
+
+        public CursoViewHolder(View itemView) {
             super(itemView);
             txtNombreCurso = itemView.findViewById(R.id.txtNombreCurso);
-        }
+            btnSolicitarTutoria = itemView.findViewById(R.id.btnSolicitarTutoria);
 
-        // Vincula datos del curso al item
+            btnSolicitarTutoria.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Curso curso = (Curso) getItem(position);
+                    Intent intent = new Intent(itemView.getContext(), SolicitarTutoriaActivity.class);
+                    intent.putExtra("idCurso", curso.getIdCurso());
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+        }
         public void bind(Curso curso) {
             txtNombreCurso.setText(curso.getNombreCurso());
         }
     }
+
+    // ViewHolder para tutoria
+    public class TutoriaViewHolder extends RecyclerView.ViewHolder {
+        private TextView txtNombreEstudiante;
+        private TextView txtNombreCurso;
+        private TextView txtTemaTutoria;
+        private TextView txtComentariosTutoria;
+        private TextView txtFechaTutoria;
+        private Button btnIniciarChat;
+        private Button btnFinalizarTutoria;
+
+        public TutoriaViewHolder(View itemView) {
+            super(itemView);
+            txtNombreEstudiante = itemView.findViewById(R.id.txtNombreEstudiante);
+            txtNombreCurso = itemView.findViewById(R.id.txtNombreCurso);
+            txtTemaTutoria = itemView.findViewById(R.id.txtTemaTutoria);
+            txtComentariosTutoria = itemView.findViewById(R.id.txtComentariosTutoria);
+            txtFechaTutoria = itemView.findViewById(R.id.txtFechaTutoria);
+            btnIniciarChat = itemView.findViewById(R.id.btnIniciarChat);
+            btnFinalizarTutoria = itemView.findViewById(R.id.btnFinalizarTutoria);
+        }
+
+        public void bind(Tutoria tutoria) {
+            String nombreEstudiante = estudianteMap.getOrDefault(tutoria.getId_estudiante(), "Desconocido");
+            txtNombreEstudiante.setText("Estudiante: " + nombreEstudiante);
+            txtNombreCurso.setText("Curso: " + tutoria.getId_curso().getNombreCurso());
+            txtTemaTutoria.setText("Tema: " + tutoria.getTema());
+            txtComentariosTutoria.setText("Comentarios: " + tutoria.getComentarios());
+            txtFechaTutoria.setText("Fecha: " + tutoria.getFecha());
+        }
+    }
+
 }
