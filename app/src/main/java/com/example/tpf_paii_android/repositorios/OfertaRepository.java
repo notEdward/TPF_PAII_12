@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.example.tpf_paii_android.conexion_database.DatabaseConnection;
 import com.example.tpf_paii_android.modelos.Curso;
+import com.example.tpf_paii_android.modelos.EstadoNivelEducativo;
 import com.example.tpf_paii_android.modelos.Estudiante;
 import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Modalidad;
@@ -164,29 +165,34 @@ public class OfertaRepository {
         executor.execute(() -> {
             List<OfertaEmpleo> ofertas = new ArrayList<>();
 
-            // consulta inicial
-            StringBuilder queryBuilder = new StringBuilder("SELECT * FROM ofertas_empleos WHERE 1=1");
+            StringBuilder queryBuilder = new StringBuilder(
+                    "SELECT oe.*, c.id_categoria " +
+                            "FROM ofertas_empleos oe " +
+                            "LEFT JOIN curso c ON oe.id_curso = c.id_curso " +
+                            "WHERE 1=1"
+            );
 
-            // Condiciones ( que esten en los ids seleccionados )
+            // Filtros dinámicos
             if (!modalidadesSeleccionadas.isEmpty()) {
-                queryBuilder.append(" AND id_tipo_modalidad IN (")
+                queryBuilder.append(" AND oe.id_tipo_modalidad IN (")
                         .append(TextUtils.join(",", modalidadesSeleccionadas))
                         .append(")");
             }
 
             if (!tiposEmpleoSeleccionados.isEmpty()) {
-                queryBuilder.append(" AND id_tipo_empleo IN (")
+                queryBuilder.append(" AND oe.id_tipo_empleo IN (")
                         .append(TextUtils.join(",", tiposEmpleoSeleccionados))
                         .append(")");
             }
 
             if (!cursosSeleccionados.isEmpty()) {
-                queryBuilder.append(" AND id_curso IN (")
+                queryBuilder.append(" AND oe.id_curso IN (")
                         .append(TextUtils.join(",", cursosSeleccionados))
                         .append(")");
             }
 
             String query = queryBuilder.toString();
+
             try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL,
                     DatabaseConnection.user,
                     DatabaseConnection.pass);
@@ -206,6 +212,9 @@ public class OfertaRepository {
                     oferta.setOtrosRequisitos(resultSet.getString("otros_requisitos"));
                     oferta.setDireccion(resultSet.getString("direccion"));
                     oferta.setId_localidad(resultSet.getInt("id_localidad"));
+
+                    oferta.setIdCategoria(resultSet.getInt("id_categoria"));
+
                     ofertas.add(oferta);
                 }
 
@@ -216,6 +225,7 @@ public class OfertaRepository {
             }
         });
     }
+
     //fin filtros
 
     //Comienzo de detalle Oferta
@@ -226,12 +236,16 @@ public class OfertaRepository {
                     "c.nombre_curso AS nombre_curso, " +
                     "l.nombre AS nombre_localidad, p.nombre AS nombre_provincia, " +
                     "m.descripcion AS descripcion_modalidad, " +
-                    "te.descripcion AS descripcion_tipo_empleo " +
+                    "ne.descripcion AS descipcion_nivelEducativo, " +
+                    "te.descripcion AS descripcion_tipo_empleo, " +
+                    "emp.nombre AS nombre_empresa " +
                     "FROM ofertas_empleos o " +
+                    "JOIN empresa emp ON o.id_empresa = emp.id_empresa " +
                     "JOIN curso c ON o.id_curso = c.id_curso " +
                     "JOIN localidad l ON o.id_localidad = l.id_localidad " +
                     "JOIN provincia p ON l.id_provincia = p.id_provincia " +
                     "JOIN modalidad m ON o.id_tipo_modalidad = m.id_modalidad " +
+                    "JOIN nivel_educativo ne ON o.id_nivel_educativo = ne.id_nivel_educativo " +
                     "JOIN tipo_empleo te ON o.id_tipo_empleo = te.id_tipo_empleo " +
                     "WHERE o.id_oferta_empleo = ?";
 
@@ -244,6 +258,7 @@ public class OfertaRepository {
                         // Crea un objeto OfertaDetalle con los resultados obtenidos
                         detalle = new OfertaDetalle(
                                 idOfertaEmpleo,  // Asigna el ID de la oferta
+                                resultSet.getString("nombre_empresa"),
                                 resultSet.getString("titulo"),
                                 resultSet.getString("descripcion"),
                                 resultSet.getString("direccion"),
@@ -252,6 +267,7 @@ public class OfertaRepository {
                                 resultSet.getString("nombre_provincia"),  // O el valor que consideres para provincia
                                 resultSet.getString("descripcion_modalidad"),
                                 resultSet.getString("descripcion_tipo_empleo"),
+                                resultSet.getString("descipcion_nivelEducativo"),
                                 resultSet.getString("otros_requisitos")
                         );
                     }
@@ -651,13 +667,16 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
         });
     }
 
-
     public void obtenerDetalleEstudiante(int idUsuario, DataCallback<Estudiante> callback) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
-            String query = "SELECT e.*, n.descripcion AS nivelEducativo " +
+            String query = "SELECT e.*, n.id_nivel_educativo, n.descripcion AS nivelEducativo, en.id_estado_nivel, en.descripcion AS estadoNivel, " +
+                    "l.id_localidad, l.nombre AS localidad, p.id_provincia, p.nombre AS provincia " +
                     "FROM estudiante e " +
                     "JOIN nivel_educativo n ON e.id_nivel_educativo = n.id_nivel_educativo " +
+                    "JOIN estado_nivel en ON e.id_estado_nivel = en.id_estado_nivel " +
+                    "JOIN localidad l ON e.id_localidad = l.id_localidad " +
+                    "JOIN provincia p ON l.id_provincia = p.id_provincia " +
                     "WHERE e.id_usuario = ?";
 
             try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
@@ -673,7 +692,31 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
                     estudiante.setEmail(rs.getString("email"));
                     estudiante.setTelefono(rs.getString("telefono"));
                     estudiante.setDireccion(rs.getString("direccion"));
-//                    estudiante.setNivelEducativoDescripcion(rs.getString("nivelEducativo"));
+                    //obejo nivel educativo
+                    int idNivelEducativo = rs.getInt("id_nivel_educativo");
+                    String descripcionNivelEducativo = rs.getString("nivelEducativo");
+                    NivelEducativo nivelEducativo = new NivelEducativo(idNivelEducativo, descripcionNivelEducativo);
+                    estudiante.setNivelEducativo(nivelEducativo);
+
+                    // objeto estadonivel
+                    int idEstadoNivel = rs.getInt("id_estado_nivel");
+                    String descripcionEstadoNivel = rs.getString("estadoNivel");
+                    EstadoNivelEducativo estadoNivelEducativo = new EstadoNivelEducativo(idEstadoNivel, descripcionEstadoNivel);
+                    estudiante.setEstadoNivelEducativo(estadoNivelEducativo);
+
+                    // obj local
+                    int idLocalidad = rs.getInt("id_localidad");
+                    String nombreLocalidad = rs.getString("localidad");
+                    Localidad localidad = new Localidad(idLocalidad, nombreLocalidad);
+
+                    // obj prov
+                    int idProvincia = rs.getInt("id_provincia");
+                    String nombreProvincia = rs.getString("provincia");
+                    Provincia provincia = new Provincia(idProvincia, nombreProvincia);
+                    localidad.setId_provincia(provincia);
+
+                    estudiante.setLocalidad(localidad);
+
                     callback.onSuccess(estudiante);
                 } else {
                     callback.onSuccess(null);
@@ -684,21 +727,18 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
         });
     }
 
-
-    public void actualizarEstadoPostulacion(int idPostulacion, String estado, DataCallback<Boolean> callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+    public void actualizarEstadoPostulacion(int idPostulacion, String nuevoEstado, DataCallback<Boolean> callback) {
         executor.execute(() -> {
             String query = "UPDATE postulaciones SET estado_postulacion = ? WHERE id_postulacion = ?";
 
             try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
                  PreparedStatement ps = con.prepareStatement(query)) {
-
-                ps.setString(1, estado);
+                ps.setString(1, nuevoEstado);
                 ps.setInt(2, idPostulacion);
-                int rowsUpdated = ps.executeUpdate();
 
-                // Si se actualizó al menos una fila, es exitoso
-                if (rowsUpdated > 0) {
+                int rowsAffected = ps.executeUpdate();
+
+                if (rowsAffected > 0) {
                     callback.onSuccess(true);
                 } else {
                     callback.onSuccess(false);
@@ -708,8 +748,6 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
             }
         });
     }
-
-
     public void shutdownExecutor() {
         executor.shutdown();
     }

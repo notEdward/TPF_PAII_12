@@ -45,7 +45,10 @@ public class ResponderActivity extends AppCompatActivity {
             Toast.makeText(this, "El mensaje no puede estar vacío", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        if (mensaje.length() > 150) {
+            Toast.makeText(this, "El mensaje no puede tener más de 150 caracteres", Toast.LENGTH_SHORT).show();
+            return;
+        }
         foroViewModel.enviarRespuesta(idHilo, nombreUsuario, mensaje).observe(this, success -> {
             if (success) {
                 Toast.makeText(ResponderActivity.this, "Respuesta enviada", Toast.LENGTH_SHORT).show();

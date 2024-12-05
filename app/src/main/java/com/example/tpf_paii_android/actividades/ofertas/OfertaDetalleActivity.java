@@ -16,7 +16,7 @@ import com.example.tpf_paii_android.viewmodels.OfertaViewModel;
 public class OfertaDetalleActivity extends AppCompatActivity {
 
     private int idOfertaEmpleo, imageResId; // ID de la oferta a consultar
-    private TextView tvTitulo, tvDescripcion, tvDireccion, tvCurso, tvLocalidad, tvModalidad, tvTipoEmpleo, tvOtrosRequisitos;
+    private TextView tvNombreEmpresa, tvTitulo, tvDescripcion, tvDireccion, tvCurso, tvLocalidad, tvModalidad, tvTipoEmpleo, tvNivelEducativo, tvOtrosRequisitos;
     private ImageView ivImagenOferta;
     private OfertaViewModel ofertaViewModel;
     private int idUsuario;
@@ -38,6 +38,7 @@ public class OfertaDetalleActivity extends AppCompatActivity {
         imageResId = getIntent().getIntExtra("imageResId", R.drawable.img1_tpf);
 
         //vinculo
+        tvNombreEmpresa = findViewById(R.id.tvNombreEmpresa);
         tvTitulo = findViewById(R.id.tvTitulo);
         ivImagenOferta = findViewById(R.id.ivImagenOferta);
         tvDescripcion = findViewById(R.id.tvDescripcion);
@@ -46,15 +47,14 @@ public class OfertaDetalleActivity extends AppCompatActivity {
         tvLocalidad = findViewById(R.id.tvLocalidad);
         tvModalidad = findViewById(R.id.tvModalidad);
         tvTipoEmpleo = findViewById(R.id.tvTipoEmpleo);
+        tvNivelEducativo = findViewById(R.id.tvNivelEducativo);
         tvOtrosRequisitos = findViewById(R.id.tvOtrosRequisitos);
 
-        // Inicializa el ViewModel
         ofertaViewModel = new ViewModelProvider(this).get(OfertaViewModel.class);
 
-        // Observar los cambios en los detalles de la oferta
         ofertaViewModel.getOfertaDetalleLiveData().observe(this, ofertaDetalle -> {
             if (ofertaDetalle != null) {
-                // Actualiza la UI con los datos de la oferta
+                tvNombreEmpresa.setText("Empresa: " + ofertaDetalle.getNombreEmpresa());
                 tvTitulo.setText(ofertaDetalle.getTitulo());
                 tvDescripcion.setText(ofertaDetalle.getDescripcion());
                 tvDireccion.setText("Dirección: " + ofertaDetalle.getDireccion());
@@ -62,18 +62,17 @@ public class OfertaDetalleActivity extends AppCompatActivity {
                 tvLocalidad.setText("Localidad: " + ofertaDetalle.getLocalidad());
                 tvModalidad.setText("Modalidad: " + ofertaDetalle.getModalidad());
                 tvTipoEmpleo.setText("Tipo de empleo: " + ofertaDetalle.getTipoEmpleo());
+                tvNivelEducativo.setText("Nivel educativo deseable: " + ofertaDetalle.getNivelEducativo());
                 tvOtrosRequisitos.setText("Otros requisitos: " + ofertaDetalle.getOtrosRequisitos());
                 ivImagenOferta.setImageResource(imageResId);
             }
         });
 
         //postulaciones
-        // Observa el mensaje de postulación
         ofertaViewModel.getPostularMensaje().observe(this, mensaje -> {
             Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
         });
 
-        // Configura el botón de postulación
         btnPostularse = findViewById(R.id.btnPostularse);
 
         if (!"Estudiante".equalsIgnoreCase(tipoUsuario)) {
@@ -84,14 +83,12 @@ public class OfertaDetalleActivity extends AppCompatActivity {
             });
         }
 
-        // Observar mensajes de error
         ofertaViewModel.getErrorMessage().observe(this, errorMessage -> {
             if (errorMessage != null) {
                 Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
             }
         });
 
-        // Cargar los detalles de la oferta
         ofertaViewModel.obtenerDetallesOferta(idOfertaEmpleo);
     }
 }

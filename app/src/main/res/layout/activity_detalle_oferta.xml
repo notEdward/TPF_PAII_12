@@ -46,6 +46,14 @@
             android:scaleType="centerCrop"
             android:layout_marginTop="16dp" />
 
+        <TextView
+            android:id="@+id/tvNombreEmpresa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre Empresa"
+            android:paddingTop="16dp"
+            android:layout_marginStart="8dp" />
+
         <!-- Descripción de la oferta -->
         <TextView
             android:id="@+id/tvDescripcion"
@@ -100,6 +108,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tipo de Empleo"
+            android:paddingTop="8dp"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/tvNivelEducativo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nivel educativo deseable"
             android:paddingTop="8dp"
             android:layout_marginStart="8dp" />
 

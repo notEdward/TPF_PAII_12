@@ -34,7 +34,17 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/textProvinciaLocalidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
         android:id="@+id/textNivelEducativo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textEstadoNivel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="16dp" />

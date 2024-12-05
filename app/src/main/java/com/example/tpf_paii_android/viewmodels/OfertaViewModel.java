@@ -37,22 +37,20 @@ private MutableLiveData<List<TipoEmpleo>> tiposEmpleoLiveData = new MutableLiveD
     private MutableLiveData<List<Localidad>> localidadesLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Provincia>> provinciasLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> ofertaCreadaExitosamente = new MutableLiveData<>();
-//baja
-private MutableLiveData<Boolean> bajaOfertaLiveData = new MutableLiveData<>();
+    //baja
+    private MutableLiveData<Boolean> bajaOfertaLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<PostulacionItem>> postulaciones = new MutableLiveData<>();
 
     ////
-    public LiveData<List<PostulacionItem>> getPostulaciones() {
-        return postulaciones;
-    }
     private MutableLiveData<Estudiante> estudianteLiveData = new MutableLiveData<>();
 
     public LiveData<String> getPostularMensaje() {
         return postularMensaje;
     }
-
     //oferta detalle
     private final MutableLiveData<OfertaDetalle> ofertaDetalleLiveData = new MutableLiveData<>();
+    private MutableLiveData<String> estadoPostulacionLiveData = new MutableLiveData<>();
+
     public LiveData<OfertaDetalle> getOfertaDetalleLiveData() {
         return ofertaDetalleLiveData;
     }
@@ -72,7 +70,9 @@ private MutableLiveData<Boolean> bajaOfertaLiveData = new MutableLiveData<>();
     public LiveData<List<OfertaEmpleo>> getOfertasFiltradas() {
         return ofertasFiltradasLiveData;
     }
-
+    public LiveData<List<PostulacionItem>> getPostulaciones() {
+        return postulaciones;
+    }
     //empresa
     public LiveData<List<TipoEmpleo>> getTiposEmpleoLiveData() { return tiposEmpleoLiveData; }
     public LiveData<List<Modalidad>> getModalidadesLiveData() { return modalidadesLiveData; }
@@ -92,6 +92,11 @@ private MutableLiveData<Boolean> bajaOfertaLiveData = new MutableLiveData<>();
     public LiveData<Estudiante> getEstudianteLiveData() {
         return estudianteLiveData;
     }
+    public LiveData<String> getEstadoPostulacionLiveData() {
+        return estadoPostulacionLiveData;
+    }
+
+
     public void loadOfertas() {
         ofertaRepository.getAllOfertas(new OfertaRepository.DataCallback<ArrayList<OfertaEmpleo>>() {
             @Override
@@ -352,8 +357,26 @@ public void cargarPostulacionesEstudiante(int idUsuario) {
         });
     }
 
-    public void actualizarEstadoPostulacion(int idPostulacion, String estado, OfertaRepository.DataCallback<Boolean> callback) {
-        ofertaRepository.actualizarEstadoPostulacion(idPostulacion, estado, callback);
+//    public void actualizarEstadoPostulacion(int idPostulacion, String estado, OfertaRepository.DataCallback<Boolean> callback) {
+//        ofertaRepository.actualizarEstadoPostulacion(idPostulacion, estado, callback);
+//    }
+
+    public void actualizarEstadoPostulacion(int idPostulacion, String nuevoEstado) {
+        ofertaRepository.actualizarEstadoPostulacion(idPostulacion, nuevoEstado, new OfertaRepository.DataCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    estadoPostulacionLiveData.postValue(nuevoEstado + " con éxito");
+                } else {
+                    estadoPostulacionLiveData.postValue("Error al actualizar el estado");
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                estadoPostulacionLiveData.postValue("Error al actualizar el estado");
+            }
+        });
     }
 
     @Override

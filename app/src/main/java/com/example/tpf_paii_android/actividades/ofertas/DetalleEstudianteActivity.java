@@ -11,13 +11,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.tpf_paii_android.MyApp;
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.viewmodels.OfertaViewModel;
+import android.view.View;
 
 public class DetalleEstudianteActivity extends AppCompatActivity {
-    private TextView textNombreApellido, textDNI, textEmail, textTelefono, textDireccion, textNivelEducativo;
+    private TextView textNombreApellido, textDNI, textEmail, textTelefono, textDireccion, textProvinciaLocalidad, textNivelEducativo, textEstadoNivel;
     private Button btnAceptar, btnRechazar;
 
     private int idPostulacion;
     private int idUsuario;
+    private String estadoPostulacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,10 @@ public class DetalleEstudianteActivity extends AppCompatActivity {
         textEmail = findViewById(R.id.textEmail);
         textTelefono = findViewById(R.id.textTelefono);
         textDireccion = findViewById(R.id.textDireccion);
+        textProvinciaLocalidad = findViewById(R.id.textProvinciaLocalidad);
         textNivelEducativo = findViewById(R.id.textNivelEducativo);
+        textEstadoNivel = findViewById(R.id.textEstadoNivel);
+
         btnAceptar = findViewById(R.id.btnAceptar);
         btnRechazar = findViewById(R.id.btnRechazar);
         MyApp app = (MyApp) getApplicationContext();
@@ -38,6 +43,12 @@ public class DetalleEstudianteActivity extends AppCompatActivity {
         //recibimos del adapter de la actividad anterior para ver el detalle del estudiante
         idPostulacion = getIntent().getIntExtra("idPostulacion", -1);
         idUsuario = getIntent().getIntExtra("idUsuario", -1);
+        estadoPostulacion = getIntent().getStringExtra("estadoPostulacion"); // Recuperar estado
+
+        if ("Aceptado".equalsIgnoreCase(estadoPostulacion) || "Rechazado".equalsIgnoreCase(estadoPostulacion)) {
+            btnAceptar.setVisibility(View.GONE);
+            btnRechazar.setVisibility(View.GONE);
+        }
 
         OfertaViewModel viewModel = new ViewModelProvider(this).get(OfertaViewModel.class);
         viewModel.obtenerDetalleEstudiante(idUsuario);
@@ -49,24 +60,31 @@ public class DetalleEstudianteActivity extends AppCompatActivity {
                 textEmail.setText("Email: " + estudiante.getEmail());
                 textTelefono.setText("Teléfono: " + estudiante.getTelefono());
                 textDireccion.setText("Dirección: " + estudiante.getDireccion());
-                // textNivelEducativo.setText("Nivel Educativo: " + estudiante.getNivelEducativoDescripcion());
+                textNivelEducativo.setText("Nivel Educativo: " + estudiante.getNivelEducativo().getDescripcion());
+                textEstadoNivel.setText("Estado: " + estudiante.getEstadoNivelEducativo().getDescripcion());
+                textProvinciaLocalidad.setText("Provincia y localidad: " + estudiante.getLocalidad().getId_provincia().getNombre() + " , " + estudiante.getLocalidad().getNombre());
+
             }
         });
 
-//        btnAceptar.setOnClickListener(v -> actualizarEstadoPostulacion(viewModel, "Aceptado"));
-//        btnRechazar.setOnClickListener(v -> actualizarEstadoPostulacion(viewModel, "Rechazado"));
-    }
+        if (viewModel.getEstadoPostulacionLiveData() != null) {
+            viewModel.getEstadoPostulacionLiveData().observe(this, mensaje -> {
+                if (mensaje != null) {
+                    Toast.makeText(DetalleEstudianteActivity.this, mensaje, Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
+        }
 
-//    private void actualizarEstadoPostulacion(OfertaViewModel viewModel, String estado) {
-//        viewModel.actualizarEstadoPostulacion(idPostulacion, estado, success -> {
-//            if (success) {
-//                Toast.makeText(this, "Estado actualizado a " + estado, Toast.LENGTH_SHORT).show();
-//                finish();
-//            } else {
-//                Toast.makeText(this, "Error al actualizar estado", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+        btnAceptar.setOnClickListener(v -> {
+            viewModel.actualizarEstadoPostulacion(idPostulacion, "Aceptado");
+        });
+        btnRechazar.setOnClickListener(v -> {
+            viewModel.actualizarEstadoPostulacion(idPostulacion, "Rechazado");
+        });
+
+  }
+
 }
 
 

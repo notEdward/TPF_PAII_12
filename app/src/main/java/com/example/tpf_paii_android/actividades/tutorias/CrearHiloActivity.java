@@ -43,6 +43,14 @@ public class CrearHiloActivity extends AppCompatActivity {
             String titulo = editTextTitulo.getText().toString();
             String mensaje = editTextMensaje.getText().toString();
 
+            if (titulo.length() > 75) {
+                Toast.makeText(this, "El titulo no puede tener más de 75 caracteres", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (mensaje.length() > 150) {
+                Toast.makeText(this, "El mensaje no puede tener más de 150 caracteres", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (titulo.isEmpty() || mensaje.isEmpty()) {
                 Toast.makeText(CrearHiloActivity.this, "Por favor ingrese un título y un mensaje", Toast.LENGTH_SHORT).show();
             } else {

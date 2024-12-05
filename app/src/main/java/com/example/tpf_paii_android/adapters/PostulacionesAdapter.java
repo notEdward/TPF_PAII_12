@@ -2,6 +2,7 @@ package com.example.tpf_paii_android.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,18 +61,20 @@ public class PostulacionesAdapter extends RecyclerView.Adapter<PostulacionesAdap
                 holder.textTitulo.setVisibility(View.VISIBLE);
                 shownTitles.add(postulacion.getTitulo());
             }
-            holder.textDetalle.setText("Usuario: " + postulacion.getNombreUsuario());
+            String textoHtml = "Usuario: " + postulacion.getNombreUsuario() + " - <b>" + postulacion.getEstadoPostulacion() + "</b>";
+            holder.textDetalle.setText(Html.fromHtml(textoHtml, Html.FROM_HTML_MODE_LEGACY));
             holder.btnVerDetalle.setVisibility(View.VISIBLE);
 
             holder.btnVerDetalle.setOnClickListener(v -> {
                 Intent intent = new Intent(context, DetalleEstudianteActivity.class);
                 intent.putExtra("idPostulacion", postulacion.getIdPostulacion());
                 intent.putExtra("idUsuario", postulacion.getIdUsuario());
+                intent.putExtra("estadoPostulacion", postulacion.getEstadoPostulacion());
                 context.startActivity(intent);
             });
 
         } else if (tipoUsuario.equalsIgnoreCase("Estudiante")) {
-            // Para estudiante, solo mostramos el título y detalles
+            // estudiante solo mostramos el título y detalles
             holder.textTitulo.setText(postulacion.getTitulo());
             holder.textDetalle.setText(
                     "Fecha: " + postulacion.getFechaPostulacion() +

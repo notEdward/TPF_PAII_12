@@ -14,6 +14,10 @@ public class Estudiante {
     private int id_nivelEducativo;
     private int id_estadoNivelEducativo;
 
+    private Localidad localidad;
+    private EstadoNivelEducativo estadoNivelEducativo;
+    private NivelEducativo nivelEducativo;
+
 
     public Estudiante() {
     }
@@ -32,6 +36,22 @@ public class Estudiante {
         this.id_localidad = id_localidad;
         this.id_nivelEducativo = id_nivelEducativo;
         this.id_estadoNivelEducativo = id_estadoNivelEducativo;
+    }
+
+    public Estudiante(String DNI, Usuario id_usuario, String nombre, String apellido, int id_genero, String email,
+                      String telefono, String direccion, int id_localidad, EstadoNivelEducativo estadoNivelEducativo,
+                      NivelEducativo nivelEducativo) {
+        this.dni = DNI;
+        this.id_usuario = id_usuario;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.id_genero = id_genero;
+        this.email = email;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.id_localidad = id_localidad;
+        this.estadoNivelEducativo = estadoNivelEducativo;
+        this.nivelEducativo = nivelEducativo;
     }
 
     public String getDni() {
@@ -120,6 +140,30 @@ public class Estudiante {
 
     public void setId_estadoNivelEducativo(int id_estadoNivelEducativo) {
         this.id_estadoNivelEducativo = id_estadoNivelEducativo;
+    }
+
+    public NivelEducativo getNivelEducativo() {
+        return nivelEducativo;
+    }
+
+    public void setNivelEducativo(NivelEducativo nivelEducativo) {
+        this.nivelEducativo = nivelEducativo;
+    }
+
+    public EstadoNivelEducativo getEstadoNivelEducativo() {
+        return estadoNivelEducativo;
+    }
+
+    public void setEstadoNivelEducativo(EstadoNivelEducativo estadoNivelEducativo) {
+        this.estadoNivelEducativo = estadoNivelEducativo;
+    }
+
+    public Localidad getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(Localidad localidad) {
+        this.localidad = localidad;
     }
 
     @Override
