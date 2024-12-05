@@ -513,24 +513,56 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
                 Class.forName(DatabaseConnection.driver);
                 Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
 
-                // estado del curso a 0 (inactivo)
-                String query = "UPDATE ofertas_empleos SET estado = ? WHERE id_oferta_empleo = ?";
-                PreparedStatement statement = con.prepareStatement(query);
-                statement.setInt(1, nuevoEstado);
-                statement.setInt(2, idOferta);
+                String queryOferta = "UPDATE ofertas_empleos SET estado = ? WHERE id_oferta_empleo = ?";
+                PreparedStatement statementOferta = con.prepareStatement(queryOferta);
+                statementOferta.setInt(1, nuevoEstado);
+                statementOferta.setInt(2, idOferta);
 
-                int rowsAffected = statement.executeUpdate();
-                statement.close();
+                int rowsAffectedOferta = statementOferta.executeUpdate();
+                statementOferta.close();
+
+                String queryPostulaciones = "UPDATE postulaciones SET estado_postulacion = 'Finalizado' WHERE id_oferta_empleo = ? AND LOWER(estado_postulacion) = 'pendiente'";
+                PreparedStatement statementPostulaciones = con.prepareStatement(queryPostulaciones);
+                statementPostulaciones.setInt(1, idOferta);
+
+                int rowsAffectedPostulaciones = statementPostulaciones.executeUpdate();
+                statementPostulaciones.close();
+
                 con.close();
 
+                boolean success = rowsAffectedOferta > 0 || rowsAffectedPostulaciones > 0;
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    callback.onSuccess(rowsAffected > 0);
+                    callback.onSuccess(success);
                 });
             } catch (Exception e) {
                 new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
             }
         });
     }
+//    public void actualizarEstadoOferta(int idOferta, int nuevoEstado, OfertaRepository.DataCallback<Boolean> callback) {
+//        executor.execute(() -> {
+//            try {
+//                Class.forName(DatabaseConnection.driver);
+//                Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+//
+//                // estado del curso a 0 (inactivo)
+//                String query = "UPDATE ofertas_empleos SET estado = ? WHERE id_oferta_empleo = ?";
+//                PreparedStatement statement = con.prepareStatement(query);
+//                statement.setInt(1, nuevoEstado);
+//                statement.setInt(2, idOferta);
+//
+//                int rowsAffected = statement.executeUpdate();
+//                statement.close();
+//                con.close();
+//
+//                new Handler(Looper.getMainLooper()).post(() -> {
+//                    callback.onSuccess(rowsAffected > 0);
+//                });
+//            } catch (Exception e) {
+//                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+//            }
+//        });
+//    }
 
     //Seccion postulaciones
     public void obtenerPostulacionesEstudiante(int idUsuario, OfertaRepository.DataCallback<List<PostulacionItem>> callback) {

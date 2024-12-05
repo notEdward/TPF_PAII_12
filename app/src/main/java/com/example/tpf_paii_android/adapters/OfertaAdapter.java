@@ -49,12 +49,6 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
             tvVerOferta = itemView.findViewById(R.id.tvVerOferta);
         }
 
-        public void bind(OfertaEmpleo oferta) {
-            tituloTextView.setText(oferta.getTitulo());
-            descripcionTextView.setText(oferta.getDescripcion());
-            imageOferta.setImageResource(R.drawable.img3_tpf); // Imagen de ejemplo
-            tvVerOferta.setText("Ver oferta");
-        }
     }
 
     @NonNull
@@ -113,7 +107,7 @@ public class OfertaAdapter extends RecyclerView.Adapter<OfertaAdapter.OfertaView
                             // Acción para "Baja" oferta, mostrar un dialogo de confirmación
                             new AlertDialog.Builder(context)
                                     .setTitle("Confirmación")
-                                    .setMessage("¿Está seguro que desea dar de baja esta oferta?")
+                                    .setMessage("¿Está seguro que desea dar de baja esta oferta?\n\nLos estudiantes que se hayan postulado verán el estado como \"Finalizado\".")
                                     .setPositiveButton("Sí", (dialog, which) -> {
                                         // Notificar a la actividad para dar de baja la oferta
                                         if (context instanceof OfertaActivity) {

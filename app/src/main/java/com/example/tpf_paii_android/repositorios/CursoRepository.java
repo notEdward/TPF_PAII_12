@@ -360,28 +360,80 @@ public void registrarEvaluacion(Evaluacion evaluacion, DataCallback<Boolean> cal
 //baja
 public void actualizarEstadoCurso(int idCurso, int nuevoEstado, DataCallback<Boolean> callback) {
     executor.execute(() -> {
+        Connection con = null;
         try {
             Class.forName(DatabaseConnection.driver);
-            Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+            con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+            con.setAutoCommit(false);
 
-            // estado del curso a 0 (inactivo)
-            String query = "UPDATE curso SET estado = ? WHERE id_curso = ?";
-            PreparedStatement statement = con.prepareStatement(query);
-            statement.setInt(1, nuevoEstado);
-            statement.setInt(2, idCurso);
+            String queryCurso = "UPDATE curso SET estado = ? WHERE id_curso = ?";
+            PreparedStatement statementCurso = con.prepareStatement(queryCurso);
+            statementCurso.setInt(1, nuevoEstado);
+            statementCurso.setInt(2, idCurso);
+            int rowsCurso = statementCurso.executeUpdate();
 
-            int rowsAffected = statement.executeUpdate();
-            statement.close();
+            String queryInscripciones = "UPDATE inscripciones SET estado_inscripcion = 'Cancelado' " +
+                    "WHERE id_curso = ? AND LOWER(estado_inscripcion) = 'activo'";
+            PreparedStatement statementInscripciones = con.prepareStatement(queryInscripciones);
+            statementInscripciones.setInt(1, idCurso);
+            int rowsInscripciones = statementInscripciones.executeUpdate();
+
+            con.commit();
+            statementCurso.close();
+            statementInscripciones.close();
             con.close();
 
+            boolean success = rowsCurso > 0 || rowsInscripciones > 0;
             new Handler(Looper.getMainLooper()).post(() -> {
-                callback.onSuccess(rowsAffected > 0);
+                callback.onSuccess(success);
             });
         } catch (Exception e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (Exception rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            e.printStackTrace();
             new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (Exception closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
         }
     });
 }
+
+    //public void actualizarEstadoCurso(int idCurso, int nuevoEstado, DataCallback<Boolean> callback) {
+//    executor.execute(() -> {
+//        try {
+//            Class.forName(DatabaseConnection.driver);
+//            Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+//
+//            // estado del curso a 0 (inactivo)
+//            String query = "UPDATE curso SET estado = ? WHERE id_curso = ?";
+//            PreparedStatement statement = con.prepareStatement(query);
+//            statement.setInt(1, nuevoEstado);
+//            statement.setInt(2, idCurso);
+//
+//            int rowsAffected = statement.executeUpdate();
+//            statement.close();
+//            con.close();
+//
+//            new Handler(Looper.getMainLooper()).post(() -> {
+//                callback.onSuccess(rowsAffected > 0);
+//            });
+//        } catch (Exception e) {
+//            new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+//        }
+//    });
+//}
     public void obtenerMisCursos(int idUsuario, DataCallback<List<MisCursoItem>> callback) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {

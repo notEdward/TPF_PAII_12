@@ -18,6 +18,7 @@ import com.example.tpf_paii_android.actividades.ofertas.DetalleEstudianteActivit
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PostulacionesAdapter extends RecyclerView.Adapter<PostulacionesAdapter.PostulacionesViewHolder> {
     private final List<PostulacionItem> postulaciones;
@@ -27,7 +28,13 @@ public class PostulacionesAdapter extends RecyclerView.Adapter<PostulacionesAdap
 //hash para ver si ya existe con el mismo nombre y no repetir
 
     public PostulacionesAdapter(List<PostulacionItem> postulaciones, String tipoUsuario, Context context) {
-        this.postulaciones = postulaciones;
+        if (tipoUsuario.equalsIgnoreCase("Empresa")) {
+            this.postulaciones = postulaciones.stream()
+                    .filter(p -> !p.getEstadoPostulacion().equalsIgnoreCase("Finalizado"))
+                    .collect(Collectors.toList());
+        } else {
+            this.postulaciones = postulaciones;
+        }
         this.tipoUsuario = tipoUsuario;
         this.context = context;
     }

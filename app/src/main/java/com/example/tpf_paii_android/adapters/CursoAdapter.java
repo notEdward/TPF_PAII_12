@@ -86,7 +86,7 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
                         // Acción para "Baja" curso, mostrar un dialogo de confirmación
                         new AlertDialog.Builder(context)
                                 .setTitle("Confirmación")
-                                .setMessage("¿Está seguro que desea dar de baja este curso?")
+                                .setMessage("¿Está seguro que desea dar de baja este curso?\n\nLos estudiantes que estén inscritos y no hayan finalizado el curso verán el estado como \"Cancelado\".")
                                 .setPositiveButton("Sí", (dialog, which) -> {
                                     // Notificar a la actividad para dar de baja el curso
                                     if (context instanceof CursoActivity) {
