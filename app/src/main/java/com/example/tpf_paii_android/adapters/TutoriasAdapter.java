@@ -129,8 +129,7 @@ public class TutoriasAdapter extends ListAdapter<Object, RecyclerView.ViewHolder
         private TextView txtTemaTutoria;
         private TextView txtComentariosTutoria;
         private TextView txtFechaTutoria;
-        private Button btnIniciarChat;
-        private Button btnFinalizarTutoria;
+
 
         public TutoriaViewHolder(View itemView) {
             super(itemView);
@@ -139,8 +138,6 @@ public class TutoriasAdapter extends ListAdapter<Object, RecyclerView.ViewHolder
             txtTemaTutoria = itemView.findViewById(R.id.txtTemaTutoria);
             txtComentariosTutoria = itemView.findViewById(R.id.txtComentariosTutoria);
             txtFechaTutoria = itemView.findViewById(R.id.txtFechaTutoria);
-            btnIniciarChat = itemView.findViewById(R.id.btnIniciarChat);
-            btnFinalizarTutoria = itemView.findViewById(R.id.btnFinalizarTutoria);
         }
 
         public void bind(Tutoria tutoria) {

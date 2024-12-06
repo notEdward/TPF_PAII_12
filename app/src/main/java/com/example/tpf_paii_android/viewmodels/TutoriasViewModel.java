@@ -21,7 +21,7 @@ public class TutoriasViewModel extends ViewModel {
     private final MutableLiveData<List<Tutoria>> tutoriasAsignadasLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> successLiveData = new MutableLiveData<>();
 
-    private final MutableLiveData<Map<String, String>> estudiantesMapLiveData = new MutableLiveData<>(); // LiveData para el mapa de estudiante
+    private final MutableLiveData<Map<String, String>> estudiantesMap = new MutableLiveData<>(); // LiveData para el mapa de estudiante
 
     private int idUsuario;
 
@@ -31,7 +31,9 @@ public class TutoriasViewModel extends ViewModel {
 
     public TutoriasViewModel(TutoriasRepository repository) {
         this.tutoriasRepository = repository;
+        obtenerEstudiantesMap();
     }
+
 
     // Método para obtener el dni del estudiante usando el idUsuario
     public void obtenerDniEstudiante(int idUsuario, TutoriasRepository.DataCallback<String> callback) {
@@ -58,7 +60,7 @@ public class TutoriasViewModel extends ViewModel {
         tutoriasRepository.getEstudiantesMap(new TutoriasRepository.DataCallback<Map<String, String>>() {
             @Override
             public void onSuccess(Map<String, String> result) {
-                estudiantesMapLiveData.postValue(result);
+                estudiantesMap.postValue(result);
             }
 
             @Override
@@ -69,8 +71,8 @@ public class TutoriasViewModel extends ViewModel {
     }
 
     // Obtiene las tutorías asignadas por tutor
-    public void cargarTutoriasPorTutor(int idTutor) {
-        tutoriasRepository.getTutoriasPorTutor(idTutor, new TutoriasRepository.DataCallback<List<Tutoria>>() {
+    public void cargarTutoriasPorTutor(int idUsuario) {
+        tutoriasRepository.getTutoriasPorTutor(idUsuario, new TutoriasRepository.DataCallback<List<Tutoria>>() {
             @Override
             public void onSuccess(List<Tutoria> result) {
                 tutoriasAsignadasLiveData.postValue(result);
@@ -170,8 +172,11 @@ public class TutoriasViewModel extends ViewModel {
 
     // LiveData mapa de estudiantes
     public LiveData<Map<String, String>> getEstudiantesMapLiveData() {
-        return estudiantesMapLiveData;
+        return estudiantesMap;
     }
+
+
+
 
     // LiveData para mensajes de exito
     public LiveData<String> getSuccessLiveData() {

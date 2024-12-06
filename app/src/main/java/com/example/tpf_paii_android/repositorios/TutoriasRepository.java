@@ -59,7 +59,7 @@ public class TutoriasRepository {
         });
     }
 
-    public void getTutoriasPorTutor(int idTutor, DataCallback<List<Tutoria>> callback) {
+    public void getTutoriasPorTutor(int idUsuario, DataCallback<List<Tutoria>> callback) {
         executor.execute(() -> {
             List<Tutoria> tutorias = new ArrayList<>();
             String query =
@@ -72,14 +72,15 @@ public class TutoriasRepository {
                             "    t.tema, " +
                             "    t.comentarios " +
                             "FROM tutoria t " +
-                            "JOIN estudiante e ON t.id_estudiante = e.id_usuario " +
+                            "JOIN tutor tu ON t.id_tutor = tu.id_tutor " +
+                            "JOIN estudiante e ON t.id_estudiante = e.dni " +
                             "JOIN curso c ON t.id_curso = c.id_curso " +
-                            "WHERE t.id_tutor = ?";
+                            "WHERE tu.id_usuario = ?";
 
             try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
                  PreparedStatement preparedStatement = con.prepareStatement(query)) {
 
-                preparedStatement.setInt(1, idTutor);
+                preparedStatement.setInt(1, idUsuario);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
@@ -96,7 +97,7 @@ public class TutoriasRepository {
                     // Crear instancia de Tutoria
                     Tutoria tutoria = new Tutoria(
                             resultSet.getInt("id_tutoria"),
-                            null, // Suponiendo que no necesitas inicializar el Tutor
+                            null,
                             resultSet.getString("id_estudiante"),
                             curso,
                             resultSet.getDate("fecha"),
@@ -132,14 +133,14 @@ public class TutoriasRepository {
 
                 while (resultSet.next()) {
                     String idUsuario = resultSet.getString("id_usuario");
-                    String nombreUsuario = resultSet.getString("nombre_usuario");
+
                     String nombreEstudiante = resultSet.getString("nombre");
                     String apellidoEstudiante = resultSet.getString("apellido");
 
-                    // Concatenamos el nombre completo
+                    // Concatena el nombre completo
                     String nombreCompleto = nombreEstudiante + " " + apellidoEstudiante;
 
-                    // Agregamos al mapa id_usuario -> nombre completo
+                    // Agrega al mapa id_usuario -> nombre completo
                     estudiantesMap.put(idUsuario, nombreCompleto);
                 }
 

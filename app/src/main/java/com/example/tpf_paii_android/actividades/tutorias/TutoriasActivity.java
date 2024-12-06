@@ -146,8 +146,9 @@ public class TutoriasActivity extends MenuHamburguesaActivity {
     }
 
 
-    // Método para obtener el mapa de estudiantes vacio
+    // Método para obtener el mapa de estudiantes
     private Map<String, String> obtenerEstudiantesMap() {
         return new HashMap<>();
+                //tutoriasViewModel.getEstudiantesMapLiveData().getValue();
     }
 }
