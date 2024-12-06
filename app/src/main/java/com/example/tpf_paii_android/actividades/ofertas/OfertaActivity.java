@@ -97,7 +97,7 @@ public class OfertaActivity extends MenuHamburguesaActivity {
             public void afterTextChanged(Editable s) {}
         });
         //btn alta
-        if ("Empresa".equals(tipo_usuario)) {
+        if ("Empresa".equalsIgnoreCase(tipo_usuario)) {
             btnCrear.setVisibility(View.VISIBLE);
             btnCrear.setOnClickListener(view -> {
                 Intent intent = new Intent(OfertaActivity.this, AltaOfertaActivity.class);
@@ -105,6 +105,11 @@ public class OfertaActivity extends MenuHamburguesaActivity {
             });
         } else {
             btnCrear.setVisibility(View.GONE);
+        }
+        if (tipo_usuario.equalsIgnoreCase("Empresa") || tipo_usuario.equalsIgnoreCase("Estudiante")) {
+            btnPostulaciones.setVisibility(View.VISIBLE);
+        } else {
+            btnPostulaciones.setVisibility(View.GONE);
         }
         //btn postulaciones
         btnPostulaciones.setOnClickListener(v -> {

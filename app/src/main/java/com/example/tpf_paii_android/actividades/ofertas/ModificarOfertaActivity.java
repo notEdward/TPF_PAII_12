@@ -60,8 +60,6 @@ public class ModificarOfertaActivity extends AppCompatActivity {
         spinnerProvincia = findViewById(R.id.spinnerProvincia);
 
         viewModel = new ViewModelProvider(this).get(OfertaViewModel.class);
-        configurarObservadores();
-        cargarDatos();
 
         idOfertaEmpleo = getIntent().getIntExtra("id_oferta_empleo", -1);
         String titulo = getIntent().getStringExtra("titulo");
@@ -87,8 +85,11 @@ public class ModificarOfertaActivity extends AppCompatActivity {
                 seleccionarNivelEducativoEnSpinner(oferta.getNivelEducativo());
                 seleccionarModalidadEnSpinner(oferta.getModalidad());
                 seleccionarLocalidadEnSpinner(oferta.getLocalidad());
+                seleccionarProvinciaEnSpinner(oferta.getLocalidad());
             }
         });
+        configurarObservadores();
+        cargarDatos();
 
         viewModel.getExitoActualizacion().observe(this, exito -> {
             if (exito != null && exito) {
@@ -160,21 +161,19 @@ public class ModificarOfertaActivity extends AppCompatActivity {
             NivelEducativoAdapter nivelEducativoAdapter = new NivelEducativoAdapter(this, nivelesEducativos);
             spinnerNivelEducativo.setAdapter(nivelEducativoAdapter);
         });
-
         viewModel.getProvinciasLiveData().observe(this, provincias -> {
             provinciaAdapter = new ProvinciaAdapter(this, provincias);
             spinnerProvincia.setAdapter(provinciaAdapter);
         });
-
         viewModel.getLocalidadesLiveData().observe(this, localidades -> {
             ArrayAdapter<Localidad> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localidades);
             spinnerLocalidad.setAdapter(adapter);
         });
-
         viewModel.getLocalidadesLiveData().observe(this, localidades -> {
             localidadAdapter = new LocalidadAdapter(this, localidades);
             spinnerLocalidad.setAdapter(localidadAdapter);
         });
+
         //cambio automatico de provincia/localidad
         spinnerProvincia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -248,6 +247,22 @@ public class ModificarOfertaActivity extends AppCompatActivity {
                 }
                 if (posicion != -1) {
                     spinnerLocalidad.setSelection(posicion);
+                }
+            });
+        }
+    }
+    private void seleccionarProvinciaEnSpinner(Localidad localidadSeleccionado) {
+        if (localidadSeleccionado != null) {
+            viewModel.getProvinciasLiveData().observe(this, provincias -> {
+                int posicion = -1;
+                for (int i = 0; i < provincias.size(); i++) {
+                    if (provincias.get(i).getId_provincia() == localidadSeleccionado.getIdprovincia()) {
+                        posicion = i;
+                        break;
+                    }
+                }
+                if (posicion != -1) {
+                    spinnerProvincia.setSelection(posicion);
                 }
             });
         }

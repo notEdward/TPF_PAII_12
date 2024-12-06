@@ -45,6 +45,9 @@ public class Localidad {
         return  nombre;
     }
 
+    public int getIdprovincia() {
+        return idProvincia;
+    }
     public void setId_provincia(int idProvincia) {
         this.idProvincia = idProvincia;
     }
