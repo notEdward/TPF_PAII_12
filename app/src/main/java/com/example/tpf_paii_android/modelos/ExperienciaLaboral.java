@@ -20,6 +20,14 @@ public class ExperienciaLaboral {
         this.duracion = duracion;
     }
 
+    public ExperienciaLaboral(int idExpLaboral, String lugarTrabajo, String cargoOcupado, String tareasRealizadas, String duracion) {
+        this.id_experienciaLaboral = idExpLaboral;
+        this.lugar = lugarTrabajo;
+        this.cargo = cargoOcupado;
+        this.tareas = tareasRealizadas;
+        this.duracion = duracion;
+    }
+
     public int getId_experienciaLaboral() {
         return id_experienciaLaboral;
     }

@@ -17,7 +17,9 @@ public class Estudiante {
     private Localidad localidad;
     private EstadoNivelEducativo estadoNivelEducativo;
     private NivelEducativo nivelEducativo;
-
+    private Genero genero;
+    private ExperienciaLaboral experienciaLaboral;
+    private int idUsuario;
 
     public Estudiante() {
     }
@@ -134,6 +136,21 @@ public class Estudiante {
         this.id_nivelEducativo = id_nivelEducativo;
     }
 
+    public Genero getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Genero genero) {
+        this.genero = genero;
+    }
+    public ExperienciaLaboral getExperienciaLaboral() {
+        return experienciaLaboral;
+    }
+
+    public void setExperienciaLaboral(ExperienciaLaboral experienciaLaboral) {
+        this.experienciaLaboral = experienciaLaboral;
+    }
+
     public int getId_estadoNivelEducativo() {
         return id_estadoNivelEducativo;
     }
@@ -164,6 +181,14 @@ public class Estudiante {
 
     public void setLocalidad(Localidad localidad) {
         this.localidad = localidad;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     @Override
