@@ -4,16 +4,17 @@ public class OfertaEmpleo {
 
     public int getIdEmpresa;
     private int id_ofertaEmpleo;
-    private Empresa id_empresa;
+    private Empresa empresa;
     private String titulo;
     private String descripcion;
-    private TipoEmpleo id_tipoEmpleo;
-    private Modalidad id_modalidad;
-    private NivelEducativo id_nivelEducativo;
-    private Curso id_curso;
+    private TipoEmpleo tipoEmpleo;
+    private Modalidad modalidad;
+    private NivelEducativo nivelEducativo;
+    private Curso curso;
     private String otrosRequisitos;
     private String direccion;
-    private Localidad id_localidad;
+    private Localidad localidad;
+    private CategoriaCurso categoriaCurso;
 
     //Para constructoro simple
     private int idEmpresa;
@@ -27,36 +28,36 @@ public class OfertaEmpleo {
     public OfertaEmpleo() {
     }
 
-    public OfertaEmpleo(int id_ofertaEmpleo, Empresa id_empresa, String titulo, String descripcion, TipoEmpleo id_tipoEmpleo, Modalidad id_modalidad, NivelEducativo id_nivelEducativo, Curso id_curso, String otrosRequisitos, String direccion, Localidad id_localidad) {
-        this.id_ofertaEmpleo = id_ofertaEmpleo;
-        this.id_empresa = id_empresa;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.id_tipoEmpleo = id_tipoEmpleo;
-        this.id_modalidad = id_modalidad;
-        this.id_nivelEducativo = id_nivelEducativo;
-        this.id_curso = id_curso;
-        this.otrosRequisitos = otrosRequisitos;
-        this.direccion = direccion;
-        this.id_localidad = id_localidad;
-    }
+//    public OfertaEmpleo(int id_ofertaEmpleo, Empresa id_empresa, String titulo, String descripcion, TipoEmpleo id_tipoEmpleo, Modalidad id_modalidad, NivelEducativo id_nivelEducativo, Curso id_curso, String otrosRequisitos, String direccion, Localidad id_localidad) {
+//        this.id_ofertaEmpleo = id_ofertaEmpleo;
+//        this.id_empresa = id_empresa;
+//        this.titulo = titulo;
+//        this.descripcion = descripcion;
+//        this.id_tipoEmpleo = id_tipoEmpleo;
+//        this.id_modalidad = id_modalidad;
+//        this.id_nivelEducativo = id_nivelEducativo;
+//        this.id_curso = id_curso;
+//        this.otrosRequisitos = otrosRequisitos;
+//        this.direccion = direccion;
+//        this.id_localidad = id_localidad;
+//    }
 
     // Constructor Simple para ver ofertas
-    public OfertaEmpleo(int id_ofertaEmpleo, int idEmpresa, String titulo, String descripcion, int idTipoEmpleo,
-                        int idTipoModalidad, int idNivelEducativo, int idCurso, String otrosRequisitos,
-                        String direccion, int idLocalidad) {
-        this.id_ofertaEmpleo = id_ofertaEmpleo;
-        this.idEmpresa = idEmpresa;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.idTipoEmpleo = idTipoEmpleo;
-        this.idTipoModalidad = idTipoModalidad;
-        this.idNivelEducativo = idNivelEducativo;
-        this.idCurso = idCurso;
-        this.otrosRequisitos = otrosRequisitos;
-        this.direccion = direccion;
-        this.idLocalidad = idLocalidad;
-    }
+//    public OfertaEmpleo(int id_ofertaEmpleo, int idEmpresa, String titulo, String descripcion, int idTipoEmpleo,
+//                        int idTipoModalidad, int idNivelEducativo, int idCurso, String otrosRequisitos,
+//                        String direccion, int idLocalidad) {
+//        this.id_ofertaEmpleo = id_ofertaEmpleo;
+//        this.idEmpresa = idEmpresa;
+//        this.titulo = titulo;
+//        this.descripcion = descripcion;
+//        this.idTipoEmpleo = idTipoEmpleo;
+//        this.idTipoModalidad = idTipoModalidad;
+//        this.idNivelEducativo = idNivelEducativo;
+//        this.idCurso = idCurso;
+//        this.otrosRequisitos = otrosRequisitos;
+//        this.direccion = direccion;
+//        this.idLocalidad = idLocalidad;
+//    }
 
     // Constructor Simple para ver ofertas
     public OfertaEmpleo(int idEmpresa, String titulo, String descripcion, int idTipoEmpleo,
@@ -92,6 +93,72 @@ public class OfertaEmpleo {
         this.idCategoria = idCategoria;
     }
 
+    public OfertaEmpleo(int id_ofertaEmpleo, Empresa idEmpresa, String titulo, String descripcion,
+                        TipoEmpleo tipoEmpleo, Modalidad modalidad, NivelEducativo nivelEducativo, Curso curso, String otrosRequisitos,
+                        String direccion, Localidad localidad, CategoriaCurso categoriaCurso) {
+        this.id_ofertaEmpleo = id_ofertaEmpleo;
+        this.empresa = idEmpresa;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.tipoEmpleo = tipoEmpleo;
+        this.modalidad = modalidad;
+        this.nivelEducativo = nivelEducativo;
+        this.curso = curso;
+        this.otrosRequisitos = otrosRequisitos;
+        this.direccion = direccion;
+        this.localidad = localidad;
+        this.categoriaCurso = categoriaCurso;
+    }
+
+    public Modalidad getModalidad() {
+        return modalidad;
+    }
+    public void setModalidad(Modalidad modalidad) {
+        this.modalidad = modalidad;
+    }
+
+    public Localidad getLocalidad() {
+        return localidad;
+    }
+    public void setLocalidad(Localidad localidad) {
+        this.localidad = localidad;
+    }
+
+    public CategoriaCurso categoriaCurso() {
+        return categoriaCurso;
+    }
+    public void setCategoriaCurso(CategoriaCurso categoriaCurso) {
+        this.categoriaCurso = categoriaCurso;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
+    public NivelEducativo getNivelEducativo() {
+        return nivelEducativo;
+    }
+    public void setNivelEducativo(NivelEducativo nivelEducativo) {
+        this.nivelEducativo = nivelEducativo;
+    }
+
+    public TipoEmpleo getTipoEmpleo() {
+        return tipoEmpleo;
+    }
+    public void setTipoEmpleo(TipoEmpleo tipoEmpleo) {
+        this.tipoEmpleo = tipoEmpleo;
+    }
+
     public int getIdCategoria() {
         return idCategoria;
     }
@@ -105,10 +172,6 @@ public class OfertaEmpleo {
 
     public int getId_ofertaEmpleo() {
         return id_ofertaEmpleo;
-    }
-
-    public Empresa getId_empresa() {
-        return id_empresa;
     }
 
     public String getTitulo() {
@@ -127,38 +190,6 @@ public class OfertaEmpleo {
         this.descripcion = descripcion;
     }
 
-    public TipoEmpleo getId_tipoEmpleo() {
-        return id_tipoEmpleo;
-    }
-
-    public void setId_tipoEmpleo(TipoEmpleo id_tipoEmpleo) {
-        this.id_tipoEmpleo = id_tipoEmpleo;
-    }
-
-    public Modalidad getId_modalidad() {
-        return id_modalidad;
-    }
-
-    public void setId_modalidad(Modalidad id_modalidad) {
-        this.id_modalidad = id_modalidad;
-    }
-
-    public NivelEducativo getId_nivelEducativo() {
-        return id_nivelEducativo;
-    }
-
-    public void setId_nivelEducativo(NivelEducativo id_nivelEducativo) {
-        this.id_nivelEducativo = id_nivelEducativo;
-    }
-
-    public Curso getId_curso() {
-        return id_curso;
-    }
-
-    public void setId_curso(Curso id_curso) {
-        this.id_curso = id_curso;
-    }
-
     public String getOtrosRequisitos() {
         return otrosRequisitos;
     }
@@ -173,31 +204,6 @@ public class OfertaEmpleo {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
-    }
-
-    public Localidad getId_localidad() {
-        return id_localidad;
-    }
-
-    public void setId_localidad(Localidad id_localidad) {
-        this.id_localidad = id_localidad;
-    }
-
-    @Override
-    public String toString() {
-        return "OfertaEmpleo{" +
-                "id_ofertaEmpleo=" + id_ofertaEmpleo +
-                ", id_empresa=" + id_empresa +
-                ", titulo='" + titulo + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", id_tipoEmpleo=" + id_tipoEmpleo +
-                ", id_modalidad=" + id_modalidad +
-                ", id_nivelEducativo=" + id_nivelEducativo +
-                ", id_curso=" + id_curso +
-                ", otrosRequisitos='" + otrosRequisitos + '\'' +
-                ", direccion='" + direccion + '\'' +
-                ", id_localidad=" + id_localidad +
-                '}';
     }
 
     //Setters simplificados.

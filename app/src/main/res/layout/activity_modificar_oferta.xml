@@ -44,6 +44,74 @@
         android:maxLength="150"
         android:gravity="top" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo de empleo" />
+    <Spinner
+        android:id="@+id/spinnerTipoEmpleo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modalidad" />
+    <Spinner
+        android:id="@+id/spinnerModalidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nivel educativo deseable" />
+    <Spinner
+        android:id="@+id/spinnerNivelEducativo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Spinner para provincia -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Provincia" />
+    <Spinner
+        android:id="@+id/spinnerProvincia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Spinner para localidad -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Localidad" />
+    <Spinner
+        android:id="@+id/spinnerLocalidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dirección" />
+
+    <EditText
+        android:id="@+id/etDireccion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Dirección de la oferta" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Otros requisitos" />
+    <EditText
+        android:id="@+id/etOtroRequisito"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Otros requisitos" />
+
     <Button
         android:id="@+id/btnGuardarCambios"
         android:layout_width="wrap_content"

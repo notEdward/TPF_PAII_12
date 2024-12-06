@@ -4,6 +4,7 @@ public class CategoriaCurso {
     private int idCategoria;
     private String descripcion;
 
+    public CategoriaCurso(){}
     // Constructor
     public CategoriaCurso(int idCategoria, String descripcion) {
         this.idCategoria = idCategoria;

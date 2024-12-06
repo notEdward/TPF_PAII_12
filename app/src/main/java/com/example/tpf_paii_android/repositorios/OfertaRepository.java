@@ -4,7 +4,9 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.example.tpf_paii_android.conexion_database.DatabaseConnection;
+import com.example.tpf_paii_android.modelos.CategoriaCurso;
 import com.example.tpf_paii_android.modelos.Curso;
+import com.example.tpf_paii_android.modelos.Empresa;
 import com.example.tpf_paii_android.modelos.EstadoNivelEducativo;
 import com.example.tpf_paii_android.modelos.Estudiante;
 import com.example.tpf_paii_android.modelos.Localidad;
@@ -501,22 +503,28 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
     public void actualizarOferta(OfertaEmpleo oferta, DataCallback<Boolean> callback) {
         executor.execute(() -> {
             try (Connection connection = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass)) {
-                // Código de conexión y actualización a la base de datos
-                String updateQuery = "UPDATE ofertas_empleos SET titulo = ?, descripcion = ? WHERE id_oferta_empleo = ?";
+
+                String updateQuery = "UPDATE ofertas_empleos SET titulo = ?, descripcion = ?, direccion = ?, otros_requisitos = ?, " +
+                        "id_tipo_empleo = ?, id_tipo_modalidad = ?, id_nivel_educativo = ?, id_localidad = ? " +
+                        "WHERE id_oferta_empleo = ?";
                 PreparedStatement statement = connection.prepareStatement(updateQuery);
                 statement.setString(1, oferta.getTitulo());
                 statement.setString(2, oferta.getDescripcion());
-                statement.setInt(3, oferta.getId_ofertaEmpleo());
+                statement.setString(3, oferta.getDireccion());
+                statement.setString(4, oferta.getOtrosRequisitos());
+                statement.setInt(5, oferta.getIdTipoEmpleo());
+                statement.setInt(6, oferta.getIdModalidad());
+                statement.setInt(7, oferta.getIdNivelEducativo());
+                statement.setInt(8, oferta.getIdLocalidad());
+                statement.setInt(9, oferta.getId_ofertaEmpleo());
 
                 int rowsAffected = statement.executeUpdate();
                 statement.close();
 
-                // Llama al callback en el hilo principal si se actualizó correctamente
                 boolean exito = rowsAffected > 0;
                 new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(exito));
 
             } catch (Exception e) {
-                // En caso de error, envía la excepción al callback de falla
                 new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
             }
         });
@@ -748,6 +756,101 @@ public void obtenerNivelesEducativos(DataCallback<List<NivelEducativo>> callback
             }
         });
     }
+
+    public void cargarOferta(int idOfertaEmpleo, DataCallback<OfertaEmpleo> callback) {
+        executor.execute(() -> {
+            OfertaEmpleo ofertaEmpleo = null;
+            String query = "SELECT o.titulo, o.descripcion, o.direccion, o.otros_requisitos, " +
+                    "c.id_curso, c.nombre_curso, " +
+                    "cc.id_categoria, cc.descripcion AS descripcion_categoria, " +
+                    "l.id_localidad, l.nombre AS nombre_localidad, p.id_provincia, p.nombre AS nombre_provincia, " +
+                    "m.id_modalidad, m.descripcion AS descripcion_modalidad, " +
+                    "ne.id_nivel_educativo, ne.descripcion AS descripcion_nivelEducativo, " +
+                    "te.id_tipo_empleo, te.descripcion AS descripcion_tipo_empleo, " +
+                    "emp.id_empresa, emp.nombre AS nombre_empresa " +
+                    "FROM ofertas_empleos o " +
+                    "JOIN empresa emp ON o.id_empresa = emp.id_empresa " +
+                    "JOIN curso c ON o.id_curso = c.id_curso " +
+                    "JOIN categoria_curso cc ON c.id_categoria = cc.id_categoria " +
+                    "JOIN localidad l ON o.id_localidad = l.id_localidad " +
+                    "JOIN provincia p ON l.id_provincia = p.id_provincia " +
+                    "JOIN modalidad m ON o.id_tipo_modalidad = m.id_modalidad " +
+                    "JOIN nivel_educativo ne ON o.id_nivel_educativo = ne.id_nivel_educativo " +
+                    "JOIN tipo_empleo te ON o.id_tipo_empleo = te.id_tipo_empleo " +
+                    "WHERE o.id_oferta_empleo = ?";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement stmt = con.prepareStatement(query)) {
+
+                stmt.setInt(1, idOfertaEmpleo);
+                try (ResultSet resultSet = stmt.executeQuery()) {
+                    if (resultSet.next()) {
+
+                        Empresa empresa = new Empresa();
+                        empresa.setId_empresa(resultSet.getInt("id_empresa"));
+                        empresa.setNombre(resultSet.getString("nombre_empresa"));
+
+                        Curso curso = new Curso();
+                        curso.setIdCurso(resultSet.getInt("id_curso"));
+                        curso.setNombreCurso(resultSet.getString("nombre_curso"));
+
+                        CategoriaCurso categoriaCurso = new CategoriaCurso();
+                        categoriaCurso.setIdCategoria(resultSet.getInt("id_categoria"));
+                        categoriaCurso.setDescripcion(resultSet.getString("descripcion_categoria"));
+
+                        Localidad localidad = new Localidad();
+                        localidad.setId_localidad(resultSet.getInt("id_localidad"));
+                        localidad.setNombre(resultSet.getString("nombre_localidad"));
+                        localidad.setId_provincia(resultSet.getInt("id_provincia"));
+
+                        TipoEmpleo tipoEmpleo = new TipoEmpleo();
+                        tipoEmpleo.setId_tipoEmpleo(resultSet.getInt("id_tipo_empleo"));
+                        tipoEmpleo.setDescripcion(resultSet.getString("descripcion_tipo_empleo"));
+
+                        Modalidad modalidad = new Modalidad();
+                        modalidad.setId_modalidad(resultSet.getInt("id_modalidad"));
+                        modalidad.setDescripcion(resultSet.getString("descripcion_modalidad"));
+
+                        NivelEducativo nivelEducativo = new NivelEducativo();
+                        nivelEducativo.setId_nivelEducativo(resultSet.getInt("id_nivel_educativo"));
+                        nivelEducativo.setDescripcion(resultSet.getString("descripcion_nivelEducativo"));
+
+                        ofertaEmpleo = new OfertaEmpleo(
+                                idOfertaEmpleo,
+                                empresa,
+                                resultSet.getString("titulo"),
+                                resultSet.getString("descripcion"),
+                                tipoEmpleo,
+                                modalidad,
+                                nivelEducativo,
+                                curso,
+                                resultSet.getString("otros_requisitos"),
+                                resultSet.getString("direccion"),
+                                localidad,
+                                categoriaCurso // Incluir la categoría
+                        );
+                    }
+                }
+                OfertaEmpleo finalOfertaEmpleo = ofertaEmpleo;
+                //recordemos que esto es para pasar al hilo principal
+                // ya que sino no nos va a dejar realizar la accion
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (finalOfertaEmpleo != null) {
+                        callback.onSuccess(finalOfertaEmpleo);
+                    } else {
+                        callback.onFailure(new Exception("No se encontraron detalles para la oferta."));
+                    }
+                });
+
+            } catch (Exception e) {
+                // Manejo de excepciones y error en la ejecución
+                new Handler(Looper.getMainLooper()).post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
+
+
     public void shutdownExecutor() {
         executor.shutdown();
     }

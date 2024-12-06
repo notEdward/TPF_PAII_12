@@ -29,8 +29,8 @@ public class OfertaViewModel extends ViewModel {
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<List<OfertaEmpleo>> ofertasFiltradasLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> postularMensaje = new MutableLiveData<>();
-//empresa
-private MutableLiveData<List<TipoEmpleo>> tiposEmpleoLiveData = new MutableLiveData<>();
+    //empresa
+    private MutableLiveData<List<TipoEmpleo>> tiposEmpleoLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Modalidad>> modalidadesLiveData = new MutableLiveData<>();
     private MutableLiveData<List<NivelEducativo>> nivelesEducativosLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Curso>> cursosLiveData = new MutableLiveData<>();
@@ -40,9 +40,10 @@ private MutableLiveData<List<TipoEmpleo>> tiposEmpleoLiveData = new MutableLiveD
     //baja
     private MutableLiveData<Boolean> bajaOfertaLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<PostulacionItem>> postulaciones = new MutableLiveData<>();
-
     ////
     private MutableLiveData<Estudiante> estudianteLiveData = new MutableLiveData<>();
+    private final MutableLiveData<OfertaEmpleo> ofertaLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> exitoActualizacion = new MutableLiveData<>();
 
     public LiveData<String> getPostularMensaje() {
         return postularMensaje;
@@ -95,7 +96,13 @@ private MutableLiveData<List<TipoEmpleo>> tiposEmpleoLiveData = new MutableLiveD
     public LiveData<String> getEstadoPostulacionLiveData() {
         return estadoPostulacionLiveData;
     }
-
+    //para modificacion
+    public LiveData<OfertaEmpleo> getOfertaLiveData() {
+        return ofertaLiveData;
+    }
+    public LiveData<Boolean> getExitoActualizacion() {
+        return exitoActualizacion;
+    }
 
     public void loadOfertas() {
         ofertaRepository.getAllOfertas(new OfertaRepository.DataCallback<ArrayList<OfertaEmpleo>>() {
@@ -357,10 +364,6 @@ public void cargarPostulacionesEstudiante(int idUsuario) {
         });
     }
 
-//    public void actualizarEstadoPostulacion(int idPostulacion, String estado, OfertaRepository.DataCallback<Boolean> callback) {
-//        ofertaRepository.actualizarEstadoPostulacion(idPostulacion, estado, callback);
-//    }
-
     public void actualizarEstadoPostulacion(int idPostulacion, String nuevoEstado) {
         ofertaRepository.actualizarEstadoPostulacion(idPostulacion, nuevoEstado, new OfertaRepository.DataCallback<Boolean>() {
             @Override
@@ -375,6 +378,33 @@ public void cargarPostulacionesEstudiante(int idUsuario) {
             @Override
             public void onFailure(Exception e) {
                 estadoPostulacionLiveData.postValue("Error al actualizar el estado");
+            }
+        });
+    }
+
+    public void cargarOferta(int idOfertaEmpleo) {
+        ofertaRepository.cargarOferta(idOfertaEmpleo, new OfertaRepository.DataCallback<OfertaEmpleo>() {
+            @Override
+            public void onSuccess(OfertaEmpleo result) {
+                ofertaLiveData.setValue(result);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue("Error al cargar los detalles de la oferta: " + e.getMessage());
+            }
+        });
+    }
+    public void actualizarOferta(OfertaEmpleo ofertaActualizada) {
+        ofertaRepository.actualizarOferta(ofertaActualizada, new OfertaRepository.DataCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean exito) {
+                exitoActualizacion.setValue(exito);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorMessage.setValue(e.getMessage());
             }
         });
     }

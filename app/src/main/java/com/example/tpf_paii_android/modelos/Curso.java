@@ -9,6 +9,7 @@ public class Curso {
     private String respuestasCorrectas;
     private int estado;
 
+    public Curso(){}
     // Constructor
     public Curso(int idCurso, String nombreCurso, String descripcion, int idCategoria, String respuestasCorrectas, int estado) {
         this.idCurso = idCurso;
