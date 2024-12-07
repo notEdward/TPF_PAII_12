@@ -12,6 +12,7 @@ public class Empresa {
     private String direccion;
     private int id_localidad;
     private Usuario id_usuario;
+    private Localidad localidad;
 
 
     public Empresa() {
@@ -118,7 +119,13 @@ public class Empresa {
     public void setId_usuario(Usuario id_usuario) {
         this.id_usuario = id_usuario;
     }
+    public Localidad getLocalidad() {
+        return localidad;
+    }
 
+    public void setLocalidad(Localidad localidad) {
+        this.localidad = localidad;
+    }
     @Override
     public String toString() {
         return "Empresa{" +

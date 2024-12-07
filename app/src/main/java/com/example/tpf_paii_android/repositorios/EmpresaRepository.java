@@ -168,7 +168,12 @@ public LiveData<Boolean> registrarEmpresa(Empresa empresa, int idUsuario) {
     public Empresa obtenerEmpresa(int idEmpresa) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Empresa> futureResult = executor.submit(() -> {
-            String query = "SELECT nombre, descripcion, sector, n_identificacion_fiscal, direccion, id_localidad, email, telefono FROM empresa WHERE id_empresa = ?";
+//            String query = "SELECT nombre, descripcion, sector, n_identificacion_fiscal, direccion, id_localidad, email, telefono FROM empresa WHERE id_empresa = ?";
+            String query = "SELECT e.nombre, e.descripcion, e.sector, e.n_identificacion_fiscal, e.direccion, " +
+                    "e.email, e.telefono, l.id_localidad, l.nombre AS nombre_localidad, l.id_provincia " +
+                    "FROM empresa e " +
+                    "JOIN localidad l ON e.id_localidad = l.id_localidad " +
+                    "WHERE e.id_empresa = ?";
             Empresa empresa = null;
 
             try (Connection cn = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
@@ -177,6 +182,11 @@ public LiveData<Boolean> registrarEmpresa(Empresa empresa, int idUsuario) {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
+                        Localidad localidad = new Localidad();
+                        localidad.setId_localidad(rs.getInt("id_localidad"));
+                        localidad.setNombre(rs.getString("nombre_localidad"));
+                        localidad.setId_provincia(rs.getInt("id_provincia"));
+
                         empresa = new Empresa(
                                 rs.getString("nombre"),
                                 rs.getString("descripcion"),
@@ -184,8 +194,9 @@ public LiveData<Boolean> registrarEmpresa(Empresa empresa, int idUsuario) {
                                 rs.getString("email"),
                                 rs.getString("telefono"),
                                 rs.getString("direccion"),
-                                rs.getInt("id_localidad")
+                                localidad.getId_localidad()
                         );
+                        empresa.setLocalidad(localidad);
                     }
                 }
             } catch (SQLException e) {

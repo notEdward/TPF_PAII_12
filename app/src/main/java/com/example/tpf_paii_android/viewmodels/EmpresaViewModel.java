@@ -13,6 +13,7 @@ import com.example.tpf_paii_android.modelos.Provincia;
 import com.example.tpf_paii_android.modelos.Tutor;
 import com.example.tpf_paii_android.repositorios.EmpresaRepository;
 import com.example.tpf_paii_android.repositorios.EstudianteRepository;
+import com.example.tpf_paii_android.repositorios.ModificarEstudianteRepository;
 
 import java.util.List;
 
@@ -37,6 +38,9 @@ public class EmpresaViewModel extends ViewModel {
         LocalidadesLiveData = Transformations.switchMap(provinciaIdLiveData, idProvincia ->
                 empresaRepository.obtenerLocalidadesPorProvincia(idProvincia)
         );
+
+        // Asigna un valor inicial, como 0 o una provincia predeterminada
+        provinciaIdLiveData.setValue(1); // O reemplaza 0 por un valor válido si lo conoces
     }
 
     public LiveData<Boolean> registrarEmpresa(Empresa empresa, int idUsuario) {
@@ -58,7 +62,10 @@ public class EmpresaViewModel extends ViewModel {
         provinciaIdLiveData.setValue(idProvincia);
     }
 
-
+    public int getProvinciaSeleccionada() {
+        Integer id = provinciaIdLiveData.getValue();
+        return id != null ? id : -1;
+    }
 
 
     // Getter para el LiveData de errores
@@ -102,7 +109,9 @@ public class EmpresaViewModel extends ViewModel {
 
 
 
-
+    public void cargarLocalidadesPorProvincia(int idProvincia) {
+        LocalidadesLiveData =  empresaRepository.obtenerLocalidadesPorProvincia(idProvincia);
+    }
 
 
 

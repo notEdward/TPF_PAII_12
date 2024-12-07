@@ -75,14 +75,28 @@ public class ModificarEmpresa extends AppCompatActivity {
                 txtEmail.setText(empresa.getEmail());
                 txtTelefono.setText(empresa.getTelefono());
                 txtDireccion.setText(empresa.getDireccion());
+                empresaViewModel.setProvinciaSeleccionada(empresa.getLocalidad().getIdprovincia());
+                seleccionarProvinciaEnSpinner(empresa.getLocalidad().getIdprovincia());
+                seleccionarLocalidadEnSpinner(empresa.getId_localidad());
             }
         });
 
-        // Observar los datos de los getProvincias
         empresaViewModel.getProvincias().observe(this, new Observer<List<Provincia>>() {
             @Override
             public void onChanged(List<Provincia> provincias) {
                 if (provincias != null) cargarSpinnerProvincia(provincias);
+            }
+        });
+
+       // Observar los datos de los getProvincias
+        empresaViewModel.getProvincias().observe(this, provincias -> {
+            if (provincias != null && !provincias.isEmpty()) {
+                cargarSpinnerProvincia(provincias);
+
+                // Selecciona la primera provincia como predeterminada
+                Provincia provinciaInicial = provincias.get(1);
+                spProvincia.setSelection(1); // Opcional: asegura que el spinner muestre la primera provincia
+                empresaViewModel.setProvinciaSeleccionada(provinciaInicial.getId_provincia());
             }
         });
 
@@ -127,14 +141,28 @@ public class ModificarEmpresa extends AppCompatActivity {
         empresaViewModel.cargarEmpresa(idEmpresa);
 
         btnModificar.setOnClickListener(view -> {
+            if (spLocalidad.getAdapter() == null || spLocalidad.getAdapter().isEmpty()) {
+                Toast.makeText(ModificarEmpresa.this, "Espere a que las localidades carguen antes de modificar.", Toast.LENGTH_SHORT).show();
+                return;
+            }
             String nombre = txtNombre.getText().toString();
             String descripcion = txtDescripcion.getText().toString();
             String sector = txtSector.getText().toString();
             String email = txtEmail.getText().toString();
             String telefono = txtTelefono.getText().toString();
             String direccion = txtDireccion.getText().toString();
-
             int idLocalidad = ((Localidad) spLocalidad.getSelectedItem()).getId_localidad();
+
+            Localidad localidadSeleccionada = (Localidad) spLocalidad.getSelectedItem();
+            if (localidadSeleccionada == null) {
+                Toast.makeText(ModificarEmpresa.this, "Seleccione una localidad válida.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (spProvincia.getSelectedItem() == null || spProvincia.getSelectedItemPosition() == 0) {
+                Toast.makeText(this, "Debe seleccionar una provincia", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             if(nombre.isEmpty() || descripcion.isEmpty() || sector.isEmpty() ||
                 email.isEmpty() || telefono.isEmpty() || direccion.isEmpty()){
@@ -160,5 +188,36 @@ public class ModificarEmpresa extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spLocalidad.setAdapter(adapter);
     }
-
+    private void seleccionarLocalidadEnSpinner(int localidadSeleccionado) {
+        if (localidadSeleccionado != -1) {
+            empresaViewModel.getLocalidades().observe(this, localidad -> {
+                int posicion = -1;
+                for (int i = 0; i < localidad.size(); i++) {
+                    if (localidad.get(i).getId_localidad() == localidadSeleccionado) {
+                        posicion = i;
+                        break;
+                    }
+                }
+                if (posicion != -1) {
+                    spLocalidad.setSelection(posicion);
+                }
+            });
+        }
+    }
+    private void seleccionarProvinciaEnSpinner(int idProvinciaSeleccionada) {
+        if (idProvinciaSeleccionada != -1) {
+            empresaViewModel.getProvincias().observe(this, provincias -> {
+                int posicion = -1;
+                for (int i = 0; i < provincias.size(); i++) {
+                    if (provincias.get(i).getId_provincia() == idProvinciaSeleccionada) {
+                        posicion = i;
+                        break;
+                    }
+                }
+                if (posicion != -1) {
+                    spProvincia.setSelection(posicion);
+                }
+            });
+        }
+    }
 }
