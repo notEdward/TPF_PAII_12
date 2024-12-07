@@ -115,6 +115,44 @@ public class TutorActivity extends AppCompatActivity {
             Toast.makeText(this, "Complete todos los campos.", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        if (txtDniTutor.getText().toString().length() > 20) {
+            txtDniTutor.setError("El DNI no puede exceder los 20 caracteres.");
+            return false;
+        }
+
+        if (txtNombreTutor.getText().toString().length() > 50) {
+            txtNombreTutor.setError("El nombre no puede exceder los 50 caracteres.");
+            return false;
+        }
+
+        if (txtApellidoTutor.getText().toString().length() > 50) {
+            txtApellidoTutor.setError("El apellido no puede exceder los 50 caracteres.");
+            return false;
+        }
+
+        int edadTut = Integer.parseInt(txtEdadTutor.getText().toString().trim());
+        if (edadTut < 14 || edadTut > 100) {
+            txtEdadTutor.setError("La edad debe estar entre 14 y 100.");
+            return false;
+        }
+
+        if (txtOcupacionTutor.getText().toString().length() > 100) {
+            txtOcupacionTutor.setError("La ocupación no puede exceder los 100 caracteres.");
+            return false;
+        }
+
+        if (txtPasaTiemposTutor.getText().toString().length() > 200) {
+            txtPasaTiemposTutor.setError("Los pasatiempos no pueden exceder los 200 caracteres.");
+            return false;
+        }
+
+        if (txtMasSobreTutor.getText().toString().length() > 200) {
+            txtMasSobreTutor.setError("La información adicional no puede exceder los 200 caracteres.");
+            return false;
+        }
+
+
         // valida contraseñas iguales
         if (!txtContrasenaTutor.getText().toString().equals(txtRepetirContrasenaTutor.getText().toString())) {
             Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();

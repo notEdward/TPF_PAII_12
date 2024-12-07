@@ -23,22 +23,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.actividades.autenticacion.Login;
 import com.example.tpf_paii_android.modelos.Empresa;
-import com.example.tpf_paii_android.modelos.Estudiante;
 import com.example.tpf_paii_android.modelos.Localidad;
 import com.example.tpf_paii_android.modelos.Provincia;
 import com.example.tpf_paii_android.modelos.Usuario;
 import com.example.tpf_paii_android.repositorios.EmpresaRepository;
-import com.example.tpf_paii_android.repositorios.EstudianteRepository;
-import com.example.tpf_paii_android.repositorios.LocalidadRepository;
-import com.example.tpf_paii_android.repositorios.ProvinciaRepository;
+
 import com.example.tpf_paii_android.repositorios.UsuarioRepository;
 import com.example.tpf_paii_android.viewmodels.EmpresaViewModel;
-import com.example.tpf_paii_android.viewmodels.EstudianteViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class RegistrarEmpresa extends AppCompatActivity {
 
@@ -155,6 +148,47 @@ public class RegistrarEmpresa extends AppCompatActivity {
             return false;
         }
 
+        if (txtNombre.getText().toString().length() > 50) {
+            txtNombre.setError("El nombre de la empresa no puede exceder los 50 caracteres.");
+            return false;
+        }
+
+        if (txtDescripcion.getText().toString().length() > 200) {
+            txtDescripcion.setError("La descripción no puede exceder los 200 caracteres.");
+            return false;
+        }
+
+        if (txtSector.getText().toString().length() > 50) {
+            txtSector.setError("El sector no puede exceder los 50 caracteres.");
+            return false;
+        }
+
+        if (txtNidentificacion.getText().toString().length() > 20) {
+            txtNidentificacion.setError("La identificación fiscal no puede exceder los 20 caracteres.");
+            return false;
+        }
+
+        if (txtEmail.getText().toString().length() > 50) {
+            txtEmail.setError("El email no puede exceder los 50 caracteres.");
+            return false;
+        }
+
+        String email = txtEmail.getText().toString().trim();
+        if (!email.endsWith(".com")) {
+            txtEmail.setError("El email debe terminar con '.com'.");
+            return false;
+        }
+
+        if (txtTelefono.getText().toString().length() > 20) {
+            txtTelefono.setError("El teléfono no puede exceder los 20 caracteres.");
+            return false;
+        }
+
+        if (txtDireccion.getText().toString().length() > 150) {
+            txtDireccion.setError("La dirección no puede exceder los 150 caracteres.");
+            return false;
+        }
+
         if (!txtContrasena.getText().toString().equals(txtRepetirContrasena.getText().toString())) {
             mostrarMensaje("Las contraseñas no coinciden.");
             txtContrasena.requestFocus();
@@ -190,10 +224,10 @@ public class RegistrarEmpresa extends AppCompatActivity {
     private void registrarEmpresaEnViewModel(Empresa empresa, int idUsuario) {
         empresaViewModel.registrarEmpresa(empresa, idUsuario).observe(this, registrado -> {
             if (registrado) {
-                mostrarMensaje("Estudiante registrado con éxito.");
+                mostrarMensaje("Empresa registrado con éxito.");
                 irALogin();
             } else {
-                mostrarMensaje("Error al registrar el estudiante.");
+                mostrarMensaje("Error al registrar Empresa.");
             }
         });
     }

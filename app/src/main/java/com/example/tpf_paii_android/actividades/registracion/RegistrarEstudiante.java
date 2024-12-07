@@ -235,6 +235,60 @@ public class RegistrarEstudiante extends AppCompatActivity {
             mostrarMensaje("Por favor, complete todos los campos.");
             return false;
         }
+        if (txtDni.getText().toString().length() > 20) {
+            txtDni.setError("El DNI no puede exceder los 20 caracteres.");
+            return false;
+        }
+
+        if (txtNombre.getText().toString().length() > 50) {
+            txtNombre.setError("El nombre no puede exceder los 50 caracteres.");
+            return false;
+        }
+
+        if (txtApellido.getText().toString().length() > 50) {
+            txtApellido.setError("El apellido no puede exceder los 50 caracteres.");
+            return false;
+        }
+
+        String email = txtEmail.getText().toString().trim();
+        if (email.length() > 100) {
+            txtEmail.setError("El email no puede exceder los 100 caracteres.");
+            return false;
+        }
+        if (!email.endsWith(".com")) {
+            txtEmail.setError("El email debe terminar con '.com'.");
+            return false;
+        }
+
+        if (txtTelefono.getText().toString().length() > 15) {
+            txtTelefono.setError("El teléfono no puede exceder los 15 caracteres.");
+            return false;
+        }
+
+        if (txtDireccion.getText().toString().length() > 100) {
+            txtDireccion.setError("La dirección no puede exceder los 100 caracteres.");
+            return false;
+        }
+
+        if (txtLugar.getText().toString().length() > 150) {
+            txtLugar.setError("El lugar no puede exceder los 150 caracteres.");
+            return false;
+        }
+
+        if (txtCargo.getText().toString().length() > 150) {
+            txtCargo.setError("El cargo no puede exceder los 150 caracteres.");
+            return false;
+        }
+
+        if (txtTareas.getText().toString().length() > 200) {
+            txtTareas.setError("Las tareas no pueden exceder los 200 caracteres.");
+            return false;
+        }
+
+        if (txtDuracion.getText().toString().length() > 20) {
+            txtDuracion.setError("La duración no puede exceder los 20 caracteres.");
+            return false;
+        }
 
         if (!txtContrasena.getText().toString().equals(txtRepetirContrasena.getText().toString())) {
             mostrarMensaje("Las contraseñas no coinciden.");

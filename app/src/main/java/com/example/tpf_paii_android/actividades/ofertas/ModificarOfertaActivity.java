@@ -120,6 +120,10 @@ public class ModificarOfertaActivity extends AppCompatActivity {
             Toast.makeText(this, "Por favor, completa todos los campos obligatorios", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (!validarCampos(nuevoTitulo, nuevaDescripcion, direccion, otrosRequisitos)) {
+            return;
+        }
+
         TipoEmpleo tipoEmpleoSeleccionado = (TipoEmpleo) spinnerTipoEmpleo.getSelectedItem();
         Modalidad modalidadSeleccionada = (Modalidad) spinnerModalidad.getSelectedItem();
         NivelEducativo nivelEducativoSeleccionado = (NivelEducativo) spinnerNivelEducativo.getSelectedItem();
@@ -273,6 +277,40 @@ public class ModificarOfertaActivity extends AppCompatActivity {
         viewModel.cargarModalidades();
         viewModel.cargarLocalidades();
         viewModel.cargarProvincias();
+    }
+    private boolean validarCampos(String titulo, String descripcion, String direccion, String otroRequisito) {
+        boolean isValid = true;
+
+        if (titulo.isEmpty()) {
+            etTituloOferta.setError("El titúlo no puede estar vacío");
+            isValid = false;
+        } else if (titulo.length() > 100) {
+            etTituloOferta.setError("El título no puede exceder los 100 caracteres");
+            isValid = false;
+        }
+
+        if (descripcion.isEmpty()) {
+            etDescripcionOferta.setError("La descripción no puede estar vacía");
+            isValid = false;
+        } else if (descripcion.length() > 150) {
+            etDescripcionOferta.setError("La descripción no puede exceder los 150 caracteres");
+            isValid = false;
+        }
+
+        if (direccion.isEmpty()) {
+            etDireccion.setError("La dirección no puede estar vacía");
+            isValid = false;
+        } else if (direccion.length() > 100) {
+            etDireccion.setError("La dirección no puede exceder los 100 caracteres");
+            isValid = false;
+        }
+
+        if (!otroRequisito.isEmpty() && otroRequisito.length() > 100) {
+            etOtroRequisito.setError("Los otros requisitos no pueden exceder los 100 caracteres");
+            isValid = false;
+        }
+
+        return isValid;
     }
 }
 

@@ -52,6 +52,16 @@ public class ModificarCursoActivity extends AppCompatActivity {
 
         btnGuardarCambios.setOnClickListener(v -> {
             String nuevaDescripcion = etDescripcionCurso.getText().toString();
+
+            if (nuevaDescripcion.isEmpty()) {
+                Toast.makeText(this, "La descripción del curso es obligatoria", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (nuevaDescripcion.length() > 200) {
+                etDescripcionCurso.setError("La descripción no puede exceder los 200 caracteres.");
+                return;
+            }
+
             cursoViewModel.modificarDescripcionCurso(idCurso, nuevaDescripcion);
             Toast.makeText(this, "Descripción actualizada correctamente", Toast.LENGTH_SHORT).show();
             finish();

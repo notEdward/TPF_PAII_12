@@ -96,6 +96,10 @@ public class CrearCursoActivity extends AppCompatActivity {
                     Toast.makeText(this, "Cada pregunta debe tener texto", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (textoPregunta.length() > 100) {
+                    Toast.makeText(this, "Cada pregunta no puede exceder los 100 caracteres.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Pregunta pregunta = new Pregunta(curso.getIdCurso(), textoPregunta, "radio");
                 preguntas.add(pregunta);
 
@@ -111,7 +115,10 @@ public class CrearCursoActivity extends AppCompatActivity {
                         Toast.makeText(this, "Cada opción debe tener texto", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
+                    if (textoOpcion.length() > 100) {
+                        Toast.makeText(this, "Cada respuesta no puede exceder los 100 caracteres.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     boolean esCorrecta = rbOpcion.isChecked();
                     if (esCorrecta) {
                         preguntaTieneRespuesta = true;
@@ -192,6 +199,16 @@ public class CrearCursoActivity extends AppCompatActivity {
 
         if (descripcionCurso.isEmpty()) {
             Toast.makeText(this, "La descripción del curso es obligatoria", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (nombreCurso.length() > 100) {
+            etNombreCurso.setError("El nombre del curso no puede exceder los 100 caracteres.");
+            return false;
+        }
+
+        if (descripcionCurso.length() > 200) {
+            etDescripcion.setError("La descripción no puede exceder los 200 caracteres.");
             return false;
         }
 
