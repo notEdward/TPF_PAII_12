@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.tpf_paii_android.MyApp;
 import com.example.tpf_paii_android.R;
 import com.example.tpf_paii_android.actividades.menu_header.MenuHamburguesaActivity;
+import com.example.tpf_paii_android.adapters.CursoTutoriasAdapter;
 import com.example.tpf_paii_android.adapters.TutoriasAdapter;
 import com.example.tpf_paii_android.viewmodels.TutoriasViewModel;
 
@@ -27,6 +28,7 @@ public class TutoriasActivity extends MenuHamburguesaActivity {
     private TutoriasViewModel tutoriasViewModel;
 
     private TutoriasAdapter tutoriasAdapter;
+    private CursoTutoriasAdapter cursoTutoriasAdapter;
 
     private String nombreUsuario;
     private String nombreTipoUsuario;
@@ -79,8 +81,8 @@ public class TutoriasActivity extends MenuHamburguesaActivity {
         Map<String, String> estudianteMap = obtenerEstudiantesMap();
 
         // Config Adapter
-        tutoriasAdapter = new TutoriasAdapter(estudianteMap);
-        recyclerViewTutorias.setAdapter(tutoriasAdapter);
+        cursoTutoriasAdapter = new CursoTutoriasAdapter();
+        recyclerViewTutorias.setAdapter(cursoTutoriasAdapter);
 
         // Observa cursos
         tutoriasViewModel.getCursosLiveData().observe(this, cursos -> {
@@ -88,7 +90,7 @@ public class TutoriasActivity extends MenuHamburguesaActivity {
             if (cursos == null || cursos.isEmpty()) {
                 Toast.makeText(this, "No estas registrado en ningun curso.", Toast.LENGTH_SHORT).show();
             } else {
-                tutoriasAdapter.setCursos(cursos);
+                cursoTutoriasAdapter.setCursos(cursos);
             }
         });
 
@@ -111,7 +113,9 @@ public class TutoriasActivity extends MenuHamburguesaActivity {
         Map<String, String> estudianteMap = obtenerEstudiantesMap();
 
         // Config Adapter
-        tutoriasAdapter = new TutoriasAdapter(estudianteMap);
+        tutoriasAdapter = new TutoriasAdapter(estudianteMap, idTutoria -> {
+            tutoriasViewModel.eliminarTutoria(idTutoria, idUsuario);
+        });
         recyclerViewTutorias.setAdapter(tutoriasAdapter);
 
         // Observa las tutorías asignadas
@@ -123,6 +127,10 @@ public class TutoriasActivity extends MenuHamburguesaActivity {
             }else {
                 tutoriasAdapter.setTutorias(tutorias);
             }
+        });
+
+        tutoriasViewModel.getSuccessLiveData().observe(this, successMessage -> {
+            Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show();
         });
 
         // Observa errores
@@ -149,6 +157,7 @@ public class TutoriasActivity extends MenuHamburguesaActivity {
     // Método para obtener el mapa de estudiantes
     private Map<String, String> obtenerEstudiantesMap() {
         return new HashMap<>();
-                //tutoriasViewModel.getEstudiantesMapLiveData().getValue();
+        //tutoriasViewModel.getEstudiantesMapLiveData().getValue();
     }
 }
+

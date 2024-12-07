@@ -26,6 +26,27 @@ public class TutoriasRepository {
         void onFailure(Exception e);
     }
 
+    public void finalizarTutoria(int idTutoria, DataCallback<Boolean> callback) {
+        executor.execute(() -> {
+            String query = "UPDATE tutoria SET estado = 'finalizada' WHERE id_tutoria = ?";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+                preparedStatement.setInt(1, idTutoria);
+                int rowsAffected = preparedStatement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    mainHandler.post(() -> callback.onSuccess(true));  // Tutoría finalizada exitosamente
+                } else {
+                    mainHandler.post(() -> callback.onFailure(new Exception("No se encontró la tutoría")));
+                }
+            } catch (Exception e) {
+                mainHandler.post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
     public void getCursosPorEstudiante(int idUsuario, DataCallback<List<Curso>> callback) {
         executor.execute(() -> {
             ArrayList<Curso> cursos = new ArrayList<>();
@@ -171,6 +192,31 @@ public class TutoriasRepository {
                 }
 
                 mainHandler.post(() -> callback.onSuccess(dniEstudiante.isEmpty() ? null : dniEstudiante.get(0)));
+            } catch (Exception e) {
+                mainHandler.post(() -> callback.onFailure(e));
+            }
+        });
+    }
+
+    public void getIdTutorPorIdUsuario(int idUsuario, DataCallback<Integer> callback) {
+        executor.execute(() -> {
+            final List<Integer> idTutors = new ArrayList<>();
+            String query =  "SELECT tu.id_tutor " +
+                    "FROM tutor tu " +
+                    "JOIN usuario u ON tu.id_usuario = u.id_usuario " +
+                    "WHERE u.id_usuario = ?";
+
+            try (Connection con = DriverManager.getConnection(DatabaseConnection.urlMySQL, DatabaseConnection.user, DatabaseConnection.pass);
+                 PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+                preparedStatement.setInt(1, idUsuario);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    idTutors.add(resultSet.getInt("id_tutor"));
+                }
+
+                mainHandler.post(() -> callback.onSuccess(idTutors.isEmpty() ? null : idTutors.get(0)));
             } catch (Exception e) {
                 mainHandler.post(() -> callback.onFailure(e));
             }

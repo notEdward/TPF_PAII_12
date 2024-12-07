@@ -21,9 +21,19 @@ public class TutoriasViewModel extends ViewModel {
     private final MutableLiveData<List<Tutoria>> tutoriasAsignadasLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> successLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<Boolean> tutoriaFinalizadaLiveData = new MutableLiveData<>();
+
     private final MutableLiveData<Map<String, String>> estudiantesMap = new MutableLiveData<>(); // LiveData para el mapa de estudiante
 
     private int idUsuario;
+
+    // Correct:
+    /*
+    public TutoriasViewModel() {
+        this.tutoriasRepository = new TutoriasRepository();
+        obtenerEstudiantesMap();
+    }
+    */
 
     public TutoriasViewModel() {
         this(new TutoriasRepository());
@@ -34,6 +44,48 @@ public class TutoriasViewModel extends ViewModel {
         obtenerEstudiantesMap();
     }
 
+    public LiveData<Boolean> getTutoriaFinalizadaLiveData() {
+        return tutoriaFinalizadaLiveData;
+    }
+
+
+    // ELIMINAR TUTORIA
+    public void eliminarTutoria(int idTutoria, int idUsuario) {
+        tutoriasRepository.finalizarTutoria(idTutoria, new TutoriasRepository.DataCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    successLiveData.postValue("Tutoria eliminada exitosamente.");
+
+                    // Obtener el ID del tutor async
+                    tutoriasRepository.getIdTutorPorIdUsuario(idUsuario, new TutoriasRepository.DataCallback<Integer>() {
+                        @Override
+                        public void onSuccess(Integer idTutor) {
+                            // Una vez obtenido id_tutor, carga las tutorías
+                            cargarTutoriasPorTutor(idTutor);
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            errorLiveData.postValue("Error al obtener el ID del tutor: " + e.getMessage());
+                        }
+                    });
+                } else {
+                    errorLiveData.postValue("Error al eliminar la tutoría.");
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                errorLiveData.postValue("Error al eliminar la tutoría: " + e.getMessage());
+            }
+        });
+    }
+
+    // método para obtener el id_tutor del Tutor usando el idUsuario
+    public void obtenerIdTutor(int idUsuario, TutoriasRepository.DataCallback<Integer> callback) {
+        tutoriasRepository.getIdTutorPorIdUsuario(idUsuario, callback);
+    }
 
     // Método para obtener el dni del estudiante usando el idUsuario
     public void obtenerDniEstudiante(int idUsuario, TutoriasRepository.DataCallback<String> callback) {
@@ -174,9 +226,6 @@ public class TutoriasViewModel extends ViewModel {
     public LiveData<Map<String, String>> getEstudiantesMapLiveData() {
         return estudiantesMap;
     }
-
-
-
 
     // LiveData para mensajes de exito
     public LiveData<String> getSuccessLiveData() {

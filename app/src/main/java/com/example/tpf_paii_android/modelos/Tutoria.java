@@ -12,6 +12,7 @@ public class Tutoria {
     private Date fecha;
     private String tema;
     private String comentarios;
+    private String estado; // "Disponible", "En curso", "Finalizada"
 
     // Constructor
     public Tutoria() {
@@ -39,6 +40,7 @@ public class Tutoria {
     }
 
     // Getters y setters
+
     public int getId_tutoria() {
         return id_tutoria;
     }
@@ -93,6 +95,14 @@ public class Tutoria {
 
     public void setComentarios(String comentarios) {
         this.comentarios = comentarios;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     // Método toString
