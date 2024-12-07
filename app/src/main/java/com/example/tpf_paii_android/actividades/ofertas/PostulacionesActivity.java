@@ -2,6 +2,7 @@ package com.example.tpf_paii_android.actividades.ofertas;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -39,8 +40,12 @@ public class PostulacionesActivity extends AppCompatActivity {
             viewModel.cargarPostulacionesEmpresa(idUsuario);
         }
         viewModel.getPostulaciones().observe(this, postulaciones -> {
-            PostulacionesAdapter adapter = new PostulacionesAdapter(postulaciones, tipoUsuario, PostulacionesActivity.this);
-            recyclerView.setAdapter(adapter);
+            if (postulaciones == null || postulaciones.isEmpty()) {
+                Toast.makeText(PostulacionesActivity.this, "No hay postulaciones", Toast.LENGTH_SHORT).show();
+            } else {
+                PostulacionesAdapter adapter = new PostulacionesAdapter(postulaciones, tipoUsuario, PostulacionesActivity.this);
+                recyclerView.setAdapter(adapter);
+            }
         });
     }
 }

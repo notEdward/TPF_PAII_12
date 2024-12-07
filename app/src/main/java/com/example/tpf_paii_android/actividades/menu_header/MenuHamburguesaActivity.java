@@ -52,7 +52,7 @@ public class MenuHamburguesaActivity extends AppCompatActivity {
         menuHamburguesa.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         // Oculta la opción 'TUTORIAS' del menu si el tipo de usuario es 'Empresa'
-        if ("Empresa".equals(tipoUsuario)) {
+        if ("Empresa".equalsIgnoreCase(tipoUsuario)) {
             MenuItem tutoriasOpcion = navigationView.getMenu().findItem(R.id.nav_tutorias);
             tutoriasOpcion.setVisible(false);
         }
