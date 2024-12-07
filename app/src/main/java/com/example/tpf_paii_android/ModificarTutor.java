@@ -114,6 +114,38 @@ public class ModificarTutor extends AppCompatActivity {
                 Toast.makeText(ModificarTutor.this, "Todos los campos deben ser completados.", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (nombre.length() > 50) {
+                Toast.makeText(this, "El nombre no puede exceder los 50 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (apellido.length() > 50) {
+                Toast.makeText(this, "El apellido no puede exceder los 50 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                if (edadInt < 14 || edadInt > 100) {
+                    Toast.makeText(this, "La edad debe estar entre 14 y 100 años.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "La edad debe ser un número válido.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (ocupacion.length() > 100) {
+                Toast.makeText(this, "La ocupación no puede exceder los 100 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (pasatiempos.length() > 200) {
+                Toast.makeText(this, "Los pasatiempos no pueden exceder los 200 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (masInfo.length() > 200) {
+                Toast.makeText(this, "La información adicional no puede exceder los 200 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             Tutor tutorModificado = new Tutor(nombre, apellido, edadInt, idGenero, ocupacion, pasatiempos, masInfo);
             tutorModificado.setIdTutor(idTutor);

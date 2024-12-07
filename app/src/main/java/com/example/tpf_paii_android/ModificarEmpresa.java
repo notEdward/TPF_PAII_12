@@ -92,11 +92,6 @@ public class ModificarEmpresa extends AppCompatActivity {
         empresaViewModel.getProvincias().observe(this, provincias -> {
             if (provincias != null && !provincias.isEmpty()) {
                 cargarSpinnerProvincia(provincias);
-
-                // Selecciona la primera provincia como predeterminada
-                Provincia provinciaInicial = provincias.get(1);
-                spProvincia.setSelection(1); // Opcional: asegura que el spinner muestre la primera provincia
-                empresaViewModel.setProvinciaSeleccionada(provinciaInicial.getId_provincia());
             }
         });
 
@@ -152,7 +147,57 @@ public class ModificarEmpresa extends AppCompatActivity {
             String telefono = txtTelefono.getText().toString();
             String direccion = txtDireccion.getText().toString();
             int idLocalidad = ((Localidad) spLocalidad.getSelectedItem()).getId_localidad();
+//validaciones
+            if (nombre.isEmpty()) {
+                Toast.makeText(ModificarEmpresa.this, "El nombre no puede estar vacío.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (sector.isEmpty()) {
+                Toast.makeText(ModificarEmpresa.this, "El sector no puede estar vacío.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (email.isEmpty()) {
+                Toast.makeText(ModificarEmpresa.this, "El email no puede estar vacío.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (descripcion.isEmpty()) {
+                Toast.makeText(ModificarEmpresa.this, "La descripción no puede estar vacía.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (direccion.isEmpty()) {
+                Toast.makeText(ModificarEmpresa.this, "La dirección no puede estar vacía.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (telefono.isEmpty()) {
+                Toast.makeText(ModificarEmpresa.this, "El teléfono no puede estar vacío.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            if (nombre.length() > 50) {
+                Toast.makeText(ModificarEmpresa.this, "El nombre no puede superar los 50 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (sector.length() > 50) {
+                Toast.makeText(ModificarEmpresa.this, "El sector no puede superar los 50 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (email.length() > 50 || !email.endsWith(".com")) {
+                Toast.makeText(ModificarEmpresa.this, "El email debe tener un máximo de 50 caracteres y terminar en .com.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (descripcion.length() > 200) {
+                Toast.makeText(ModificarEmpresa.this, "La descripción no puede superar los 200 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (direccion.length() > 150) {
+                Toast.makeText(ModificarEmpresa.this, "La dirección no puede superar los 150 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (telefono.length() > 20) {
+                Toast.makeText(ModificarEmpresa.this, "El teléfono no puede superar los 20 caracteres.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            //
             Localidad localidadSeleccionada = (Localidad) spLocalidad.getSelectedItem();
             if (localidadSeleccionada == null) {
                 Toast.makeText(ModificarEmpresa.this, "Seleccione una localidad válida.", Toast.LENGTH_SHORT).show();

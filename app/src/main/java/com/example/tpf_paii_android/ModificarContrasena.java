@@ -76,6 +76,10 @@ public class ModificarContrasena extends AppCompatActivity {
             Toast.makeText(this, "Por favor complete todos los campos.", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (contrasenaActual.length() > 40) {
+            Toast.makeText(this, "La contraseña actual no puede superar los 40 caracteres.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (!nuevaContrasena.equals(repetirNuevaContrasena)) {
             Toast.makeText(this, "Las contraseñas nuevas no coinciden.", Toast.LENGTH_SHORT).show();
